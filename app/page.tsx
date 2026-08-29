@@ -3,6 +3,12 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import localFont from 'next/font/local';
+import { createClient } from '@supabase/supabase-js';
+
+// --- INICIALIZAR SUPABASE ---
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const academiaFont = localFont({
   src: './fonts/AcademiaEclipse.ttf',
@@ -82,49 +88,36 @@ const EsquinasReliquia = () => (
   </>
 );
 
-const BotonReliquia = ({ children, onClick, type = "button" }: { children: React.ReactNode, onClick?: () => void, type?: "button" | "submit" }) => (
+const BotonReliquia = ({ children, onClick, type = "button", disabled = false }: { children: React.ReactNode, onClick?: () => void, type?: "button" | "submit", disabled?: boolean }) => (
   <button 
     type={type}
     onClick={onClick}
-    className="relative overflow-hidden px-8 py-3 bg-gradient-to-b from-[#1E0B2B] to-[#0A050E] text-[#F4F0EB] font-bold uppercase tracking-[0.2em] text-xs border border-[#E5C0A1]/40 shadow-[0_0_15px_rgba(76,29,149,0.3)] hover:shadow-[0_0_25px_rgba(200,148,110,0.5)] hover:border-[#C8946E] transition-all duration-500 group"
+    disabled={disabled}
+    className={`relative overflow-hidden px-8 py-3 bg-gradient-to-b from-[#1E0B2B] to-[#0A050E] text-[#F4F0EB] font-bold uppercase tracking-[0.2em] text-xs border border-[#E5C0A1]/40 shadow-[0_0_15px_rgba(76,29,149,0.3)] transition-all duration-500 group ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:shadow-[0_0_25px_rgba(200,148,110,0.5)] hover:border-[#C8946E]'}`}
   >
-    {/* Efecto destello interior */}
-    <span className="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-[#E5C0A1]/20 to-transparent -skew-x-45 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+    {!disabled && <span className="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-[#E5C0A1]/20 to-transparent -skew-x-45 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>}
     <span className="relative z-10">{children}</span>
   </button>
 );
 
-/* --- ICONOS MÍSTICOS VECTORIALES (Sustituyen a los emojis) --- */
+/* --- ICONOS MÍSTICOS VECTORIALES --- */
 const IconoOraculo = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-  </svg>
+  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
 );
 const IconoEclipse = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-  </svg>
+  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
 );
 const IconoGrimorio = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-  </svg>
+  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
 );
 const IconoEnigma = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-  </svg>
+  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
 );
 const IconoGaleria = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-  </svg>
+  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
 );
 const IconoFAQ = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
-  </svg>
+  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
 );
 
 export default function CodicePlutonPage() {
@@ -140,6 +133,11 @@ export default function CodicePlutonPage() {
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
 
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
+
+  // ESTADOS DEL FORMULARIO DE PACTO (SUPABASE)
+  const [emailPacto, setEmailPacto] = useState("");
+  const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [mensajePacto, setMensajePacto] = useState("");
 
   useEffect(() => {
     const nuevasParticulas = Array.from({ length: 35 }).map((_, i) => ({
@@ -199,6 +197,37 @@ export default function CodicePlutonPage() {
       setMensajeEnigma("✨ ¡Correcto! Has descifrado el sello. El capítulo inédito ha sido desbloqueado en los archivos secretos.");
     } else {
       setMensajeEnigma("❌ Las estrellas guardan silencio. Esa no es la palabra clave del eclipse.");
+    }
+  };
+
+  // FUNCIÓN PARA SELLAR EL PACTO (ENVIAR A SUPABASE)
+  const sellarPacto = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!emailPacto) return;
+
+    setEstadoPacto('loading');
+    setMensajePacto("Invocando a los astros...");
+
+    try {
+      const { error } = await supabase
+        .from('pactos')
+        .insert([{ email: emailPacto }]);
+
+      if (error) {
+        if (error.code === '23505') { // Error de duplicado
+          setMensajePacto("Las estrellas indican que este sello ya ha sido registrado anteriormente.");
+        } else {
+          setMensajePacto("Hubo una interferencia cósmica. Inténtalo de nuevo.");
+        }
+        setEstadoPacto('error');
+      } else {
+        setMensajePacto("✨ Pacto sellado. Eres un iniciado oficial de la Academia.");
+        setEstadoPacto('success');
+        setEmailPacto("");
+      }
+    } catch (err) {
+      setMensajePacto("Error de conexión. Las constelaciones están ocultas.");
+      setEstadoPacto('error');
     }
   };
 
@@ -459,7 +488,7 @@ export default function CodicePlutonPage() {
           </span>
           <h2 className="text-3xl text-[#F4F0EB] mb-3">El Enigma del Eclipse</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-8">“¿Cómo se llama el planeta que rige nuestra academia y da sombra al sol?”</p>
-          <form onSubmit={verificarEnigma} className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+          <form onSubmit={verificarEnigma} className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
             <input type="text" value={respuestaEnigma} onChange={(e) => setRespuestaEnigma(e.target.value)} placeholder="Palabra secreta..." className="px-6 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] md:w-72 focus:outline-none focus:border-[#C8946E] transition-colors shadow-inner" />
             <BotonReliquia type="submit">Revelar Sello</BotonReliquia>
           </form>
@@ -535,15 +564,37 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 11. CAPTACIÓN */}
+      {/* 11. CAPTACIÓN CONECTADA A SUPABASE */}
       <section className="py-12 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           <h2 className="text-3xl text-[#F4F0EB] mb-3">Inscripción a la Academia</h2>
           <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Inscribe tu nombre antes del 19 de noviembre y recibe un artefacto digital exclusivo.</p>
-          <form className="flex flex-col sm:flex-row gap-3 justify-center" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" placeholder="tu@correo.com" className="px-6 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] sm:w-80 focus:outline-none focus:border-[#C8946E] transition-colors shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]" />
-            <BotonReliquia type="submit">Sellar Pacto</BotonReliquia>
+          
+          <form className="flex flex-col sm:flex-row gap-4 justify-center" onSubmit={sellarPacto}>
+            <input 
+              type="email" 
+              required
+              value={emailPacto}
+              onChange={(e) => setEmailPacto(e.target.value)}
+              placeholder="tu@correo.com" 
+              className="px-6 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] sm:w-80 focus:outline-none focus:border-[#C8946E] transition-colors shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]" 
+            />
+            <BotonReliquia type="submit" disabled={estadoPacto === 'loading'}>
+              {estadoPacto === 'loading' ? 'Invocando...' : 'Sellar Pacto'}
+            </BotonReliquia>
           </form>
+
+          {/* Mensaje de respuesta del servidor */}
+          {mensajePacto && (
+            <motion.p 
+              initial={{ opacity: 0, y: 10 }} 
+              animate={{ opacity: 1, y: 0 }} 
+              className={`mt-6 text-xs p-4 bg-black/90 backdrop-blur-md border inline-block shadow-[0_0_20px_rgba(0,0,0,0.5)] ${estadoPacto === 'success' ? 'text-[#E5C0A1] border-[#E5C0A1]/50' : 'text-red-400 border-red-900/50'}`}
+            >
+              {mensajePacto}
+            </motion.p>
+          )}
+
         </motion.div>
       </section>
 
@@ -561,7 +612,7 @@ export default function CodicePlutonPage() {
         </div>
       </footer>
 
-      {/* MODAL / VISOR DE IMAGEN A TAMAÑO REAL */}
+      {/* MODAL / VISOR DE IMAGEN */}
       {imagenSeleccionada && (
         <div onClick={() => setImagenSeleccionada(null)} className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer">
           <div className="relative max-w-4xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>

@@ -59,8 +59,8 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className}`}>
       
-      {/* 1. GRAN BANNER (HERO) ASTRAL */}
-      <section className="relative h-screen flex flex-col justify-center items-center text-center overflow-hidden isolate">
+      {/* 1. GRAN BANNER (HERO) ASTRAL - OPTIMIZADO PARA MÓVILES */}
+      <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate">
         
         <div 
           className="absolute inset-0 bg-cover bg-center -z-30 opacity-60"
@@ -72,12 +72,13 @@ export default function CodicePlutonPage() {
           alt="Anillo Astrológico"
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 120, ease: "linear" }}
-          className="absolute w-[1100px] h-[1100px] max-w-none -z-20 opacity-85 object-contain"
+          style={{ willChange: "transform" }}
+          className="absolute w-[700px] h-[700px] md:w-[1100px] md:h-[1100px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none"
         />
 
         {/* Planeta con resplandor púrpura oscurecido */}
-        <div className="absolute w-[520px] h-[520px] -z-10 flex items-center justify-center">
-          <div className="absolute w-[450px] h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[90px] opacity-80"></div>
+        <div className="absolute w-[420px] h-[420px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none">
+          <div className="absolute w-[350px] h-[350px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[90px] opacity-80"></div>
           <img
             src="/planeta-oficial.png"
             alt="Planeta Oficial Los Hijos de Plutón"
@@ -89,7 +90,7 @@ export default function CodicePlutonPage() {
         <img
           src="/estrella.png"
           alt="Estrella Polar"
-          className="absolute top-[calc(50%-380px)] -translate-y-1/2 w-40 h-40 z-30 drop-shadow-[0_0_35px_rgba(229,192,161,1)] object-contain"
+          className="absolute top-[calc(50%-320px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-28 h-28 md:w-40 md:h-40 z-30 drop-shadow-[0_0_35px_rgba(229,192,161,1)] object-contain pointer-events-none"
         />
 
         <motion.div
@@ -98,19 +99,19 @@ export default function CodicePlutonPage() {
           transition={{ duration: 1.5 }}
           className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4"
         >
-          <h1 className="font-normal text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_10px_30px_rgba(0,0,0,1)] filter brightness-110 contrast-125 tracking-wider text-center mb-4">
+          <h1 className="font-normal text-5xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_10px_30px_rgba(0,0,0,1)] filter brightness-110 contrast-125 tracking-wider text-center mb-4">
             EL CÓDICE<br />DE PLUTÓN
           </h1>
-          <p className="text-[#E5C0A1]/90 text-sm md:text-base font-light tracking-[0.2em] uppercase text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]">
+          <p className="text-[#E5C0A1]/90 text-xs md:text-base font-light tracking-[0.2em] uppercase text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] px-2">
             El santuario para los lectores y fans de Los Hijos de Plutón
           </p>
         </motion.div>
         
         <div 
           onClick={() => scrollToSection('oraculo-diario')}
-          className="absolute bottom-8 cursor-pointer px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-[#E5C0A1]/20 shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:border-[#C8946E]/50 transition-all z-30"
+          className="absolute bottom-6 cursor-pointer px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-[#E5C0A1]/20 shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:border-[#C8946E]/50 transition-all z-30"
         >
-          <span className="text-[#C8946E] text-xs tracking-widest uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
+          <span className="text-[#C8946E] text-[11px] md:text-xs tracking-widest uppercase font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
             Desciende a las sombras
           </span>
         </div>

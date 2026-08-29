@@ -63,7 +63,6 @@ const CASAS_INFO: Record<string, { nombre: string; descripcion: string; emblema:
   }
 };
 
-// COMPONENTE: Divisor Estelar
 const DivisorEstelar = () => (
   <div className="w-full flex justify-center items-center py-8 opacity-80">
     <div className="w-24 md:w-48 h-[1px] bg-gradient-to-r from-transparent to-[#E5C0A1]/50"></div>
@@ -72,7 +71,6 @@ const DivisorEstelar = () => (
   </div>
 );
 
-// COMPONENTE: Esquinas de Reliquia (Para las cajas)
 const EsquinasReliquia = () => (
   <>
     <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#E5C0A1]/50 group-hover:border-[#C8946E] transition-colors duration-300"></div>
@@ -94,17 +92,18 @@ export default function CodicePlutonPage() {
   const [mensajeEnigma, setMensajeEnigma] = useState("");
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
 
-  // Estados para las partículas (para evitar errores de hidratación en SSR)
-  const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number }[]>([]);
+  // Estados para las partículas con 'size' incluido para variabilidad real
+  const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
   useEffect(() => {
-    // Generamos las partículas solo en el cliente
-    const nuevasParticulas = Array.from({ length: 15 }).map((_, i) => ({
+    // Generar partículas aleatorias una sola vez al cargar la web
+    const nuevasParticulas = Array.from({ length: 35 }).map((_, i) => ({
       id: i,
-      x: (Math.random() - 0.5) * 400,
-      y: (Math.random() - 0.5) * 200,
-      delay: Math.random() * 3,
-      duration: Math.random() * 3 + 3
+      x: (Math.random() - 0.5) * 800, // Se esparcen a lo ancho
+      y: (Math.random() - 0.5) * 400, // Se esparcen a lo alto
+      delay: Math.random() * 4,
+      duration: Math.random() * 4 + 4, // Duran entre 4 y 8 segundos
+      size: Math.random() * 3 + 1.5 // Miden entre 1.5px y 4.5px
     }));
     setParticulas(nuevasParticulas);
 
@@ -173,7 +172,7 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className}`}>
       
-      {/* 1. HERO ASTRAL (CON ANIMACIÓN DE TEXTO Y POLVO ESTELAR) */}
+      {/* 1. HERO ASTRAL */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
 
@@ -191,39 +190,52 @@ export default function CodicePlutonPage() {
 
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
           
-          {/* Sistema de partículas de polvo estelar */}
-          <div className="absolute inset-0 w-full h-full pointer-events-none flex justify-center items-center z-0">
+          {/* POLVO ESTELAR (Mejorado y visible) */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] pointer-events-none z-0">
             {particulas.map((p) => (
               <motion.div
                 key={p.id}
-                className="absolute w-1 h-1 bg-[#E5C0A1] rounded-full blur-[1px]"
-                initial={{ opacity: 0, x: p.x, y: p.y }}
+                className="absolute bg-[#E5C0A1] rounded-full blur-[1px] shadow-[0_0_8px_rgba(229,192,161,0.8)]"
+                style={{ width: p.size, height: p.size, left: '50%', top: '50%' }}
+                initial={{ opacity: 0, x: p.x, y: p.y, scale: 0 }}
                 animate={{
-                  opacity: [0, Math.random() * 0.8 + 0.2, 0],
-                  y: [p.y, p.y - 100],
-                  x: "+=" + (Math.random() * 30 - 15)
+                  opacity: [0, 0.9, 0],
+                  scale: [0, 1, 0.5],
+                  y: [p.y, p.y - 120], // Suben hacia arriba
+                  x: [p.x, p.x + (Math.random() * 40 - 20)] // Pequeño desvío lateral
                 }}
                 transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }}
               />
             ))}
           </div>
 
-          {/* Título animado con resplandor */}
-          <motion.h1 
-            className="relative z-10 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center mb-3"
-            animate={{ 
-              filter: [
-                "drop-shadow(0px 5px 15px rgba(0,0,0,1))", 
-                "drop-shadow(0px 0px 25px rgba(229,192,161,0.6))", 
-                "drop-shadow(0px 5px 15px rgba(0,0,0,1))"
-              ] 
-            }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-          >
-            EL CÓDICE<br />DE PLUTÓN
-          </motion.h1>
+          {/* TÍTULO DOBLE CAPA (El truco definitivo para que brille el degradado) */}
+          <div className="relative mb-3 grid place-items-center w-full z-10">
+            {/* CAPA TRASERA: Aura palpitante */}
+            <motion.h1 
+              className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center"
+              animate={{
+                filter: [
+                  "blur(4px) brightness(1)",
+                  "blur(14px) brightness(1.6)",
+                  "blur(4px) brightness(1)"
+                ],
+                opacity: [0.3, 0.9, 0.3]
+              }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              EL CÓDICE<br />DE PLUTÓN
+            </motion.h1>
 
-          <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2">El santuario para los lectores y fans de Los Hijos de Plutón</p>
+            {/* CAPA FRONTAL: Texto nítido */}
+            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center">
+              EL CÓDICE<br />DE PLUTÓN
+            </h1>
+          </div>
+
+          <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">
+            El santuario para los lectores y fans de Los Hijos de Plutón
+          </p>
         </motion.div>
         
         <div onClick={() => scrollToSection('oraculo-diario')} className="absolute bottom-6 cursor-pointer px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-[#E5C0A1]/20 shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:border-[#C8946E]/50 transition-all z-30 group">

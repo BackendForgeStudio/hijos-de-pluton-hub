@@ -170,30 +170,30 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
-      {/* FONDOS LATERALES MÍSTICOS (FIJOS) - Solo en Desktop (CORREGIDO A RUTAS LOCALES) */}
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.25] mix-blend-screen hidden md:block">
+      {/* FONDOS LATERALES MÍSTICOS (FIJOS) - AHORA MÁS VISIBLES */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.70] mix-blend-screen hidden md:block">
         {/* Runas a la izquierda */}
         <div 
-          className="absolute top-0 left-0 w-1/4 h-full bg-repeat-y"
+          className="absolute top-0 left-0 w-1/3 h-full bg-repeat-y"
           style={{ 
             backgroundImage: "url('/images/runas-izq.jpg')",
             backgroundSize: '100% auto',
-            WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
-            maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)'
+            WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)',
+            maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)'
           }}
         />
         {/* Constelaciones y Zodiaco a la derecha */}
         <div 
-          className="absolute top-0 right-0 w-1/4 h-full bg-repeat-y"
+          className="absolute top-0 right-0 w-1/3 h-full bg-repeat-y"
           style={{ 
             backgroundImage: "url('/images/zodiaco-der.jpg')",
             backgroundSize: '100% auto',
-            WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
-            maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)'
+            WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)',
+            maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)'
           }}
         />
-        {/* Fundido superior para que no pise el cielo de la sección Hero */}
-        <div className="absolute top-0 left-0 w-full h-[100vh] bg-gradient-to-b from-[#08040C] via-[#08040C]/80 to-transparent"></div>
+        {/* Fundido superior más sutil (para no tapar las runas) */}
+        <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-[#08040C] to-transparent"></div>
       </div>
 
       {/* 1. HERO ASTRAL */}

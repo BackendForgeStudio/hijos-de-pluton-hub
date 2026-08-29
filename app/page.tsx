@@ -92,18 +92,16 @@ export default function CodicePlutonPage() {
   const [mensajeEnigma, setMensajeEnigma] = useState("");
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
 
-  // Estados para las partículas con 'size' incluido para variabilidad real
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
   useEffect(() => {
-    // Generar partículas aleatorias una sola vez al cargar la web
     const nuevasParticulas = Array.from({ length: 35 }).map((_, i) => ({
       id: i,
-      x: (Math.random() - 0.5) * 800, // Se esparcen a lo ancho
-      y: (Math.random() - 0.5) * 400, // Se esparcen a lo alto
+      x: (Math.random() - 0.5) * 800, 
+      y: (Math.random() - 0.5) * 400, 
       delay: Math.random() * 4,
-      duration: Math.random() * 4 + 4, // Duran entre 4 y 8 segundos
-      size: Math.random() * 3 + 1.5 // Miden entre 1.5px y 4.5px
+      duration: Math.random() * 4 + 4, 
+      size: Math.random() * 3 + 1.5 
     }));
     setParticulas(nuevasParticulas);
 
@@ -170,8 +168,34 @@ export default function CodicePlutonPage() {
   };
 
   return (
-    <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className}`}>
+    <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
+      {/* FONDOS LATERALES MÍSTICOS (FIJOS) - Solo en Desktop */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.25] mix-blend-screen hidden md:block">
+        {/* Runas a la izquierda */}
+        <div 
+          className="absolute top-0 left-0 w-1/4 h-full bg-repeat-y"
+          style={{ 
+            backgroundImage: `url('http://googleusercontent.com/image_collection/image_retrieval/124659403484173173_0')`,
+            backgroundSize: '100% auto',
+            WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
+            maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)'
+          }}
+        />
+        {/* Constelaciones y Zodiaco a la derecha */}
+        <div 
+          className="absolute top-0 right-0 w-1/4 h-full bg-repeat-y"
+          style={{ 
+            backgroundImage: `url('http://googleusercontent.com/image_collection/image_retrieval/1441787755496835625_0')`,
+            backgroundSize: '100% auto',
+            WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
+            maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)'
+          }}
+        />
+        {/* Fundido superior para que no pise el cielo de la sección Hero */}
+        <div className="absolute top-0 left-0 w-full h-[100vh] bg-gradient-to-b from-[#08040C] via-[#08040C]/80 to-transparent"></div>
+      </div>
+
       {/* 1. HERO ASTRAL */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
@@ -190,7 +214,6 @@ export default function CodicePlutonPage() {
 
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
           
-          {/* POLVO ESTELAR (Mejorado y visible) */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] pointer-events-none z-0">
             {particulas.map((p) => (
               <motion.div
@@ -201,17 +224,15 @@ export default function CodicePlutonPage() {
                 animate={{
                   opacity: [0, 0.9, 0],
                   scale: [0, 1, 0.5],
-                  y: [p.y, p.y - 120], // Suben hacia arriba
-                  x: [p.x, p.x + (Math.random() * 40 - 20)] // Pequeño desvío lateral
+                  y: [p.y, p.y - 120],
+                  x: [p.x, p.x + (Math.random() * 40 - 20)]
                 }}
                 transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }}
               />
             ))}
           </div>
 
-          {/* TÍTULO DOBLE CAPA (El truco definitivo para que brille el degradado) */}
           <div className="relative mb-3 grid place-items-center w-full z-10">
-            {/* CAPA TRASERA: Aura palpitante */}
             <motion.h1 
               className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center"
               animate={{
@@ -227,7 +248,6 @@ export default function CodicePlutonPage() {
               EL CÓDICE<br />DE PLUTÓN
             </motion.h1>
 
-            {/* CAPA FRONTAL: Texto nítido */}
             <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center">
               EL CÓDICE<br />DE PLUTÓN
             </h1>
@@ -247,7 +267,7 @@ export default function CodicePlutonPage() {
 
       {/* 2. NAVEGACIÓN ADHESIVA */}
       <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2">
+        <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2 relative z-10">
           <li onClick={() => scrollToSection('lore')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">La Obra</li>
           <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Oráculo</li>
           <li onClick={() => scrollToSection('test-casas')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Test Casas</li>
@@ -259,25 +279,25 @@ export default function CodicePlutonPage() {
       </nav>
 
       {/* 3. CUENTA ATRÁS */}
-      <section className="py-12 bg-[#0F0814] text-center transform-gpu">
+      <section className="py-12 bg-transparent text-center relative z-10">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-[#C8946E] text-xs uppercase tracking-[0.4em] mb-4 font-bold flex items-center justify-center gap-2">
             <span>✧</span> Próximo Alineamiento del Eclipse <span>✧</span>
           </p>
           <div className="grid grid-cols-4 gap-3 max-w-lg mx-auto text-[#F4F0EB]">
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
               <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.days}</span>
               <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Días</p>
             </div>
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
               <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.hours}</span>
               <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Horas</p>
             </div>
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
               <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.minutes}</span>
               <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Min</p>
             </div>
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
               <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.seconds}</span>
               <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Seg</p>
             </div>
@@ -287,8 +307,8 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 4. CAJAS ASIMÉTRICAS (CON MARCOS DE RELIQUIA) */}
-      <section id="lore" className="py-12 px-6 relative bg-[#08040C] overflow-hidden transform-gpu">
+      {/* 4. CAJAS ASIMÉTRICAS */}
+      <section id="lore" className="py-12 px-6 relative overflow-hidden transform-gpu z-10">
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-2 tracking-wider">Los Archivos del Códice</h2>
@@ -296,7 +316,7 @@ export default function CodicePlutonPage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
-            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300 cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
+            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300 cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Volumen I</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">La Obra y el Lore</h3>
@@ -304,7 +324,7 @@ export default function CodicePlutonPage() {
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
             </div>
             
-            <div id="merch" className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 cursor-pointer md:mt-10" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
+            <div id="merch" className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 cursor-pointer md:mt-10" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Artefactos</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">Reliquias y Merch</h3>
@@ -312,7 +332,7 @@ export default function CodicePlutonPage() {
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Explorar ✦</span>
             </div>
             
-            <div id="discord" className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300 cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
+            <div id="discord" className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300 cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Comunidad</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">El Círculo (Discord)</h3>
@@ -320,7 +340,7 @@ export default function CodicePlutonPage() {
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Unirse ✦</span>
             </div>
             
-            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 cursor-pointer md:mt-14" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
+            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 cursor-pointer md:mt-14" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Manuscritos</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">Capítulos Inéditos</h3>
@@ -334,7 +354,7 @@ export default function CodicePlutonPage() {
       <DivisorEstelar />
 
       {/* 5. ORÁCULO DIARIO */}
-      <section id="oraculo-diario" className="py-12 px-6 bg-[#0F0814] text-center transform-gpu">
+      <section id="oraculo-diario" className="py-12 px-6 text-center transform-gpu relative z-10">
         <div className="max-w-2xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2 flex items-center justify-center gap-2">
             🔮 Consulta Mística 🔮
@@ -342,7 +362,7 @@ export default function CodicePlutonPage() {
           <h2 className="text-3xl text-[#F4F0EB] mb-4">El Oráculo de Plutón</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-8">Pulsa el sello para revelar la profecía oculta que marcará tu jornada.</p>
 
-          <div className="p-6 bg-black/60 border border-[#E5C0A1]/30 mb-6 relative group shadow-[0_0_30px_rgba(46,16,101,0.3)]">
+          <div className="p-6 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 mb-6 relative group shadow-[0_0_30px_rgba(46,16,101,0.3)]">
             <EsquinasReliquia />
             <p className="text-base md:text-xl text-[#F4F0EB] italic font-light min-h-[60px] flex items-center justify-center relative z-10">
               {profeciaActual}
@@ -358,7 +378,7 @@ export default function CodicePlutonPage() {
       <DivisorEstelar />
 
       {/* 6. TEST DE ASIGNACIÓN */}
-      <section id="test-casas" className="py-12 px-6 bg-[#08040C] text-center">
+      <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2 flex items-center justify-center gap-2">
             🌑 Ritual de Iniciación 🌑
@@ -366,7 +386,7 @@ export default function CodicePlutonPage() {
           <h2 className="text-3xl text-[#F4F0EB] mb-3">¿A qué Casa perteneces?</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-8">Descubre cuál de las casas de la Academia Eclipse rige tu destino.</p>
 
-          <div className="p-6 border border-[#E5C0A1]/30 text-left relative bg-[#140B1A]/90 shadow-[0_0_30px_rgba(76,29,149,0.15)]">
+          <div className="p-6 border border-[#E5C0A1]/30 text-left relative bg-black/80 backdrop-blur-md shadow-[0_0_30px_rgba(76,29,149,0.15)]">
             <EsquinasReliquia />
             {!casaResultado ? (
               <div className="relative z-10">
@@ -376,7 +396,7 @@ export default function CodicePlutonPage() {
                 <h3 className="text-lg md:text-xl text-[#F4F0EB] mb-6 font-light">{PREGUNTAS_TEST[preguntaActual].pregunta}</h3>
                 <div className="space-y-3">
                   {PREGUNTAS_TEST[preguntaActual].opciones.map((opcion, index) => (
-                    <button key={index} onClick={() => seleccionarRespuesta(opcion.casa)} className="w-full text-left p-3 bg-black/50 border border-[#E5C0A1]/20 hover:border-[#C8946E] hover:bg-[#2E1065]/30 text-[#F4F0EB] text-xs md:text-sm transition-all cursor-pointer">
+                    <button key={index} onClick={() => seleccionarRespuesta(opcion.casa)} className="w-full text-left p-3 bg-black/60 border border-[#E5C0A1]/20 hover:border-[#C8946E] hover:bg-[#2E1065]/50 text-[#F4F0EB] text-xs md:text-sm transition-all cursor-pointer">
                       {opcion.texto}
                     </button>
                   ))}
@@ -400,7 +420,7 @@ export default function CodicePlutonPage() {
       <DivisorEstelar />
 
       {/* 7. EL GRIMORIO */}
-      <section id="grimorio" className="py-12 px-6 bg-[#0B0510]">
+      <section id="grimorio" className="py-12 px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2 flex items-center justify-center gap-2">
             📜 Enciclopedia 📜
@@ -409,19 +429,19 @@ export default function CodicePlutonPage() {
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Expedientes de iniciados, alineaciones estelares y reliquias mayores.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.75), rgba(10, 5, 14, 0.85)), url('/images/textura-grimorio.jpg')" }}>
+            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente I</span>
               <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Custodios</h3>
               <p className="text-xs text-[#E5C0A1]/70 font-light">Expedientes de los maestros del eco.</p>
             </div>
-            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.75), rgba(10, 5, 14, 0.85)), url('/images/textura-grimorio.jpg')" }}>
+            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente II</span>
               <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Zodiaco</h3>
               <p className="text-xs text-[#E5C0A1]/70 font-light">Influencia de los signos celestes.</p>
             </div>
-            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.75), rgba(10, 5, 14, 0.85)), url('/images/textura-grimorio.jpg')" }}>
+            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente III</span>
               <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Artefactos</h3>
@@ -434,7 +454,7 @@ export default function CodicePlutonPage() {
       <DivisorEstelar />
 
       {/* 8. ENIGMA */}
-      <section id="enigma" className="py-12 px-6 bg-[#08040C] text-center">
+      <section id="enigma" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2 flex items-center justify-center gap-2">
             👁️‍🗨️ Reto Semanal 👁️‍🗨️
@@ -442,17 +462,17 @@ export default function CodicePlutonPage() {
           <h2 className="text-3xl text-[#F4F0EB] mb-3">El Enigma del Eclipse</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-6">“¿Cómo se llama el planeta que rige nuestra academia y da sombra al sol?”</p>
           <form onSubmit={verificarEnigma} className="flex flex-col sm:flex-row gap-2 justify-center mb-4">
-            <input type="text" value={respuestaEnigma} onChange={(e) => setRespuestaEnigma(e.target.value)} placeholder="Palabra secreta..." className="px-4 py-2 bg-black/50 border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] md:w-64 focus:outline-none focus:border-[#C8946E] transition-colors" />
+            <input type="text" value={respuestaEnigma} onChange={(e) => setRespuestaEnigma(e.target.value)} placeholder="Palabra secreta..." className="px-4 py-2 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] md:w-64 focus:outline-none focus:border-[#C8946E] transition-colors shadow-inner" />
             <button type="submit" className="px-5 py-2 bg-[#2E1065] text-[#F4F0EB] font-bold uppercase text-xs border border-[#E5C0A1]/30 hover:bg-[#C8946E] hover:text-black transition-all cursor-pointer">Sellar</button>
           </form>
-          {mensajeEnigma && <p className="text-xs text-[#E5C0A1] p-3 bg-black/40 border border-[#E5C0A1]/20 inline-block shadow-[0_0_15px_rgba(229,192,161,0.1)]">{mensajeEnigma}</p>}
+          {mensajeEnigma && <p className="text-xs text-[#E5C0A1] p-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/20 inline-block shadow-[0_0_15px_rgba(229,192,161,0.1)]">{mensajeEnigma}</p>}
         </div>
       </section>
 
       <DivisorEstelar />
 
       {/* 9. GALERÍA DE VISIONES */}
-      <section id="galeria" className="py-12 px-6 bg-[#0B0510] text-center">
+      <section id="galeria" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-4xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2 flex items-center justify-center gap-2">
             🌌 Archivo Visual 🌌
@@ -494,7 +514,7 @@ export default function CodicePlutonPage() {
       <DivisorEstelar />
 
       {/* 10. FAQ */}
-      <section id="faq" className="py-12 px-6 bg-[#08040C]">
+      <section id="faq" className="py-12 px-6 relative z-10">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2 flex items-center justify-center gap-2">
@@ -503,11 +523,11 @@ export default function CodicePlutonPage() {
             <h2 className="text-3xl text-[#F4F0EB]">Preguntas Frecuentes</h2>
           </div>
           <div className="space-y-4 text-xs md:text-sm">
-            <div className="p-5 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.9), rgba(15, 8, 20, 0.95)), url('/images/textura-grimorio.jpg')" }}>
+            <div className="p-5 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.95), rgba(15, 8, 20, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿De qué trata la novela?</h3>
               <p className="text-[#E5C0A1]/80 font-light leading-relaxed">Fantasía y misterio creada por Augusta Thoenig y Fran de Solas en el universo de la Academia Eclipse.</p>
             </div>
-            <div className="p-5 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.9), rgba(15, 8, 20, 0.95)), url('/images/textura-grimorio.jpg')" }}>
+            <div className="p-5 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.95), rgba(15, 8, 20, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿Qué es El Códice de Plutón?</h3>
               <p className="text-[#E5C0A1]/80 font-light leading-relaxed">El santuario digital oficial de la comunidad de lectores para consultar lore y contenidos inéditos.</p>
             </div>
@@ -518,19 +538,19 @@ export default function CodicePlutonPage() {
       <DivisorEstelar />
 
       {/* 11. CAPTACIÓN */}
-      <section className="py-12 px-6 bg-[#08040C] text-center mb-10">
+      <section className="py-12 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           <h2 className="text-3xl text-[#F4F0EB] mb-3">Inscripción a la Academia</h2>
           <p className="text-[#E5C0A1]/80 mb-6 font-light text-xs md:text-sm">Inscribe tu nombre antes del 19 de noviembre y recibe un artefacto digital exclusivo.</p>
           <form className="flex flex-col sm:flex-row gap-3 justify-center" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" placeholder="tu@correo.com" className="px-4 py-3 bg-black/50 border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] sm:w-80 focus:outline-none focus:border-[#C8946E] transition-colors shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]" />
+            <input type="email" placeholder="tu@correo.com" className="px-4 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] sm:w-80 focus:outline-none focus:border-[#C8946E] transition-colors shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]" />
             <button className="px-6 py-3 bg-[#2E1065] text-[#F4F0EB] font-bold uppercase text-xs border border-[#E5C0A1]/20 hover:bg-[#C8946E] hover:text-black hover:shadow-[0_0_15px_rgba(200,148,110,0.5)] transition-all cursor-pointer">Sellar Pacto</button>
           </form>
         </motion.div>
       </section>
 
       {/* 12. PIE DE PÁGINA */}
-      <footer className="py-12 px-6 bg-[#050208] border-t border-[#E5C0A1]/15 text-center text-[11px] text-[#E5C0A1]/60">
+      <footer className="py-12 px-6 bg-black/95 backdrop-blur-lg border-t border-[#E5C0A1]/15 text-center text-[11px] text-[#E5C0A1]/60 relative z-10">
         <div className="max-w-4xl mx-auto space-y-4">
           <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>
           <p className="leading-relaxed font-light">

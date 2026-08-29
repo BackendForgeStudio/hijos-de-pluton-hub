@@ -94,7 +94,20 @@ export default function CodicePlutonPage() {
   const [mensajeEnigma, setMensajeEnigma] = useState("");
   const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
 
+  // Estados para las partículas (para evitar errores de hidratación en SSR)
+  const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number }[]>([]);
+
   useEffect(() => {
+    // Generamos las partículas solo en el cliente
+    const nuevasParticulas = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      x: (Math.random() - 0.5) * 400,
+      y: (Math.random() - 0.5) * 200,
+      delay: Math.random() * 3,
+      duration: Math.random() * 3 + 3
+    }));
+    setParticulas(nuevasParticulas);
+
     const targetDate = new Date('2026-11-19T00:00:00');
     const interval = setInterval(() => {
       const now = new Date();
@@ -160,7 +173,7 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className}`}>
       
-      {/* 1. HERO ASTRAL */}
+      {/* 1. HERO ASTRAL (CON ANIMACIÓN DE TEXTO Y POLVO ESTELAR) */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
 
@@ -177,10 +190,40 @@ export default function CodicePlutonPage() {
         <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-24 h-24 md:w-40 md:h-40 z-30 drop-shadow-[0_0_25px_rgba(229,192,161,1)] object-contain pointer-events-none" />
 
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
-          <h1 className="font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_8px_25px_rgba(0,0,0,1)] tracking-wider text-center mb-3">
+          
+          {/* Sistema de partículas de polvo estelar */}
+          <div className="absolute inset-0 w-full h-full pointer-events-none flex justify-center items-center z-0">
+            {particulas.map((p) => (
+              <motion.div
+                key={p.id}
+                className="absolute w-1 h-1 bg-[#E5C0A1] rounded-full blur-[1px]"
+                initial={{ opacity: 0, x: p.x, y: p.y }}
+                animate={{
+                  opacity: [0, Math.random() * 0.8 + 0.2, 0],
+                  y: [p.y, p.y - 100],
+                  x: "+=" + (Math.random() * 30 - 15)
+                }}
+                transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }}
+              />
+            ))}
+          </div>
+
+          {/* Título animado con resplandor */}
+          <motion.h1 
+            className="relative z-10 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center mb-3"
+            animate={{ 
+              filter: [
+                "drop-shadow(0px 5px 15px rgba(0,0,0,1))", 
+                "drop-shadow(0px 0px 25px rgba(229,192,161,0.6))", 
+                "drop-shadow(0px 5px 15px rgba(0,0,0,1))"
+              ] 
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          >
             EL CÓDICE<br />DE PLUTÓN
-          </h1>
-          <p className="text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2">El santuario para los lectores y fans de Los Hijos de Plutón</p>
+          </motion.h1>
+
+          <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2">El santuario para los lectores y fans de Los Hijos de Plutón</p>
         </motion.div>
         
         <div onClick={() => scrollToSection('oraculo-diario')} className="absolute bottom-6 cursor-pointer px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-[#E5C0A1]/20 shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:border-[#C8946E]/50 transition-all z-30 group">

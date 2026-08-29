@@ -170,13 +170,13 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
-      {/* FONDOS LATERALES MÍSTICOS (FIJOS) - Solo en Desktop */}
+      {/* FONDOS LATERALES MÍSTICOS (FIJOS) - Solo en Desktop (CORREGIDO A RUTAS LOCALES) */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.25] mix-blend-screen hidden md:block">
         {/* Runas a la izquierda */}
         <div 
           className="absolute top-0 left-0 w-1/4 h-full bg-repeat-y"
           style={{ 
-            backgroundImage: `url('http://googleusercontent.com/image_collection/image_retrieval/124659403484173173_0')`,
+            backgroundImage: "url('/images/runas-izq.jpg')",
             backgroundSize: '100% auto',
             WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
             maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)'
@@ -186,7 +186,7 @@ export default function CodicePlutonPage() {
         <div 
           className="absolute top-0 right-0 w-1/4 h-full bg-repeat-y"
           style={{ 
-            backgroundImage: `url('http://googleusercontent.com/image_collection/image_retrieval/1441787755496835625_0')`,
+            backgroundImage: "url('/images/zodiaco-der.jpg')",
             backgroundSize: '100% auto',
             WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)',
             maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 100%)'

@@ -15,12 +15,67 @@ const PROFECIAS = [
   "“La Academia Eclipse no elige a sus alumnos; las constelaciones trazan su destino.”",
   "“Cuando el anillo se alinee, el verdadero rostro del eclipse será revelado.”",
   "“La luz guía a los inexpertos, pero solo los hijos de la oscuridad dominan el cosmos.”",
-  "“Un pacto sellado en noviembre jamás podrá romper bajo la luz de la luna.”"
+  "“Un pacto sellado en noviembre jamás podrá romperse bajo la luz de la luna.”"
 ];
+
+// PREGUNTAS DEL TEST DE ASIGNACIÓN
+const PREGUNTAS_TEST = [
+  {
+    pregunta: "¿Qué prefieres cuando cae la medianoche en la Academia Eclipse?",
+    opciones: [
+      { texto: "Fundirme con las sombras y observar los secretos sin ser visto.", casa: "Umbra" },
+      { texto: "Encender un farol de luz pura para disipar los misterios oscuros.", casa: "Lux" },
+      { texto: "Estudiar el mapa estelar y decodificar los designios del cosmos.", casa: "Astra" }
+    ]
+  },
+  {
+    pregunta: "¿Cuál consideras que es tu mayor virtud ante un enigma insondable?",
+    opciones: [
+      { texto: "La paciencia táctica y el sigilo absoluto.", casa: "Umbra" },
+      { texto: "La lógica incisiva y la revelación de la verdad.", casa: "Lux" },
+      { texto: "La intuición guiada por las alineaciones astrales.", casa: "Astra" }
+    ]
+  },
+  {
+    pregunta: "Si pudieras elegir un emblema para grabar en tu escudo, sería...",
+    opciones: [
+      { texto: "Un eclipse total devorando el brillo del sol.", casa: "Umbra" },
+      { texto: "Un haz de luz pura atravesando un prisma cristalino.", casa: "Lux" },
+      { texto: "Una constelación oculta que cambia de forma.", casa: "Astra" }
+    ]
+  }
+];
+
+const CASAS_INFO: Record<string, { nombre: string; descripcion: string; emblema: string }> = {
+  Umbra: {
+    nombre: "Casa Umbra Noctis",
+    descripcion: "Herederos del eco y la oscuridad. Dominas el arte de moverte sin dejar rastro, comprendiendo que los secretos más profundos solo se revelan en el silencio de las sombras.",
+    emblema: "🌑 El Sello de la Oscuridad Táctica"
+  },
+  Lux: {
+    nombre: "Casa Lux Aeterna",
+    descripcion: "Guardianes del prisma y la revelación. Tu linaje busca siempre la verdad absoluta, utilizando el poder de la luz para iluminar los rincones más ocultos del cosmos.",
+    emblema: "✨ El Faro del Espejo Lumínico"
+  },
+  Astra: {
+    nombre: "Casa Astra Nova",
+    descripcion: "Tejedores del destino estelar. Vinculados directamente a los movimientos celestes, interpretáis las constelaciones antes de que escriban el futuro de la Academia.",
+    emblema: "🌌 El Astrolabio del Firmamento"
+  }
+};
 
 export default function CodicePlutonPage() {
   const [profeciaActual, setProfeciaActual] = useState("Pulsa el cristal para invocar tu profecía diaria.");
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  // Estados del Test de Asignación
+  const [preguntaActual, setPreguntaActual] = useState(0);
+  const [puntosCasas, setPuntosCasas] = useState({ Umbra: 0, Lux: 0, Astra: 0 });
+  const [casaResultado, setCasaResultado] = useState<string | null>(null);
+
+  // Estado del Enigma Semanal
+  const [respuestaEnigma, setRespuestaEnigma] = useState("");
+  const [mensajeEnigma, setMensajeEnigma] = useState("");
 
   useEffect(() => {
     const targetDate = new Date('2026-11-19T00:00:00');
@@ -44,6 +99,35 @@ export default function CodicePlutonPage() {
     setProfeciaActual(PROFECIAS[randomIndex]);
   };
 
+  const seleccionarRespuesta = (casa: string) => {
+    const nuevosPuntos = { ...puntosCasas, [casa]: puntosCasas[casa as keyof typeof puntosCasas] + 1 };
+    setPuntosCasas(nuevosPuntos);
+
+    if (preguntaActual + 1 < PREGUNTAS_TEST.length) {
+      setPreguntaActual(preguntaActual + 1);
+    } else {
+      const ganadora = Object.keys(nuevosPuntos).reduce((a, b) => 
+        nuevosPuntos[a as keyof typeof nuevosPuntos] > nuevosPuntos[b as keyof typeof nuevosPuntos] ? a : b
+      );
+      setCasaResultado(ganadora);
+    }
+  };
+
+  const reiniciarTest = () => {
+    setPreguntaActual(0);
+    setPuntosCasas({ Umbra: 0, Lux: 0, Astra: 0 });
+    setCasaResultado(null);
+  };
+
+  const verificarEnigma = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (respuestaEnigma.toLowerCase().trim() === "plutón" || respuestaEnigma.toLowerCase().trim() === "pluton") {
+      setMensajeEnigma("✨ ¡Correcto! Has descifrado el sello. El capítulo inédito ha sido desbloqueado en los archivos secretos.");
+    } else {
+      setMensajeEnigma("❌ Las estrellas guardan silencio. Esa no es la palabra clave del eclipse.");
+    }
+  };
+
   const fadeUp = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
@@ -59,7 +143,7 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className}`}>
       
-      {/* 1. GRAN BANNER (HERO) ASTRAL - OPTIMIZADO */}
+      {/* 1. GRAN BANNER (HERO) ASTRAL */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         
         <div 
@@ -76,7 +160,6 @@ export default function CodicePlutonPage() {
           className="absolute w-[700px] h-[700px] md:w-[1100px] md:h-[1100px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu"
         />
 
-        {/* Planeta optimizado */}
         <div className="absolute w-[380px] h-[380px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
           <div className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[60px] md:blur-[90px] opacity-80"></div>
           <img
@@ -117,11 +200,15 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 2. NAVEGACIÓN ADHESIVA (FLUIDA Y DESLIZABLE EN MÓVIL) */}
+      {/* 2. NAVEGACIÓN ADHESIVA COMPLETA */}
       <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <ul className="flex justify-start md:justify-center gap-6 md:gap-12 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2">
+        <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2">
           <li onClick={() => scrollToSection('lore')} className="hover:text-white cursor-pointer transition-colors py-1">La Obra</li>
-          <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-white cursor-pointer transition-colors py-1">Oráculo Diario</li>
+          <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-white cursor-pointer transition-colors py-1">Oráculo</li>
+          <li onClick={() => scrollToSection('test-casas')} className="hover:text-white cursor-pointer transition-colors py-1">Test Casas</li>
+          <li onClick={() => scrollToSection('grimorio')} className="hover:text-white cursor-pointer transition-colors py-1">Grimorio</li>
+          <li onClick={() => scrollToSection('enigma')} className="hover:text-white cursor-pointer transition-colors py-1">Enigma</li>
+          <li onClick={() => scrollToSection('galeria')} className="hover:text-white cursor-pointer transition-colors py-1">Galería</li>
           <li onClick={() => scrollToSection('merch')} className="hover:text-white cursor-pointer transition-colors py-1">Reliquias</li>
           <li onClick={() => scrollToSection('discord')} className="hover:text-white cursor-pointer transition-colors py-1">Discord</li>
           <li onClick={() => scrollToSection('faq')} className="hover:text-white cursor-pointer transition-colors py-1">FAQ</li>
@@ -175,11 +262,6 @@ export default function CodicePlutonPage() {
               transition={{ duration: 0.2 }}
               className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-0 transform-gpu"
             >
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#E5C0A1]"></div>
-
               <span className="text-xs uppercase tracking-[0.3em] text-[#C8946E] block mb-3 font-bold">Volumen I</span>
               <h3 className="text-2xl text-[#F4F0EB] mb-3 tracking-wide">La Obra y el Lore</h3>
               <p className="text-[#E5C0A1]/80 text-sm font-light leading-relaxed mb-6">
@@ -195,11 +277,6 @@ export default function CodicePlutonPage() {
               transition={{ duration: 0.2 }}
               className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-16 transform-gpu"
             >
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#E5C0A1]"></div>
-
               <span className="text-xs uppercase tracking-[0.3em] text-[#C8946E] block mb-3 font-bold">Artefactos</span>
               <h3 className="text-2xl text-[#F4F0EB] mb-3 tracking-wide">Reliquias y Merch</h3>
               <p className="text-[#E5C0A1]/80 text-sm font-light leading-relaxed mb-6">
@@ -215,11 +292,6 @@ export default function CodicePlutonPage() {
               transition={{ duration: 0.2 }}
               className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-4 transform-gpu"
             >
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#E5C0A1]"></div>
-
               <span className="text-xs uppercase tracking-[0.3em] text-[#C8946E] block mb-3 font-bold">Comunidad</span>
               <h3 className="text-2xl text-[#F4F0EB] mb-3 tracking-wide">El Círculo (Discord)</h3>
               <p className="text-[#E5C0A1]/80 text-sm font-light leading-relaxed mb-6">
@@ -234,11 +306,6 @@ export default function CodicePlutonPage() {
               transition={{ duration: 0.2 }}
               className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-24 transform-gpu"
             >
-              <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 left-0 w-3 h-3 border-b-2 border-l-2 border-[#E5C0A1]"></div>
-              <div className="absolute bottom-0 right-0 w-3 h-3 border-b-2 border-r-2 border-[#E5C0A1]"></div>
-
               <span className="text-xs uppercase tracking-[0.3em] text-[#C8946E] block mb-3 font-bold">Manuscritos</span>
               <h3 className="text-2xl text-[#F4F0EB] mb-3 tracking-wide">Capítulos Inéditos</h3>
               <p className="text-[#E5C0A1]/80 text-sm font-light leading-relaxed mb-6">
@@ -276,7 +343,158 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 6. SECCIÓN FAQ / SEO OPTIMIZADA PARA GOOGLE */}
+      {/* 6. TEST DE ASIGNACIÓN (CASAS DE LA ACADEMIA) */}
+      <section id="test-casas" className="py-28 px-6 bg-[#08040C] border-b border-[#E5C0A1]/10 text-center relative transform-gpu">
+        <div className="max-w-2xl mx-auto relative z-10">
+          <span className="text-[#C8946E] uppercase tracking-[0.4em] text-xs font-bold block mb-3">Ritual de Iniciación</span>
+          <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-4">¿A qué Casa perteneces?</h2>
+          <p className="text-[#E5C0A1]/80 text-sm md:text-base font-light mb-12">
+            Responde con sinceridad a los designios estelares de la Academia Eclipse y descubre cuál de las casas de la novela rige tu destino.
+          </p>
+
+          <div className="p-6 md:p-10 bg-gradient-to-b from-[#140B1A]/90 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 backdrop-blur-md shadow-[0_0_40px_rgba(76,29,149,0.2)] text-left relative">
+            
+            {!casaResultado ? (
+              <div>
+                <div className="flex justify-between items-center mb-6 border-b border-[#E5C0A1]/20 pb-4">
+                  <span className="text-xs uppercase tracking-widest text-[#C8946E] font-bold">Enigma {preguntaActual + 1} de {PREGUNTAS_TEST.length}</span>
+                  <span className="text-xs text-[#E5C0A1]/60">Academia Eclipse</span>
+                </div>
+
+                <h3 className="text-xl md:text-2xl text-[#F4F0EB] mb-8 font-light tracking-wide">
+                  {PREGUNTAS_TEST[preguntaActual].pregunta}
+                </h3>
+
+                <div className="space-y-4">
+                  {PREGUNTAS_TEST[preguntaActual].opciones.map((opcion, index) => (
+                    <button
+                      key={index}
+                      onClick={() => seleccionarRespuesta(opcion.casa)}
+                      className="w-full text-left p-4 bg-black/50 border border-[#E5C0A1]/20 hover:border-[#C8946E] hover:bg-[#2E1065]/40 text-[#F4F0EB] text-sm md:text-base transition-all cursor-pointer flex items-center justify-between group"
+                    >
+                      <span>{opcion.texto}</span>
+                      <span className="text-[#C8946E] opacity-0 group-hover:opacity-100 transition-opacity ml-2">→</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <span className="text-xs uppercase tracking-[0.4em] text-[#C8946E] block mb-2 font-bold">Tu destino ha sido revelado</span>
+                <h3 className="text-3xl md:text-4xl text-[#F4F0EB] mb-4 font-normal">{CASAS_INFO[casaResultado].nombre}</h3>
+                <p className="text-[#E5C0A1] text-xs uppercase tracking-widest mb-6 font-bold">{CASAS_INFO[casaResultado].emblema}</p>
+                <p className="text-[#E5C0A1]/90 text-base font-light leading-relaxed mb-8">
+                  {CASAS_INFO[casaResultado].descripcion}
+                </p>
+                <button
+                  onClick={reiniciarTest}
+                  className="px-8 py-3 bg-[#2E1065] text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:bg-[#C8946E] hover:text-black transition-all border border-[#E5C0A1]/30 cursor-pointer"
+                >
+                  Consultar de nuevo tu destino
+                </button>
+              </div>
+            )}
+
+          </div>
+        </div>
+      </section>
+
+      {/* 7. EL GRIMORIO INTERACTIVO (PERSONAJES Y LORE) */}
+      <section id="grimorio" className="py-28 px-6 bg-[#0B0510] border-b border-[#E5C0A1]/10">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-[#C8946E] uppercase tracking-[0.4em] text-xs font-bold block mb-3">Enciclopedia Viva</span>
+            <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-4">El Grimorio de la Academia</h2>
+            <p className="text-[#E5C0A1]/80 text-sm font-light">Conoce los expedientes de los iniciados y los misterios de las constelaciones principales.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 bg-black/40 border border-[#E5C0A1]/20 hover:border-[#C8946E] transition-all">
+              <span className="text-xs text-[#C8946E] uppercase tracking-widest font-bold">Iniciado Destacado</span>
+              <h3 className="text-2xl text-[#F4F0EB] mt-2 mb-3">Los Custodios de la Sombra</h3>
+              <p className="text-[#E5C0A1]/80 text-sm font-light leading-relaxed">
+                Expedientes clasificados sobre aquellos que aprendieron a dominar el eco estelar en los pasillos subterráneos de Plutón.
+              </p>
+            </div>
+            <div className="p-6 bg-black/40 border border-[#E5C0A1]/20 hover:border-[#C8946E] transition-all">
+              <span className="text-xs text-[#C8946E] uppercase tracking-widest font-bold">Alineación Estelar</span>
+              <h3 className="text-2xl text-[#F4F0EB] mt-2 mb-3">El Zodiaco de la Novela</h3>
+              <p className="text-[#E5C0A1]/80 text-sm font-light leading-relaxed">
+                Descubre cómo los signos celestes influyen directamente en los poderes, debilidades y pactos de cada personaje.
+              </p>
+            </div>
+            <div className="p-6 bg-black/40 border border-[#E5C0A1]/20 hover:border-[#C8946E] transition-all">
+              <span className="text-xs text-[#C8946E] uppercase tracking-widest font-bold">Reliquias Mayores</span>
+              <h3 className="text-2xl text-[#F4F0EB] mt-2 mb-3">Artefactos del Eclipsado</h3>
+              <p className="text-[#E5C0A1]/80 text-sm font-light leading-relaxed">
+                Catálogo histórico de objetos rituales que protagonizan los giros más intensos de la trama literaria.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. EL ENIGMA DEL ECLIPSE (RETOS Y CAPÍTULOS OCULTOS) */}
+      <section id="enigma" className="py-28 px-6 bg-[#08040C] border-b border-[#E5C0A1]/10 text-center">
+        <div className="max-w-2xl mx-auto">
+          <span className="text-[#C8946E] uppercase tracking-[0.4em] text-xs font-bold block mb-3">Reto Semanal</span>
+          <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-4">El Enigma del Eclipse</h2>
+          <p className="text-[#E5C0A1]/80 text-sm md:text-base font-light mb-8">
+            “Aquel cuyo nombre da sombra al sol y gobierna en el confín del sistema estelar... ¿Cómo se llama el planeta que rige nuestra academia?”
+          </p>
+
+          <form onSubmit={verificarEnigma} className="flex flex-col sm:flex-row gap-3 justify-center mb-6">
+            <input 
+              type="text"
+              value={respuestaEnigma}
+              onChange={(e) => setRespuestaEnigma(e.target.value)}
+              placeholder="Introduce la palabra secreta..."
+              className="px-6 py-3 bg-black/50 border border-[#E5C0A1]/30 focus:outline-none focus:border-[#C8946E] text-[#F4F0EB] text-sm tracking-widest md:w-80"
+            />
+            <button 
+              type="submit"
+              className="px-6 py-3 bg-[#2E1065] text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:bg-[#C8946E] hover:text-black transition-all border border-[#E5C0A1]/30 cursor-pointer"
+            >
+              Revelar Sello
+            </button>
+          </form>
+
+          {mensajeEnigma && (
+            <p className="text-sm text-[#E5C0A1] tracking-wide font-light bg-black/40 p-4 border border-[#E5C0A1]/20 inline-block">
+              {mensajeEnigma}
+            </p>
+          )}
+        </div>
+      </section>
+
+      {/* 9. GALERÍA DE VISIONES (ARTE Y ESCENAS DEL LIBRO) */}
+      <section id="galeria" className="py-28 px-6 bg-[#0B0510] border-b border-[#E5C0A1]/10 text-center">
+        <div className="max-w-5xl mx-auto">
+          <span className="text-[#C8946E] uppercase tracking-[0.4em] text-xs font-bold block mb-3">Archivo Visual</span>
+          <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-4">Galería de Visiones</h2>
+          <p className="text-[#E5C0A1]/80 text-sm font-light mb-16">Recreaciones visuales de los momentos más icónicos del universo de Los Hijos de Plutón.</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="h-64 bg-gradient-to-tr from-[#1E0B2B] to-[#0A050E] border border-[#E5C0A1]/30 flex flex-col justify-end p-6 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-[url('/fondo-astral.png')] bg-cover opacity-30 group-hover:scale-105 transition-transform duration-500"></div>
+              <span className="relative z-10 text-xs uppercase tracking-widest text-[#C8946E] font-bold">Escena I</span>
+              <h3 className="relative z-10 text-xl text-[#F4F0EB] mt-1">El Umbral de la Academia</h3>
+            </div>
+            <div className="h-64 bg-gradient-to-tr from-[#1E0B2B] to-[#0A050E] border border-[#E5C0A1]/30 flex flex-col justify-end p-6 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-[url('/fondo-astral.png')] bg-cover opacity-30 group-hover:scale-105 transition-transform duration-500"></div>
+              <span className="relative z-10 text-xs uppercase tracking-widest text-[#C8946E] font-bold">Escena II</span>
+              <h3 className="relative z-10 text-xl text-[#F4F0EB] mt-1">La Conjunción del Anillo</h3>
+            </div>
+            <div className="h-64 bg-gradient-to-tr from-[#1E0B2B] to-[#0A050E] border border-[#E5C0A1]/30 flex flex-col justify-end p-6 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-[url('/fondo-astral.png')] bg-cover opacity-30 group-hover:scale-105 transition-transform duration-500"></div>
+              <span className="relative z-10 text-xs uppercase tracking-widest text-[#C8946E] font-bold">Escena III</span>
+              <h3 className="relative z-10 text-xl text-[#F4F0EB] mt-1">El Sello de Plutón</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. SECCIÓN FAQ / SEO OPTIMIZADA PARA GOOGLE */}
       <section id="faq" className="py-24 px-6 bg-[#08040C] border-b border-[#E5C0A1]/10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
@@ -309,7 +527,7 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 7. CAPTACIÓN (EL ORÁCULO DE ADMISIÓN) */}
+      {/* 11. CAPTACIÓN (EL ORÁCULO DE ADMISIÓN) */}
       <section className="py-28 px-6 relative overflow-hidden bg-[#08040C]">
         <motion.div 
           initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUp}

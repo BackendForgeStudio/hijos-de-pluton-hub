@@ -15,7 +15,7 @@ const PROFECIAS = [
   "“La Academia Eclipse no elige a sus alumnos; las constelaciones trazan su destino.”",
   "“Cuando el anillo se alinee, el verdadero rostro del eclipse será revelado.”",
   "“La luz guía a los inexpertos, pero solo los hijos de la oscuridad dominan el cosmos.”",
-  "“Un pacto sellado en noviembre jamás podrá romperse bajo la luz de la luna.”"
+  "“Un pacto sellado en noviembre jamás podrá romper bajo la luz de la luna.”"
 ];
 
 const PREGUNTAS_TEST = [
@@ -326,16 +326,38 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 7. EL GRIMORIO */}
+      {/* 7. EL GRIMORIO (CON TEXTURA DE FONDO) */}
       <section id="grimorio" className="py-20 px-6 bg-[#0B0510] border-b border-[#E5C0A1]/10">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2">Enciclopedia</span>
           <h2 className="text-3xl text-[#F4F0EB] mb-3">El Grimorio de la Academia</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Expedientes de iniciados, alineaciones estelares y reliquias mayores.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-            <div className="p-5 bg-black/40 border border-[#E5C0A1]/20"><h3 className="text-lg text-[#F4F0EB] mb-1">Custodios</h3><p className="text-xs text-[#E5C0A1]/70">Expedientes de los maestros del eco.</p></div>
-            <div className="p-5 bg-black/40 border border-[#E5C0A1]/20"><h3 className="text-lg text-[#F4F0EB] mb-1">Zodiaco</h3><p className="text-xs text-[#E5C0A1]/70">Influencia de los signos celestes.</p></div>
-            <div className="p-5 bg-black/40 border border-[#E5C0A1]/20"><h3 className="text-lg text-[#F4F0EB] mb-1">Artefactos</h3><p className="text-xs text-[#E5C0A1]/70">Catálogo de objetos rituales.</p></div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <div 
+              className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] transition-all"
+              style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.92), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}
+            >
+              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente I</span>
+              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium">Custodios</h3>
+              <p className="text-xs text-[#E5C0A1]/70 font-light">Expedientes de los maestros del eco.</p>
+            </div>
+            <div 
+              className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] transition-all"
+              style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.92), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}
+            >
+              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente II</span>
+              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium">Zodiaco</h3>
+              <p className="text-xs text-[#E5C0A1]/70 font-light">Influencia de los signos celestes.</p>
+            </div>
+            <div 
+              className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] transition-all"
+              style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.92), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}
+            >
+              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente III</span>
+              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium">Artefactos</h3>
+              <p className="text-xs text-[#E5C0A1]/70 font-light">Catálogo de objetos rituales.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -354,16 +376,35 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 9. GALERÍA */}
+      {/* 9. GALERÍA DE VISIONES */}
       <section id="galeria" className="py-20 px-6 bg-[#0B0510] border-b border-[#E5C0A1]/10 text-center">
         <div className="max-w-4xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold block mb-2">Visuales</span>
           <h2 className="text-3xl text-[#F4F0EB] mb-3">Galería de Visiones</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Recreaciones del universo de Los Hijos de Plutón.</p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
-            <div className="h-48 bg-gradient-to-tr from-[#1E0B2B] to-[#0A050E] border border-[#E5C0A1]/30 p-4 flex flex-col justify-end"><h3 className="text-sm text-[#F4F0EB]">Umbral de la Academia</h3></div>
-            <div className="h-48 bg-gradient-to-tr from-[#1E0B2B] to-[#0A050E] border border-[#E5C0A1]/30 p-4 flex flex-col justify-end"><h3 className="text-sm text-[#F4F0EB]">Conjunción del Anillo</h3></div>
-            <div className="h-48 bg-gradient-to-tr from-[#1E0B2B] to-[#0A050E] border border-[#E5C0A1]/30 p-4 flex flex-col justify-end"><h3 className="text-sm text-[#F4F0EB]">Sello de Plutón</h3></div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <div className="h-64 border border-[#E5C0A1]/30 p-4 flex flex-col justify-end relative bg-cover bg-center group overflow-hidden shadow-lg" style={{ backgroundImage: "url('/images/galeria-1.jpg')" }}>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div className="relative z-10">
+                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena I</span>
+                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium">Umbral de la Academia</h3>
+              </div>
+            </div>
+            <div className="h-64 border border-[#E5C0A1]/30 p-4 flex flex-col justify-end relative bg-cover bg-center group overflow-hidden shadow-lg" style={{ backgroundImage: "url('/images/galeria-2.jpg')" }}>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div className="relative z-10">
+                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena II</span>
+                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium">Conjunción del Anillo</h3>
+              </div>
+            </div>
+            <div className="h-64 border border-[#E5C0A1]/30 p-4 flex flex-col justify-end relative bg-cover bg-center group overflow-hidden shadow-lg" style={{ backgroundImage: "url('/images/galeria-3.jpg')" }}>
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
+              <div className="relative z-10">
+                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena III</span>
+                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium">Sello de Plutón</h3>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -394,7 +435,7 @@ export default function CodicePlutonPage() {
         </motion.div>
       </section>
 
-      {/* 12. PIE DE PÁGINA (BLINDAJE LEGAL Y COPYRIGHT) */}
+      {/* 12. PIE DE PÁGINA */}
       <footer className="py-12 px-6 bg-[#050208] border-t border-[#E5C0A1]/15 text-center text-[11px] text-[#E5C0A1]/60">
         <div className="max-w-4xl mx-auto space-y-4">
           <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>

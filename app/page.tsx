@@ -15,7 +15,7 @@ const PROFECIAS = [
   "“La Academia Eclipse no elige a sus alumnos; las constelaciones trazan su destino.”",
   "“Cuando el anillo se alinee, el verdadero rostro del eclipse será revelado.”",
   "“La luz guía a los inexpertos, pero solo los hijos de la oscuridad dominan el cosmos.”",
-  "“Un pacto sellado en noviembre jamás podrá romperse bajo la luz de la luna.”"
+  "“Un pacto sellado en noviembre jamás podrá romper bajo la luz de la luna.”"
 ];
 
 export default function CodicePlutonPage() {
@@ -45,8 +45,8 @@ export default function CodicePlutonPage() {
   };
 
   const fadeUp = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
   } as const;
 
   const scrollToSection = (id: string) => {
@@ -59,8 +59,8 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className}`}>
       
-      {/* 1. GRAN BANNER (HERO) ASTRAL - OPTIMIZADO PARA MÓVILES */}
-      <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate">
+      {/* 1. GRAN BANNER (HERO) ASTRAL - OPTIMIZADO */}
+      <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         
         <div 
           className="absolute inset-0 bg-cover bg-center -z-30 opacity-60"
@@ -73,36 +73,36 @@ export default function CodicePlutonPage() {
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 120, ease: "linear" }}
           style={{ willChange: "transform" }}
-          className="absolute w-[700px] h-[700px] md:w-[1100px] md:h-[1100px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none"
+          className="absolute w-[700px] h-[700px] md:w-[1100px] md:h-[1100px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu"
         />
 
-        {/* Planeta con resplandor púrpura oscurecido */}
-        <div className="absolute w-[420px] h-[420px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none">
-          <div className="absolute w-[350px] h-[350px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[90px] opacity-80"></div>
+        {/* Planeta optimizado */}
+        <div className="absolute w-[380px] h-[380px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
+          <div className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[60px] md:blur-[90px] opacity-80"></div>
           <img
             src="/planeta-oficial.png"
             alt="Planeta Oficial Los Hijos de Plutón"
-            className="absolute w-full h-full object-contain drop-shadow-[0_0_60px_rgba(76,29,149,0.85)] opacity-95 brightness-90 contrast-125"
+            className="absolute w-full h-full object-contain drop-shadow-[0_0_40px_rgba(76,29,149,0.7)] opacity-95 brightness-90 contrast-125"
           />
-          <div className="absolute inset-0 bg-[#3B0764]/30 rounded-full blur-2xl pointer-events-none z-10 mix-blend-screen"></div>
+          <div className="absolute inset-0 bg-[#3B0764]/30 rounded-full blur-xl pointer-events-none z-10 mix-blend-screen"></div>
         </div>
 
         <img
           src="/estrella.png"
           alt="Estrella Polar"
-          className="absolute top-[calc(50%-320px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-28 h-28 md:w-40 md:h-40 z-30 drop-shadow-[0_0_35px_rgba(229,192,161,1)] object-contain pointer-events-none"
+          className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-24 h-24 md:w-40 md:h-40 z-30 drop-shadow-[0_0_25px_rgba(229,192,161,1)] object-contain pointer-events-none"
         />
 
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
+          initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.5 }}
-          className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4"
+          transition={{ duration: 1.2 }}
+          className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu"
         >
-          <h1 className="font-normal text-5xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_10px_30px_rgba(0,0,0,1)] filter brightness-110 contrast-125 tracking-wider text-center mb-4">
+          <h1 className="font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_8px_25px_rgba(0,0,0,1)] filter brightness-110 contrast-125 tracking-wider text-center mb-3">
             EL CÓDICE<br />DE PLUTÓN
           </h1>
-          <p className="text-[#E5C0A1]/90 text-xs md:text-base font-light tracking-[0.2em] uppercase text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] px-2">
+          <p className="text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] px-2">
             El santuario para los lectores y fans de Los Hijos de Plutón
           </p>
         </motion.div>
@@ -117,63 +117,63 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 2. NAVEGACIÓN ADHESIVA */}
-      <nav className="sticky top-0 z-50 bg-[#08040C]/90 backdrop-blur-md border-b border-[#E5C0A1]/20 py-4 px-6">
-        <ul className="flex justify-center gap-6 md:gap-12 text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80">
-          <li onClick={() => scrollToSection('lore')} className="hover:text-white cursor-pointer transition-colors">La Obra</li>
-          <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-white cursor-pointer transition-colors">Oráculo Diario</li>
-          <li onClick={() => scrollToSection('merch')} className="hover:text-white cursor-pointer transition-colors">Reliquias</li>
-          <li onClick={() => scrollToSection('discord')} className="hover:text-white cursor-pointer transition-colors">Discord</li>
-          <li onClick={() => scrollToSection('faq')} className="hover:text-white cursor-pointer transition-colors">FAQ</li>
+      {/* 2. NAVEGACIÓN ADHESIVA (FLUIDA Y DESLIZABLE EN MÓVIL) */}
+      <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <ul className="flex justify-start md:justify-center gap-6 md:gap-12 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2">
+          <li onClick={() => scrollToSection('lore')} className="hover:text-white cursor-pointer transition-colors py-1">La Obra</li>
+          <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-white cursor-pointer transition-colors py-1">Oráculo Diario</li>
+          <li onClick={() => scrollToSection('merch')} className="hover:text-white cursor-pointer transition-colors py-1">Reliquias</li>
+          <li onClick={() => scrollToSection('discord')} className="hover:text-white cursor-pointer transition-colors py-1">Discord</li>
+          <li onClick={() => scrollToSection('faq')} className="hover:text-white cursor-pointer transition-colors py-1">FAQ</li>
         </ul>
       </nav>
 
       {/* 3. SECCIÓN: CUENTA ATRÁS */}
-      <section className="py-16 bg-[#0F0814] border-b border-[#E5C0A1]/10 text-center">
+      <section className="py-14 bg-[#0F0814] border-b border-[#E5C0A1]/10 text-center transform-gpu">
         <div className="max-w-4xl mx-auto px-6">
           <p className="text-[#C8946E] text-xs uppercase tracking-[0.4em] mb-4 font-bold">Próximo Alineamiento del Eclipse</p>
-          <div className="grid grid-cols-4 gap-4 max-w-lg mx-auto text-[#F4F0EB]">
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-4 rounded backdrop-blur-sm">
-              <span className="text-3xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.days}</span>
-              <p className="text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Días</p>
+          <div className="grid grid-cols-4 gap-3 max-w-lg mx-auto text-[#F4F0EB]">
+            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 md:p-4 rounded backdrop-blur-sm">
+              <span className="text-2xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.days}</span>
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Días</p>
             </div>
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-4 rounded backdrop-blur-sm">
-              <span className="text-3xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.hours}</span>
-              <p className="text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Horas</p>
+            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 md:p-4 rounded backdrop-blur-sm">
+              <span className="text-2xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.hours}</span>
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Horas</p>
             </div>
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-4 rounded backdrop-blur-sm">
-              <span className="text-3xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.minutes}</span>
-              <p className="text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Min</p>
+            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 md:p-4 rounded backdrop-blur-sm">
+              <span className="text-2xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.minutes}</span>
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Min</p>
             </div>
-            <div className="bg-black/40 border border-[#E5C0A1]/20 p-4 rounded backdrop-blur-sm">
-              <span className="text-3xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.seconds}</span>
-              <p className="text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Seg</p>
+            <div className="bg-black/40 border border-[#E5C0A1]/20 p-3 md:p-4 rounded backdrop-blur-sm">
+              <span className="text-2xl md:text-4xl font-bold text-[#E5C0A1]">{timeLeft.seconds}</span>
+              <p className="text-[9px] md:text-[10px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Seg</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* 4. CAJAS INTERACTIVAS: DISEÑO ASIMÉTRICO */}
-      <section id="lore" className="py-36 px-6 relative bg-[#08040C] overflow-hidden">
-        <div className="absolute top-1/4 left-5 w-[500px] h-[500px] bg-[#3B0764]/10 rounded-full blur-[140px] pointer-events-none"></div>
-        <div className="absolute bottom-10 right-5 w-[500px] h-[500px] bg-[#C8946E]/10 rounded-full blur-[140px] pointer-events-none"></div>
+      <section id="lore" className="py-28 md:py-36 px-6 relative bg-[#08040C] overflow-hidden transform-gpu">
+        <div className="absolute top-1/4 left-5 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#3B0764]/10 rounded-full blur-[80px] md:blur-[140px] pointer-events-none"></div>
+        <div className="absolute bottom-10 right-5 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-[#C8946E]/10 rounded-full blur-[80px] md:blur-[140px] pointer-events-none"></div>
 
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div 
-            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp}
-            className="text-center mb-24"
+            initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUp}
+            className="text-center mb-16 md:mb-24"
           >
-            <h2 className="text-4xl md:text-5xl text-[#F4F0EB] mb-3 tracking-wider">Los Archivos del Códice</h2>
-            <p className="text-[#E5C0A1]/70 text-sm tracking-[0.3em] uppercase">Explora los misterios de la Academia Eclipse</p>
+            <h2 className="text-3xl md:text-5xl text-[#F4F0EB] mb-3 tracking-wider">Los Archivos del Códice</h2>
+            <p className="text-[#E5C0A1]/70 text-xs md:text-sm tracking-[0.3em] uppercase">Explora los misterios de la Academia Eclipse</p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-start">
             
             <motion.div 
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="p-8 bg-gradient-to-b from-[#140B1A]/90 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-xl relative group cursor-pointer shadow-[0_0_30px_rgba(76,29,149,0.15)] transition-all md:mt-0"
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+              className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-0 transform-gpu"
             >
               <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
               <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
@@ -191,9 +191,9 @@ export default function CodicePlutonPage() {
             <motion.div 
               id="merch"
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="p-8 bg-gradient-to-b from-[#140B1A]/90 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-xl relative group cursor-pointer shadow-[0_0_30px_rgba(76,29,149,0.15)] transition-all md:mt-16"
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+              className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-16 transform-gpu"
             >
               <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
               <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
@@ -211,9 +211,9 @@ export default function CodicePlutonPage() {
             <motion.div 
               id="discord"
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="p-8 bg-gradient-to-b from-[#140B1A]/90 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-xl relative group cursor-pointer shadow-[0_0_30px_rgba(76,29,149,0.15)] transition-all md:mt-4"
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+              className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-4 transform-gpu"
             >
               <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
               <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
@@ -230,9 +230,9 @@ export default function CodicePlutonPage() {
 
             <motion.div 
               initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp}
-              whileHover={{ y: -8, scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-              className="p-8 bg-gradient-to-b from-[#140B1A]/90 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-xl relative group cursor-pointer shadow-[0_0_30px_rgba(76,29,149,0.15)] transition-all md:mt-24"
+              whileHover={{ y: -6, scale: 1.01 }}
+              transition={{ duration: 0.2 }}
+              className="p-8 bg-gradient-to-b from-[#140B1A]/95 to-[#0A050E]/95 border-2 border-[#E5C0A1]/30 hover:border-[#C8946E] backdrop-blur-md relative group cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.15)] transition-all md:mt-24 transform-gpu"
             >
               <div className="absolute top-0 left-0 w-3 h-3 border-t-2 border-l-2 border-[#E5C0A1]"></div>
               <div className="absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-[#E5C0A1]"></div>
@@ -252,24 +252,24 @@ export default function CodicePlutonPage() {
       </section>
 
       {/* 5. SECCIÓN INTERACTIVA: EL ORÁCULO DIARIO */}
-      <section id="oraculo-diario" className="py-28 px-6 bg-gradient-to-b from-[#08040C] via-[#120718] to-[#08040C] border-y border-[#E5C0A1]/15 text-center relative">
+      <section id="oraculo-diario" className="py-24 px-6 bg-gradient-to-b from-[#08040C] via-[#120718] to-[#08040C] border-y border-[#E5C0A1]/15 text-center relative transform-gpu">
         <div className="max-w-3xl mx-auto relative z-10">
           <span className="text-[#C8946E] uppercase tracking-[0.4em] text-xs font-bold block mb-3">Consulta mística</span>
-          <h2 className="text-4xl text-[#F4F0EB] mb-6">El Oráculo de Plutón</h2>
+          <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-6">El Oráculo de Plutón</h2>
           <p className="text-[#E5C0A1]/80 text-sm md:text-base font-light mb-10">
             Regresa cada día a consultar los designios de la Academia Eclipse. Pulsa el sello para revelar la profecía oculta que marcará tu jornada.
           </p>
 
-          <div className="p-8 bg-black/60 border border-[#E5C0A1]/40 backdrop-blur-md mb-8 shadow-[0_0_40px_rgba(76,29,149,0.25)] relative">
+          <div className="p-6 md:p-8 bg-black/60 border border-[#E5C0A1]/40 backdrop-blur-md mb-8 shadow-[0_0_30px_rgba(76,29,149,0.2)] relative">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#08040C] px-4 text-[#C8946E] text-xs uppercase tracking-widest border border-[#E5C0A1]/30">Profecía del día</div>
-            <p className="text-xl md:text-2xl text-[#F4F0EB] italic font-light tracking-wide min-h-[80px] flex items-center justify-center">
+            <p className="text-lg md:text-2xl text-[#F4F0EB] italic font-light tracking-wide min-h-[80px] flex items-center justify-center">
               {profeciaActual}
             </p>
           </div>
 
           <button 
             onClick={consultarOraculo}
-            className="px-8 py-4 bg-[#2E1065] text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:bg-[#C8946E] hover:text-black transition-all shadow-[0_0_25px_rgba(46,16,101,0.7)] border border-[#E5C0A1]/30 cursor-pointer"
+            className="px-8 py-4 bg-[#2E1065] text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:bg-[#C8946E] hover:text-black transition-all shadow-[0_0_20px_rgba(46,16,101,0.6)] border border-[#E5C0A1]/30 cursor-pointer"
           >
             Invocar Nueva Profecía
           </button>
@@ -277,7 +277,7 @@ export default function CodicePlutonPage() {
       </section>
 
       {/* 6. SECCIÓN FAQ / SEO OPTIMIZADA PARA GOOGLE */}
-      <section id="faq" className="py-28 px-6 bg-[#08040C] border-b border-[#E5C0A1]/10">
+      <section id="faq" className="py-24 px-6 bg-[#08040C] border-b border-[#E5C0A1]/10">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16">
             <span className="text-[#C8946E] uppercase tracking-[0.4em] text-xs font-bold block mb-3">Base de Conocimiento</span>
@@ -310,13 +310,13 @@ export default function CodicePlutonPage() {
       </section>
 
       {/* 7. CAPTACIÓN (EL ORÁCULO DE ADMISIÓN) */}
-      <section className="py-32 px-6 relative overflow-hidden bg-[#08040C]">
+      <section className="py-28 px-6 relative overflow-hidden bg-[#08040C]">
         <motion.div 
-          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeUp}
-          className="max-w-2xl mx-auto text-center relative z-10"
+          initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} variants={fadeUp}
+          className="max-w-2xl mx-auto text-center relative z-10 transform-gpu"
         >
-          <h2 className="text-4xl text-[#F4F0EB] mb-4">Inscripción a la Academia</h2>
-          <p className="text-[#E5C0A1]/80 mb-10 font-light text-sm md:text-base">Inscribe tu nombre antes del 19 de noviembre y recibe un artefacto digital exclusivo para tus estudios en El Códice de Plutón.</p>
+          <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-4">Inscripción a la Academia</h2>
+          <p className="text-[#E5C0A1]/80 mb-8 font-light text-sm md:text-base">Inscribe tu nombre antes del 19 de noviembre y recibe un artefacto digital exclusivo para tus estudios en El Códice de Plutón.</p>
           
           <form className="flex flex-col md:flex-row gap-4 justify-center" onSubmit={(e) => e.preventDefault()}>
             <input 

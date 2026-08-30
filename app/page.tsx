@@ -18,7 +18,7 @@ const academiaFont = localFont({
 const PROFECIAS = [
   "“Bajo la sombra de Plutón, ningún secreto permanece enterrado para siempre.”",
   "“La Academia Eclipse no elige a sus alumnos; las constelaciones trazan su destino.”",
-  "“Cuando el anillo se alinee, el verdadero rostro del eclipse será revelado.”",
+  "“Когда el anillo se alinee, el verdadero rostro del eclipse será revelado.”",
   "“La luz guía a los inexpertos, pero solo los hijos de la oscuridad dominan el cosmos.”",
   "“Un pacto sellado en noviembre jamás podrá romper bajo la luz de la luna.”"
 ];
@@ -99,9 +99,9 @@ const BotonReliquia = ({ children, onClick, type = "button", disabled = false }:
   </button>
 );
 
-/* --- NUEVO ICONO SVG ESTILIZADO (Sello Arcano) --- */
+/* --- ICONO SVG ESTILIZADO (Sello Arcano) --- */
 const IconoSelloArcano = () => (
-  <svg className="w-6 h-6 text-[#C8946E] drop-shadow-[0_0_8px_rgba(200,148,110,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-8 h-8 text-[#C8946E] drop-shadow-[0_0_10px_rgba(200,148,110,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="12" r="9" strokeWidth="1.5" strokeDasharray="3 3"/>
     <circle cx="12" cy="12" r="5" strokeWidth="1.5"/>
     <path d="M12 2V5M12 19V22M2 12H5M19 12H22" strokeWidth="1.5" strokeLinecap="round"/>
@@ -130,7 +130,6 @@ export default function CodicePlutonPage() {
 
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
-  // ESTADOS DEL FORMULARIO DE PACTO
   const [emailPacto, setEmailPacto] = useState("");
   const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
@@ -196,7 +195,6 @@ export default function CodicePlutonPage() {
     }
   };
 
-  // FUNCIÓN PARA SELLAR EL PACTO Y ASIGNAR NÚMERO DE INICIADO
   const sellarPacto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailPacto) return;
@@ -205,7 +203,6 @@ export default function CodicePlutonPage() {
     setMensajePacto("Invocando a los astros...");
 
     try {
-      // Insertar el correo
       const { error } = await supabase
         .from('pactos')
         .insert([{ email: emailPacto }]);
@@ -218,9 +215,9 @@ export default function CodicePlutonPage() {
         }
         setEstadoPacto('error');
       } else {
-        // Obtener el número de orden exacto consultando la función SQL
-        const { data: countData } = await supabase.rpc('obtener_numero_pacto');
-        const numeroIniciado = countData ? countData : "✦";
+        // Consultar el número total de iniciados con la función RPC
+        const { data, error: rpcError } = await supabase.rpc('obtener_numero_pacto');
+        const numeroIniciado = (!rpcError && data !== null) ? data : "1";
 
         setMensajePacto(`✨ Pacto sellado. Eres el iniciado oficial número #${numeroIniciado} de la Academia.`);
         setEstadoPacto('success');
@@ -247,7 +244,7 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
-      {/* FONDOS LATERALES MÍSTICOS (FIJOS) */}
+      {/* FONDOS LATERALES MÍSTICOS */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.70] mix-blend-screen hidden md:block">
         <div className="absolute top-0 left-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/runas-izq.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 right-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/zodiaco-der.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
@@ -563,7 +560,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 11. CAPTACIÓN (CON EL NUEVO ICONO SVG Y NÚMERO DE INICIADO) */}
+      {/* 11. CAPTACIÓN */}
       <section className="py-16 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           

@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import localFont from 'next/font/local';
 import { createClient } from '@supabase/supabase-js';
 
-// --- INICIALIZAR SUPABASE ---
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
 const supabase = createClient(supabaseUrl, supabaseKey);
@@ -100,25 +99,22 @@ const BotonReliquia = ({ children, onClick, type = "button", disabled = false }:
   </button>
 );
 
-/* --- ICONOS MÍSTICOS VECTORIALES --- */
-const IconoOraculo = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+/* --- NUEVO ICONO SVG ESTILIZADO (Sello Arcano) --- */
+const IconoSelloArcano = () => (
+  <svg className="w-6 h-6 text-[#C8946E] drop-shadow-[0_0_8px_rgba(200,148,110,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="9" strokeWidth="1.5" strokeDasharray="3 3"/>
+    <circle cx="12" cy="12" r="5" strokeWidth="1.5"/>
+    <path d="M12 2V5M12 19V22M2 12H5M19 12H22" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+  </svg>
 );
-const IconoEclipse = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-);
-const IconoGrimorio = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>
-);
-const IconoEnigma = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-);
-const IconoGaleria = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>
-);
-const IconoFAQ = () => (
-  <svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>
-);
+
+const IconoOraculo = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>);
+const IconoEclipse = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>);
+const IconoGrimorio = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>);
+const IconoEnigma = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
+const IconoGaleria = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>);
+const IconoFAQ = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>);
 
 export default function CodicePlutonPage() {
   const [profeciaActual, setProfeciaActual] = useState("Pulsa el cristal para invocar tu profecía diaria.");
@@ -134,7 +130,7 @@ export default function CodicePlutonPage() {
 
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
-  // ESTADOS DEL FORMULARIO DE PACTO (SUPABASE)
+  // ESTADOS DEL FORMULARIO DE PACTO
   const [emailPacto, setEmailPacto] = useState("");
   const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
@@ -200,7 +196,7 @@ export default function CodicePlutonPage() {
     }
   };
 
-  // FUNCIÓN PARA SELLAR EL PACTO (ENVIAR A SUPABASE)
+  // FUNCIÓN PARA SELLAR EL PACTO Y ASIGNAR NÚMERO DE INICIADO
   const sellarPacto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailPacto) return;
@@ -209,19 +205,24 @@ export default function CodicePlutonPage() {
     setMensajePacto("Invocando a los astros...");
 
     try {
+      // Insertar el correo
       const { error } = await supabase
         .from('pactos')
         .insert([{ email: emailPacto }]);
 
       if (error) {
-        if (error.code === '23505') { // Error de duplicado
+        if (error.code === '23505') {
           setMensajePacto("Las estrellas indican que este sello ya ha sido registrado anteriormente.");
         } else {
           setMensajePacto("Hubo una interferencia cósmica. Inténtalo de nuevo.");
         }
         setEstadoPacto('error');
       } else {
-        setMensajePacto("✨ Pacto sellado. Eres un iniciado oficial de la Academia.");
+        // Obtener el número de orden exacto consultando la función SQL
+        const { data: countData } = await supabase.rpc('obtener_numero_pacto');
+        const numeroIniciado = countData ? countData : "✦";
+
+        setMensajePacto(`✨ Pacto sellado. Eres el iniciado oficial número #${numeroIniciado} de la Academia.`);
         setEstadoPacto('success');
         setEmailPacto("");
       }
@@ -382,7 +383,6 @@ export default function CodicePlutonPage() {
           <h2 className="text-3xl text-[#F4F0EB] mb-4">El Oráculo de Plutón</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Pulsa el sello para revelar la profecía oculta que marcará tu jornada.</p>
 
-          {/* Caja Altar Oráculo */}
           <div className="p-8 border border-[#E5C0A1]/30 mb-8 relative group shadow-[0_0_40px_rgba(46,16,101,0.5)] bg-black/90 backdrop-blur-md overflow-hidden">
             <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-[#C8946E] to-transparent"></div>
@@ -409,7 +409,6 @@ export default function CodicePlutonPage() {
           <h2 className="text-3xl text-[#F4F0EB] mb-3">¿A qué Casa perteneces?</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Descubre cuál de las casas de la Academia Eclipse rige tu destino.</p>
 
-          {/* Caja Altar Test */}
           <div className="p-8 border border-[#E5C0A1]/30 text-left relative bg-black/90 backdrop-blur-md shadow-[0_0_40px_rgba(76,29,149,0.3)] overflow-hidden">
             <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-15 mix-blend-overlay pointer-events-none"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-[#C8946E] to-transparent"></div>
@@ -564,9 +563,14 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 11. CAPTACIÓN CONECTADA A SUPABASE */}
-      <section className="py-12 px-6 text-center mb-10 relative z-10">
+      {/* 11. CAPTACIÓN (CON EL NUEVO ICONO SVG Y NÚMERO DE INICIADO) */}
+      <section className="py-16 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
+          
+          <div className="flex justify-center mb-4">
+            <IconoSelloArcano />
+          </div>
+
           <h2 className="text-3xl text-[#F4F0EB] mb-3">Inscripción a la Academia</h2>
           <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Inscribe tu nombre antes del 19 de noviembre y recibe un artefacto digital exclusivo.</p>
           
@@ -584,7 +588,6 @@ export default function CodicePlutonPage() {
             </BotonReliquia>
           </form>
 
-          {/* Mensaje de respuesta del servidor */}
           {mensajePacto && (
             <motion.p 
               initial={{ opacity: 0, y: 10 }} 

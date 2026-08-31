@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import localFont from 'next/font/local';
 import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
-import html2canvas from 'html2canvas';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
@@ -153,9 +152,7 @@ export default function CodicePlutonPage() {
   const [preguntaActual, setPreguntaActual] = useState(0);
   const [puntosBastion, setPuntosBastion] = useState({ Fuego: 0, Agua: 0, Tierra: 0, Aire: 0 });
   const [bastionResultado, setBastionResultado] = useState<string | null>(null);
-  const [capturandoImagen, setCapturandoImage] = useState(false);
-
-  const tarjetaRef = useRef<HTMLDivElement>(null);
+  const [generandoImagen, setGenerandoImagen] = useState(false);
 
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
@@ -194,7 +191,6 @@ export default function CodicePlutonPage() {
     if (cargandoProfecia) return;
     setCargandoProfecia(true);
 
-    // Animación de invocación mística
     setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * PROFECIAS.length);
       setProfeciaActual(PROFECIAS[randomIndex]);
@@ -222,34 +218,96 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
-  const descargarTarjetaTest = async () => {
-    if (!tarjetaRef.current || capturandoImagen) return;
-    setCapturandoImage(true);
+  // GENERADOR NATIVO DE TARJETA GRAFICA EN CANVAS (EVITA ERRORES DE LIBRERIAS EXTERNAS)
+  const descargarTarjetaTest = () => {
+    if (!bastionResultado || generandoImagen) return;
+    setGenerandoImagen(true);
 
+    const info = BASTIONES_INFO[bastionResultado];
+    const canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 630; // Formato estandar para redes sociales
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      setGenerandoImagen(false);
+      return;
+    }
+
+    // Fondo oscuro profundo
+    ctx.fillStyle = '#08040C';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Marco exterior dorado/bronce
+    ctx.strokeStyle = '#C8946E';
+    ctx.lineWidth = 4;
+    ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+
+    // Decoración esquinas
+    ctx.fillStyle = '#E5C0A1';
+    ctx.fillRect(36, 36, 12, 12);
+    ctx.fillRect(canvas.width - 48, 36, 12, 12);
+    ctx.fillRect(36, canvas.height - 48, 12, 12);
+    ctx.fillRect(canvas.width - 48, canvas.height - 48, 12, 12);
+
+    // Título superior
+    ctx.fillStyle = '#C8946E';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('ACADEMIA ECLIPSE — REGISTRO CENTRAL DE ASTHAR', canvas.width / 2, 110);
+
+    // Nombre del Bastión
+    ctx.fillStyle = '#F4F0EB';
+    ctx.font = 'bold 52px serif';
+    ctx.fillText(info.nombre, canvas.width / 2, 190);
+
+    // Emblema / Signos
+    ctx.fillStyle = '#E5C0A1';
+    ctx.font = 'bold 24px sans-serif';
+    ctx.fillText(info.emblema, canvas.width / 2, 240);
+
+    // Kinesis
+    ctx.fillStyle = '#C8946E';
+    ctx.font = 'bold 18px sans-serif';
+    ctx.fillText(info.kinesis, canvas.width / 2, 280);
+
+    // Descripción (con salto de línea automático simple)
+    ctx.fillStyle = '#E5C0A1';
+    ctx.font = '22px sans-serif';
+    const palabras = info.descripcion.split(' ');
+    let linea = '';
+    let y = 350;
+    const maxWidth = 900;
+
+    for (let n = 0; n < palabras.length; n++) {
+      const testLine = linea + palabras[n] + ' ';
+      const metrics = ctx.measureText(testLine);
+      const testWidth = metrics.width;
+      if (testWidth > maxWidth && n > 0) {
+        ctx.fillText(linea, canvas.width / 2, y);
+        linea = palabras[n] + ' ';
+        y += 35;
+      } else {
+        linea = testLine;
+      }
+    }
+    ctx.fillText(linea, canvas.width / 2, y);
+
+    // Marca de agua inferior (Publicidad para atraer fans)
+    ctx.fillStyle = '#C8946E';
+    ctx.font = 'bold 20px sans-serif';
+    ctx.fillText('elcodicedepluton.com  ✦  Santuario de la Academia Eclipse', canvas.width / 2, 550);
+
+    // Descargar imagen
     try {
-      // Retardo para asegurar renderizado completo del DOM
-      await new Promise((resolve) => setTimeout(resolve, 250));
-
-      const canvas = await html2canvas(tarjetaRef.current, {
-        scale: 2,
-        backgroundColor: '#08040C',
-        useCORS: true,
-        allowTaint: true,
-        logging: false
-      });
-
-      const image = canvas.toDataURL('image/png');
       const link = document.createElement('a');
-      link.href = image;
-      link.download = `mi-bastion-${bastionResultado ? bastionResultado.toLowerCase() : 'eclipse'}.png`;
-      document.body.appendChild(link);
+      link.download = `mi-bastion-${bastionResultado.toLowerCase()}.png`;
+      link.href = canvas.toDataURL('image/png');
       link.click();
-      document.body.removeChild(link);
     } catch (err) {
-      console.error("Error al generar la tarjeta visual:", err);
-      alert("Hubo un error al generar la imagen. Inténtalo de nuevo.");
+      console.error(err);
     } finally {
-      setCapturandoImage(false);
+      setGenerandoImagen(false);
     }
   };
 
@@ -445,7 +503,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 5. ORÁCULO DIARIO MÁGICO (CON TRANSICIÓN VISUAL ELEGANTE) */}
+      {/* 5. ORÁCULO DIARIO MÁGICO */}
       <section id="oraculo-diario" className="py-12 px-6 text-center transform-gpu relative z-10">
         <div className="max-w-2xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
@@ -486,7 +544,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE BASTIONES AMPLIADO CON TARJETA DESCARGABLE */}
+      {/* 6. TEST DE BASTIONES AMPLIADO CON TARJETA GENERADA POR CANVAS */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
@@ -517,11 +575,10 @@ export default function CodicePlutonPage() {
                 </div>
               </div>
             ) : (
-              <div className="relative z-10">
+              <div className="text-center py-6 relative z-10">
                 
-                {/* TARJETA GRAFICA PARA DESCARGAR O COMPARTIR */}
-                <div ref={tarjetaRef} className="p-8 bg-[#08040C] border border-[#C8946E] text-center relative mb-6 shadow-2xl">
-                  <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-20 pointer-events-none"></div>
+                {/* TARJETA VISUAL DE RESULTADO */}
+                <div className="p-8 bg-[#08040C] border border-[#C8946E] text-center relative mb-6 shadow-2xl">
                   <span className="text-[10px] uppercase tracking-widest text-[#C8946E] block mb-2 font-bold relative z-10">Academia Eclipse — Asthar</span>
                   <h3 className="text-3xl md:text-4xl text-[#F4F0EB] mb-3 relative z-10 drop-shadow-md">{BASTIONES_INFO[bastionResultado].nombre}</h3>
                   <p className="text-[#E5C0A1] text-xs md:text-sm mb-2 font-bold relative z-10">{BASTIONES_INFO[bastionResultado].emblema}</p>
@@ -536,8 +593,8 @@ export default function CodicePlutonPage() {
 
                 {/* BOTONES DE ACCION */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <BotonReliquia onClick={descargarTarjetaTest} disabled={capturandoImagen}>
-                    {capturandoImagen ? 'Generando...' : 'Descargar Tarjeta'}
+                  <BotonReliquia onClick={descargarTarjetaTest} disabled={generandoImagen}>
+                    {generandoImagen ? 'Generando Imagen...' : 'Descargar Tarjeta'}
                   </BotonReliquia>
                   <button onClick={compartirResultado} className="px-6 py-3 bg-[#2E1065]/60 border border-[#E5C0A1]/40 text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:border-[#C8946E] transition-all cursor-pointer">
                     Compartir Resultado ✦

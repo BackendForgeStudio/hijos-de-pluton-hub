@@ -15,56 +15,70 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
+// PROFECÍAS CANÓNICAS DE ECLIPSE
 const PROFECIAS = [
-  "“Bajo la sombra de Plutón, ningún secreto permanece enterrado para siempre.”",
-  "“La Academia Eclipse no elige a sus alumnos; las constelaciones trazan su destino.”",
-  "“Когда el anillo se alinee, el verdadero rostro del eclipse será revelado.”",
-  "“La luz guía a los inexpertos, pero solo los hijos de la oscuridad dominan el cosmos.”",
-  "“Un pacto sellado en noviembre jamás podrá romper bajo la luz de la luna.”"
+  "“El don sin control no es más que un arma autodestructiva.” — Profesor Lucio",
+  "“La mente humana detesta el vacío. Cuando neutralizamos un recuerdo, el propio cerebro recompone la secuencia.” — Profesor Lucio",
+  "“Si no aprendes a dominar esa oscuridad, terminará dominándote a ti.” — Evan",
+  "“A veces proteger a alguien implica quitarle algo que no debería haber tenido.” — Cosmo Evren",
+  "“La música es la respuesta, lo demás es solo ruido.” — Madame Orwen"
 ];
 
+// TEST DE INICIACIÓN BASADO EN LOS EVENTOS DE LA NOVELA
 const PREGUNTAS_TEST = [
   {
-    pregunta: "¿Qué prefieres cuando cae la medianoche en la Academia Eclipse?",
+    pregunta: "Suena la alarma de tormenta magnética ultra cósmica en Eclipse y estás en el patio exterior. ¿Qué haces?",
     opciones: [
-      { texto: "Fundirme con las sombras y observar los secretos sin ser visto.", casa: "Umbra" },
-      { texto: "Encender un farol de luz pura para disipar los misterios oscuros.", casa: "Lux" },
-      { texto: "Estudiar el mapa estelar y decodificar los designios del cosmos.", casa: "Astra" }
+      { texto: "Embestir las puertas selladas con fuerza bruta o calcinar un refugio provisional.", bastion: "Fuego" },
+      { texto: "Buscar a los heridos, usar la niebla para ocultarnos o levantar un campo de fuerza emocional.", bastion: "Agua" },
+      { texto: "Mantener la calma, compactar mi energía y bloquear cualquier estructura que colapse.", bastion: "Tierra" },
+      { texto: "Alterar la gravedad para huir desde el aire o hackear los sistemas de la academia.", bastion: "Aire" }
     ]
   },
   {
-    pregunta: "¿Cuál consideras que es tu mayor virtud ante un enigma insondable?",
+    pregunta: "Estás atrapado en el Laberinto de Asterión y se activa 'El Giro', alterando todos los muros violentamente. Tu instinto te dicta:",
     opciones: [
-      { texto: "La paciencia táctica y el sigilo absoluto.", casa: "Umbra" },
-      { texto: "La lógica incisiva y la revelación de la verdad.", casa: "Lux" },
-      { texto: "La intuición guiada por las alineaciones astrales.", casa: "Astra" }
+      { texto: "Lanzar proyectiles destructivos a distancia o iluminar el camino con mi propia luz.", bastion: "Fuego" },
+      { texto: "Infiltrarme en las sombras de los muros o despistar a los rivales con ilusiones.", bastion: "Agua" },
+      { fractional: false, texto: "Endurecer mi piel para soportar el impacto o inmovilizar los engranajes de piedra.", bastion: "Tierra" },
+      { texto: "Desdoblarme en dos cuerpos para explorar varias rutas o cruzar portales.", bastion: "Aire" }
     ]
   },
   {
-    pregunta: "Si pudieras elegir un emblema para grabar en tu escudo, sería...",
+    pregunta: "Descubres que un Alto Linaje está conspirando contra los Espontáneos. ¿Cómo reaccionas?",
     opciones: [
-      { texto: "Un eclipse total devorando el brillo del sol.", casa: "Umbra" },
-      { texto: "Un haz de luz pura atravesando un prisma cristalino.", casa: "Lux" },
-      { texto: "Una constelación oculta que cambia de forma.", casa: "Astra" }
+      { texto: "Confronto a los líderes cara a cara, el combate y la furia dominan mi naturaleza.", bastion: "Fuego" },
+      { texto: "Siento las intenciones ocultas de los implicados y actúo guiado por mi intuición.", bastion: "Agua" },
+      { texto: "Robo los informes médicos en secreto y organizo una resistencia desde el subsuelo.", bastion: "Tierra" },
+      { texto: "Utilizo mi magnetismo y mi elocuencia para averiguar la verdad sin que se den cuenta.", bastion: "Aire" }
     ]
   }
 ];
 
-const CASAS_INFO: Record<string, { nombre: string; descripcion: string; emblema: string }> = {
-  Umbra: {
-    nombre: "Casa Umbra Noctis",
-    descripcion: "Herederos del eco y la oscuridad. Dominas el arte de moverte sin dejar rastro, comprendiendo que los secretos más profundos solo se revelan en el silencio de las sombras.",
-    emblema: "🌑 Sello de la Oscuridad Táctica"
+const BASTIONES_INFO: Record<string, { nombre: string; descripcion: string; emblema: string; kinesis: string }> = {
+  Fuego: {
+    nombre: "Bastión de Fuego",
+    descripcion: "Tu energía es directa, afilada y letal. El combate y el instinto dominan tu naturaleza. No estás aquí para retroceder, sino para arder sin destruirlo todo.",
+    emblema: "🔥 Signos: Aries, Leo, Sagitario",
+    kinesis: "Doce Leyes: Pirokinesis, Heliokinesis, Chorokinesis."
   },
-  Lux: {
-    nombre: "Casa Lux Aeterna",
-    descripcion: "Guardianes del prisma y la revelación. Tu linaje busca siempre la verdad absoluta, utilizando el poder de la luz para iluminar los rincones más ocultos del cosmos.",
-    emblema: "✨ Faro del Espejo Lumínico"
+  Agua: {
+    nombre: "Bastión de Agua",
+    descripcion: "Sientes todo a un nivel insoportable. Tu poder transforma las emociones, navega por el mundo de los sueños y es capaz de dominar la oscuridad más profunda.",
+    emblema: "💧 Signos: Cáncer, Escorpio, Piscis",
+    kinesis: "Doce Leyes: Patokinesis, Umbrakinesis, Onirokinesis."
   },
-  Astra: {
-    nombre: "Casa Astra Nova",
-    descripcion: "Tejedores del destino estelar. Vinculados directamente a los movimientos celestes, interpretáis las constelaciones antes de que escriban el futuro de la Academia.",
-    emblema: "🌌 Astrolabio del Firmamento"
+  Tierra: {
+    nombre: "Bastión de Tierra",
+    descripcion: "Eres el límite, la estructura y la contención. Tu poder puede estabilizar células vivas, volverte físicamente indestructible o paralizar procesos atómicos.",
+    emblema: "🌿 Signos: Tauro, Virgo, Capricornio",
+    kinesis: "Doce Leyes: Taurokinesis, Biokinesis, Akinesis."
+  },
+  Aire: {
+    nombre: "Bastión de Aire",
+    descripcion: "Eres libre, elocuente y mental. Dominas el espacio, la gravedad, los desdoblamientos de identidad y los flujos eléctricos y tecnológicos.",
+    emblema: "🌪️ Signos: Géminis, Libra, Acuario",
+    kinesis: "Doce Leyes: Duplikinesis, Gravitokinesis, Electrokinesis."
   }
 };
 
@@ -99,7 +113,6 @@ const BotonReliquia = ({ children, onClick, type = "button", disabled = false }:
   </button>
 );
 
-/* --- ICONO SVG ESTILIZADO (Sello Arcano) --- */
 const IconoSelloArcano = () => (
   <svg className="w-8 h-8 text-[#C8946E] drop-shadow-[0_0_10px_rgba(200,148,110,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="12" r="9" strokeWidth="1.5" strokeDasharray="3 3"/>
@@ -121,8 +134,8 @@ export default function CodicePlutonPage() {
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   const [preguntaActual, setPreguntaActual] = useState(0);
-  const [puntosCasas, setPuntosCasas] = useState({ Umbra: 0, Lux: 0, Astra: 0 });
-  const [casaResultado, setCasaResultado] = useState<string | null>(null);
+  const [puntosBastion, setPuntosBastion] = useState({ Fuego: 0, Agua: 0, Tierra: 0, Aire: 0 });
+  const [bastionResultado, setBastionResultado] = useState<string | null>(null);
 
   const [respuestaEnigma, setRespuestaEnigma] = useState("");
   const [mensajeEnigma, setMensajeEnigma] = useState("");
@@ -166,9 +179,9 @@ export default function CodicePlutonPage() {
     setProfeciaActual(PROFECIAS[randomIndex]);
   };
 
-  const seleccionarRespuesta = (casa: string) => {
-    const nuevosPuntos = { ...puntosCasas, [casa]: puntosCasas[casa as keyof typeof puntosCasas] + 1 };
-    setPuntosCasas(nuevosPuntos);
+  const seleccionarRespuesta = (bastion: string) => {
+    const nuevosPuntos = { ...puntosBastion, [bastion]: puntosBastion[bastion as keyof typeof puntosBastion] + 1 };
+    setPuntosBastion(nuevosPuntos);
 
     if (preguntaActual + 1 < PREGUNTAS_TEST.length) {
       setPreguntaActual(preguntaActual + 1);
@@ -176,22 +189,22 @@ export default function CodicePlutonPage() {
       const ganadora = Object.keys(nuevosPuntos).reduce((a, b) => 
         nuevosPuntos[a as keyof typeof nuevosPuntos] > nuevosPuntos[b as keyof typeof nuevosPuntos] ? a : b
       );
-      setCasaResultado(ganadora);
+      setBastionResultado(ganadora);
     }
   };
 
   const reiniciarTest = () => {
     setPreguntaActual(0);
-    setPuntosCasas({ Umbra: 0, Lux: 0, Astra: 0 });
-    setCasaResultado(null);
+    setPuntosBastion({ Fuego: 0, Agua: 0, Tierra: 0, Aire: 0 });
+    setBastionResultado(null);
   };
 
   const verificarEnigma = (e: React.FormEvent) => {
     e.preventDefault();
-    if (respuestaEnigma.toLowerCase().trim() === "plutón" || respuestaEnigma.toLowerCase().trim() === "pluton") {
-      setMensajeEnigma("✨ ¡Correcto! Has descifrado el sello. El capítulo inédito ha sido desbloqueado en los archivos secretos.");
+    if (respuestaEnigma.toLowerCase().trim() === "moldavita") {
+      setMensajeEnigma("✨ ¡Correcto! La piedra de la interferencia destructiva. Los archivos de Caelus han sido expuestos.");
     } else {
-      setMensajeEnigma("❌ Las estrellas guardan silencio. Esa no es la palabra clave del eclipse.");
+      setMensajeEnigma("❌ Frecuencia errónea. Sigue buscando entre los archivos del laboratorio Evren.");
     }
   };
 
@@ -215,7 +228,6 @@ export default function CodicePlutonPage() {
         }
         setEstadoPacto('error');
       } else {
-        // Consultar el número total de iniciados con la función RPC
         const { data, error: rpcError } = await supabase.rpc('obtener_numero_pacto');
         const numeroIniciado = (!rpcError && data !== null) ? data : "1";
 
@@ -338,7 +350,7 @@ export default function CodicePlutonPage() {
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Volumen I</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">La Obra y el Lore</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Descubre los secretos detrás de <span className="italic">Los Hijos de Plutón</span>.</p>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Descubre la verdad sobre los Espontáneos y el Pacto del Velo.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
             </div>
             
@@ -346,7 +358,7 @@ export default function CodicePlutonPage() {
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Artefactos</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">Reliquias y Merch</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Coleccionables y ediciones especiales para auténticos fans.</p>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Anillos holográficos y ediciones especiales de la obra.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Explorar ✦</span>
             </div>
             
@@ -354,7 +366,7 @@ export default function CodicePlutonPage() {
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Comunidad</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">El Círculo (Discord)</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Únete a nuestra comunidad secreta de debates y teorías.</p>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Únete a la resistencia secreta de Los Hijos de Plutón.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Unirse ✦</span>
             </div>
             
@@ -362,7 +374,7 @@ export default function CodicePlutonPage() {
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Manuscritos</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">Capítulos Inéditos</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Escenas eliminadas y perspectivas exclusivas más allá del libro.</p>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Expedientes clasificados del Consejo de Asthar.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Desvelar ✦</span>
             </div>
           </div>
@@ -378,7 +390,7 @@ export default function CodicePlutonPage() {
             <IconoOraculo /> Consulta Mística <IconoOraculo />
           </span>
           <h2 className="text-3xl text-[#F4F0EB] mb-4">El Oráculo de Plutón</h2>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Pulsa el sello para revelar la profecía oculta que marcará tu jornada.</p>
+          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Pulsa el sello para revelar la advertencia oculta que marcará tu jornada.</p>
 
           <div className="p-8 border border-[#E5C0A1]/30 mb-8 relative group shadow-[0_0_40px_rgba(46,16,101,0.5)] bg-black/90 backdrop-blur-md overflow-hidden">
             <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
@@ -397,30 +409,30 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE ASIGNACIÓN */}
+      {/* 6. TEST DE BASTIONES (NUEVO LORE) */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-            <IconoEclipse /> Ritual de Iniciación <IconoEclipse />
+            <IconoEclipse /> Evaluación de Contención <IconoEclipse />
           </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">¿A qué Casa perteneces?</h2>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Descubre cuál de las casas de la Academia Eclipse rige tu destino.</p>
+          <h2 className="text-3xl text-[#F4F0EB] mb-3">Las Doce Leyes de la Manifestación Natal</h2>
+          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Descubre a qué Bastión de la Academia Eclipse perteneces según tus decisiones ante el peligro.</p>
 
           <div className="p-8 border border-[#E5C0A1]/30 text-left relative bg-black/90 backdrop-blur-md shadow-[0_0_40px_rgba(76,29,149,0.3)] overflow-hidden">
             <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-15 mix-blend-overlay pointer-events-none"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-[#C8946E] to-transparent"></div>
             <EsquinasReliquia />
 
-            {!casaResultado ? (
+            {!bastionResultado ? (
               <div className="relative z-10">
                 <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-4 border-b border-[#E5C0A1]/20 pb-3 flex justify-between">
-                  <span>Enigma {preguntaActual + 1} de {PREGUNTAS_TEST.length}</span>
-                  <span className="text-[#E5C0A1]/50">Academia Eclipse</span>
+                  <span>Prueba {preguntaActual + 1} de {PREGUNTAS_TEST.length}</span>
+                  <span className="text-[#E5C0A1]/50">Registro Central</span>
                 </span>
                 <h3 className="text-lg md:text-xl text-[#F4F0EB] mb-8 font-light leading-relaxed">{PREGUNTAS_TEST[preguntaActual].pregunta}</h3>
                 <div className="space-y-4">
                   {PREGUNTAS_TEST[preguntaActual].opciones.map((opcion, index) => (
-                    <button key={index} onClick={() => seleccionarRespuesta(opcion.casa)} className="w-full text-left p-4 bg-[#140B1A]/80 border border-[#E5C0A1]/20 hover:border-[#C8946E] hover:bg-[#2E1065]/40 text-[#F4F0EB] text-xs md:text-sm transition-all duration-300 cursor-pointer group flex justify-between items-center shadow-inner">
+                    <button key={index} onClick={() => seleccionarRespuesta(opcion.bastion)} className="w-full text-left p-4 bg-[#140B1A]/80 border border-[#E5C0A1]/20 hover:border-[#C8946E] hover:bg-[#2E1065]/40 text-[#F4F0EB] text-xs md:text-sm transition-all duration-300 cursor-pointer group flex justify-between items-center shadow-inner">
                       <span>{opcion.texto}</span>
                       <span className="text-[#C8946E] opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
                     </button>
@@ -430,10 +442,11 @@ export default function CodicePlutonPage() {
             ) : (
               <div className="text-center py-6 relative z-10">
                 <span className="text-[10px] uppercase tracking-widest text-[#C8946E] block mb-3 font-bold">Destino Revelado</span>
-                <h3 className="text-4xl text-[#F4F0EB] mb-3 drop-shadow-lg">{CASAS_INFO[casaResultado].nombre}</h3>
-                <p className="text-[#E5C0A1] text-lg mb-6 drop-shadow-[0_0_15px_rgba(229,192,161,0.6)] font-bold">{CASAS_INFO[casaResultado].emblema}</p>
-                <p className="text-[#E5C0A1]/90 text-sm font-light mb-10 leading-relaxed px-4">{CASAS_INFO[casaResultado].descripcion}</p>
-                <BotonReliquia onClick={reiniciarTest}>Repetir Ritual</BotonReliquia>
+                <h3 className="text-4xl text-[#F4F0EB] mb-3 drop-shadow-lg">{BASTIONES_INFO[bastionResultado].nombre}</h3>
+                <p className="text-[#E5C0A1] text-sm mb-2 drop-shadow-[0_0_15px_rgba(229,192,161,0.6)] font-bold">{BASTIONES_INFO[bastionResultado].emblema}</p>
+                <p className="text-[#C8946E] text-xs mb-6 font-bold tracking-widest">{BASTIONES_INFO[bastionResultado].kinesis}</p>
+                <p className="text-[#E5C0A1]/90 text-sm font-light mb-10 leading-relaxed px-4">{BASTIONES_INFO[bastionResultado].descripcion}</p>
+                <BotonReliquia onClick={reiniciarTest}>Repetir Evaluación</BotonReliquia>
               </div>
             )}
           </div>
@@ -446,29 +459,29 @@ export default function CodicePlutonPage() {
       <section id="grimorio" className="py-12 px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-            <IconoGrimorio /> Enciclopedia <IconoGrimorio />
+            <IconoGrimorio /> Enciclopedia Numi <IconoGrimorio />
           </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">El Grimorio de la Academia</h2>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Expedientes de iniciados, alineaciones estelares y reliquias mayores.</p>
+          <h2 className="text-3xl text-[#F4F0EB] mb-3">Archivos de Asthar</h2>
+          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Expedientes clasificados, Altos Linajes y Mineralogía Avanzada.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente I</span>
-              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Custodios</h3>
-              <p className="text-xs text-[#E5C0A1]/70 font-light">Expedientes de los maestros del eco.</p>
+              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Altos Linajes</h3>
+              <p className="text-xs text-[#E5C0A1]/70 font-light">Evren, Helion, Aurelis, Vesper y Draken.</p>
             </div>
             <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente II</span>
-              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Zodiaco</h3>
-              <p className="text-xs text-[#E5C0A1]/70 font-light">Influencia de los signos celestes.</p>
+              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Dilución Inversa</h3>
+              <p className="text-xs text-[#E5C0A1]/70 font-light">La verdad genética de los Espontáneos.</p>
             </div>
             <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente III</span>
-              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Artefactos</h3>
-              <p className="text-xs text-[#E5C0A1]/70 font-light">Catálogo de objetos rituales.</p>
+              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Mineralogía</h3>
+              <p className="text-xs text-[#E5C0A1]/70 font-light">Amplificadores astrales y anulación celular.</p>
             </div>
           </div>
         </div>
@@ -476,17 +489,17 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 8. ENIGMA */}
+      {/* 8. ENIGMA (ACTUALIZADO CON MOLDAVITA) */}
       <section id="enigma" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
             <IconoEnigma /> Reto Semanal <IconoEnigma />
           </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">El Enigma del Eclipse</h2>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-8">“¿Cómo se llama el planeta que rige nuestra academia y da sombra al sol?”</p>
+          <h2 className="text-3xl text-[#F4F0EB] mb-3">El Enigma del Consejo</h2>
+          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-8">“¿Qué mineral verde de origen meteórico utilizan los Evren para cancelar la frecuencia Numi de los Espontáneos?”</p>
           <form onSubmit={verificarEnigma} className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
             <input type="text" value={respuestaEnigma} onChange={(e) => setRespuestaEnigma(e.target.value)} placeholder="Palabra secreta..." className="px-6 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] md:w-72 focus:outline-none focus:border-[#C8946E] transition-colors shadow-inner" />
-            <BotonReliquia type="submit">Revelar Sello</BotonReliquia>
+            <BotonReliquia type="submit">Desencriptar</BotonReliquia>
           </form>
           {mensajeEnigma && <p className="text-xs text-[#E5C0A1] p-4 bg-black/90 backdrop-blur-md border border-[#E5C0A1]/30 inline-block shadow-[0_0_20px_rgba(229,192,161,0.15)]">{mensajeEnigma}</p>}
         </div>
@@ -500,7 +513,7 @@ export default function CodicePlutonPage() {
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
             <IconoGaleria /> Archivo Visual <IconoGaleria />
           </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">Galería de Visiones</h2>
+          <h2 className="text-3xl text-[#F4F0EB] mb-3">Galería de Asthar</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Pulsa sobre cualquier visión para observarla a tamaño real.</p>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
@@ -509,7 +522,7 @@ export default function CodicePlutonPage() {
               <EsquinasReliquia />
               <div className="relative z-10">
                 <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena I</span>
-                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium group-hover:text-[#C8946E] transition-colors">Umbral de la Academia</h3>
+                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium group-hover:text-[#C8946E] transition-colors">La Cascada Invertida</h3>
               </div>
             </div>
 
@@ -518,7 +531,7 @@ export default function CodicePlutonPage() {
               <EsquinasReliquia />
               <div className="relative z-10">
                 <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena II</span>
-                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium group-hover:text-[#C8946E] transition-colors">Conjunción del Anillo</h3>
+                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium group-hover:text-[#C8946E] transition-colors">El Laberinto de Asterión</h3>
               </div>
             </div>
 
@@ -547,12 +560,12 @@ export default function CodicePlutonPage() {
           </div>
           <div className="space-y-4 text-xs md:text-sm">
             <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.95), rgba(15, 8, 20, 0.98)), url('/images/textura-grimorio.jpg')" }}>
-              <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿De qué trata la novela?</h3>
-              <p className="text-[#E5C0A1]/80 font-light leading-relaxed">Fantasía y misterio creada por Augusta Thoenig y Fran de Solas en el universo de la Academia Eclipse.</p>
+              <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿Qué es el Pacto del Velo?</h3>
+              <p className="text-[#E5C0A1]/80 font-light leading-relaxed">Es el acuerdo histórico que separa el mundo Numi (Asthar) del plano terrestre, prohibiendo la intervención mágica directa en la Tierra para evitar el colapso de ambas realidades.</p>
             </div>
             <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.95), rgba(15, 8, 20, 0.98)), url('/images/textura-grimorio.jpg')" }}>
-              <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿Qué es El Códice de Plutón?</h3>
-              <p className="text-[#E5C0A1]/80 font-light leading-relaxed">El santuario digital oficial de la comunidad de lectores para consultar lore y contenidos inéditos.</p>
+              <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿Quiénes son Los Hijos de Plutón?</h3>
+              <p className="text-[#E5C0A1]/80 font-light leading-relaxed">Una resistencia oculta en los sótanos de Eclipse fundada originalmente por Dante y ahora liderada por Evan. Su misión es proteger a los Espontáneos de la purga de los Altos Linajes.</p>
             </div>
           </div>
         </div>
@@ -569,7 +582,7 @@ export default function CodicePlutonPage() {
           </div>
 
           <h2 className="text-3xl text-[#F4F0EB] mb-3">Inscripción a la Academia</h2>
-          <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Inscribe tu nombre antes del 19 de noviembre y recibe un artefacto digital exclusivo.</p>
+          <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Sella tu destino antes del 19 de noviembre y prepárate para cruzar el Umbral a Asthar.</p>
           
           <form className="flex flex-col sm:flex-row gap-4 justify-center" onSubmit={sellarPacto}>
             <input 

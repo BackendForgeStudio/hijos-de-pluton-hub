@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import localFont from 'next/font/local';
 import { createClient } from '@supabase/supabase-js';
@@ -39,16 +39,23 @@ export default function CirculoPage() {
   const [mensaje, setMensaje] = useState('');
   const [enviando, setEnviando] = useState(false);
   const [estadoEnvio, setEstadoEnvio] = useState<string | null>(null);
+  const [deviceId, setDeviceId] = useState<string>('');
 
   useEffect(() => {
+    // Generar o recuperar identificador único de dispositivo para control de runas
+    let id = localStorage.getItem('eclipse_device_id');
+    if (!id) {
+      id = 'dev_' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+      localStorage.setItem('eclipse_device_id', id);
+    }
+    setDeviceId(id);
     cargarTeorias();
   }, []);
 
   const cargarTeorias = async () => {
     if (!supabaseUrl || !supabaseKey) {
       setTeorias([
-        { id: 1, autor: "Iniciado #42", mensaje: "Cosmo no murió en el agujero negro de sombras... su anillo astral sigue emitiendo una frecuencia débil.", runas: 12, created_at: new Date().toISOString() },
-        { id: 2, autor: "Sagitario Anónimo", mensaje: "¿Alguien más cree que Lucio está protegiendo a Lola a espaldas del Consejo desde el primer día?", runas: 8, created_at: new Date().toISOString() }
+        { id: 1, autor: "Iniciado #42", mensaje: "Cosmo no murió en el agujero negro de sombras...", runas: 12, created_at: new Date().toISOString() }
       ]);
       return;
     }
@@ -71,23 +78,12 @@ export default function CirculoPage() {
     setEnviando(true);
     setEstadoEnvio(null);
 
-    if (!supabaseUrl || !supabaseKey) {
-      setTimeout(() => {
-        setTeorias([{ id: Date.now(), autor, mensaje, runas: 1, created_at: new Date().toISOString() }, ...teorias]);
-        setAutor('');
-        setMensaje('');
-        setEnviando(false);
-        setEstadoEnvio("✨ Teoría transmitida de forma encriptada por los túneles.");
-      }, 600);
-      return;
-    }
-
     const { error } = await supabase
       .from('teorias_pluton')
       .insert([{ autor, mensaje, runas: 0 }]);
 
     if (error) {
-      setEstadoEnvio("❌ Interferencia cósmica al enviar la teoría. Revisa la tabla de Supabase.");
+      setEstadoEnvio("❌ Interferencia cósmica al enviar la teoría.");
     } else {
       setEstadoEnvio("✨ Transmisión asegurada y enviada a los sótanos de Eclipse.");
       setAutor('');
@@ -98,16 +94,41 @@ export default function CirculoPage() {
   };
 
   const otorgarRuna = async (id: number, runasActuales: number) => {
-    const nuevasRunas = runasActuales + 1;
-    
-    // Actualización optimista en frontend
-    setTeorias(teorias.map(t => t.id === id ? { ...t, runas: nuevasRunas } : t));
+    if (!deviceId) return;
 
-    if (supabaseUrl && supabaseKey) {
-      await supabase
-        .from('teorias_pluton')
-        .update({ runas: nuevasRunas })
-        .eq('id', id);
+    // Verificar si este dispositivo ya dio runa a esta teoría
+    const { data: existente } = await supabase
+      .from('runas_otorgadas')
+      .select('id')
+      .eq('teoria_id', id)
+      .eq('dispositivo_hash', deviceId)
+      .single();
+
+    if (existente) {
+      alert("⚠️ Tu frecuencia ya ha otorgado una Runa a esta transmisión anteriormente.");
+      return;
+    }
+
+    // Registrar la runa otorgada por este dispositivo
+    const { error: errorRegistro } = await supabase
+      .from('runas_otorgadas')
+      .insert([{ teoria_id: id, dispositivo_hash: deviceId }]);
+
+    if (errorRegistro) {
+      alert("⚠️ No se pudo registrar tu Runa.");
+      return;
+    }
+
+    const nuevasRunas = runasActuales + 1;
+
+    // Actualizar en base de datos
+    const { error } = await supabase
+      .from('teorias_pluton')
+      .update({ runas: nuevasRunas })
+      .eq('id', id);
+
+    if (!error) {
+      setTeorias(teorias.map(t => t.id === id ? { ...t, runas: nuevasRunas } : t));
     }
   };
 
@@ -128,7 +149,7 @@ export default function CirculoPage() {
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3">Terminal Clandestina de Eclipse</span>
           <h1 className="text-4xl md:text-5xl text-[#F4F0EB] mb-4 drop-shadow-[0_0_15px_rgba(76,29,149,0.5)]">La Red de Los Hijos de Plutón</h1>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-xl mx-auto leading-relaxed">
-            Tablón de teorías ocultas. Comparte tus sospechas sobre el Consejo y los Evren bajo un canal cifrado por los túneles subterráneos.
+            Tablón de teorías ocultas. Canal cifrado por los túneles subterráneos (Protegido contra suplantación y auto-votos).
           </p>
         </div>
 

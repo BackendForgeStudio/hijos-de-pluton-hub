@@ -27,7 +27,6 @@ export function ReproductorProvider({ children }: { children: React.ReactNode })
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   useEffect(() => {
-    // Inicializar el audio una sola vez a nivel global
     if (!audioRef.current) {
       audioRef.current = new Audio(PLAYLIST[0].archivo);
       audioRef.current.volume = volumen;
@@ -37,10 +36,6 @@ export function ReproductorProvider({ children }: { children: React.ReactNode })
         siguientePistaAutomatica();
       });
     }
-
-    return () => {
-      // No destruimos el audio al desmontar subpáginas para que persista
-    };
   }, []);
 
   const siguientePistaAutomatica = () => {

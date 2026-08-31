@@ -13,11 +13,11 @@ export default function ReproductorGlobal() {
   const { reproduciendo, pistaActualIndex, volumen, toggleReproductor, cambiarSiguientePista, ajustarVolumen } = useAudio();
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-6 right-6 z-50 transform-gpu">
       <div className="flex flex-col items-end gap-2 p-3 bg-[#08040C]/95 backdrop-blur-md border border-[#C8946E]/50 rounded-lg shadow-[0_0_25px_rgba(76,29,149,0.5)]">
         
         <div className="flex items-center gap-2 px-2 text-left w-full max-w-[220px]">
-          <span className={`text-xs ${reproduciendo ? 'animate-spin text-[#C8946E]' : 'text-[#E5C0A1]/50'}`}>✦</span>
+          <span className={`text-xs transform-gpu ${reproduciendo ? 'animate-spin text-[#C8946E]' : 'text-[#E5C0A1]/50'}`}>✦</span>
           <div className="overflow-hidden whitespace-nowrap">
             <p className="text-[10px] text-[#C8946E] uppercase tracking-widest font-bold truncate">
               {reproduciendo ? PLAYLIST[pistaActualIndex].titulo : 'Santuario Silencioso'}

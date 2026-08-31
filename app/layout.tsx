@@ -14,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es">
-      <body className="bg-[#08040C] text-[#F4F0EB] antialiased">
+    <html lang="es" suppressHydrationWarning>
+      <body className="bg-[#08040C] text-[#F4F0EB] antialiased selection:bg-[#3B0764] selection:text-white">
         <ReproductorProvider>
           {children}
           <ReproductorGlobal />

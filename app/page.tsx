@@ -173,13 +173,21 @@ export default function CodicePlutonPage() {
   const [mensajePacto, setMensajePacto] = useState("");
 
   useEffect(() => {
-    const nuevasParticulas = Array.from({ length: 45 }).map((_, i) => ({
+    // Limpieza estricta de localStorage para evitar datos de prueba residuales de admin
+    if (typeof window !== 'undefined') {
+      const aliasGuardado = localStorage.getItem('alias_usuario');
+      if (aliasGuardado === 'prueba admin') {
+        localStorage.removeItem('alias_usuario');
+      }
+    }
+
+    const nuevasParticulas = Array.from({ length: 30 }).map((_, i) => ({
       id: i,
-      x: (Math.random() - 0.5) * 1200, 
-      y: (Math.random() - 0.5) * 700, 
+      x: (Math.random() - 0.5) * 1000, 
+      y: (Math.random() - 0.5) * 600, 
       delay: Math.random() * 5,
       duration: Math.random() * 5 + 3, 
-      size: Math.random() * 4 + 2 
+      size: Math.random() * 3 + 2 
     }));
     setParticulas(nuevasParticulas);
 
@@ -414,9 +422,10 @@ export default function CodicePlutonPage() {
     : { textShadow: '0px 2px 4px rgba(0,0,0,0.8)' };
 
   return (
-    <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
+    <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative transform-gpu`}>
       
-      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.70] mix-blend-screen hidden md:block">
+      {/* Fondo optimizado con aceleración por GPU y oculto en móviles lentos para máximo rendimiento */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.60] mix-blend-screen hidden md:block transform-gpu">
         <div className="absolute top-0 left-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/runas-izq.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 right-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/zodiaco-der.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-[#08040C] to-transparent"></div>
@@ -424,7 +433,7 @@ export default function CodicePlutonPage() {
 
       {/* 1. HERO ASTRAL */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
-        <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
+        <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60 transform-gpu" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
 
         <motion.img 
           src="/anillo.png" 
@@ -432,44 +441,44 @@ export default function CodicePlutonPage() {
           animate={{ rotate: 360 }} 
           transition={{ repeat: Infinity, duration: 120, ease: "linear" }} 
           style={{ willChange: "transform" }} 
-          className="absolute w-[1100px] h-[1100px] md:w-[1700px] md:h-[1700px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu" 
+          className="absolute w-[900px] h-[900px] md:w-[1500px] md:h-[1500px] max-w-none -z-20 opacity-75 object-contain pointer-events-none select-none transform-gpu" 
         />
 
         <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center overflow-hidden">
           {particulas.map((p) => (
             <motion.div 
               key={p.id} 
-              className="absolute bg-[#FFF5EE] rounded-full blur-[0.5px] shadow-[0_0_12px_rgba(229,192,161,0.9)]" 
-              style={{ width: p.size, height: p.size }} 
+              className="absolute bg-[#FFF5EE] rounded-full blur-[0.5px] shadow-[0_0_10px_rgba(229,192,161,0.8)] transform-gpu" 
+              style={{ width: p.size, height: p.size, willChange: 'transform, opacity' }} 
               initial={{ opacity: 0, x: p.x, y: p.y, scale: 0 }} 
-              animate={{ opacity: [0, 1, 0], scale: [0, 1.2, 0.4], y: [p.y, p.y - 180], x: [p.x, p.x + (Math.random() * 60 - 30)] }} 
+              animate={{ opacity: [0, 0.8, 0], scale: [0, 1, 0.3], y: [p.y, p.y - 140], x: [p.x, p.x + (Math.random() * 40 - 20)] }} 
               transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }} 
             />
           ))}
         </div>
 
-        <div className="absolute w-[380px] h-[380px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
-          <div className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[60px] md:blur-[90px] opacity-80"></div>
-          <img src="/planeta-oficial.png" alt="Planeta Oficial Los Hijos de Plutón" className="absolute w-full h-full object-contain drop-shadow-[0_0_40px_rgba(76,29,149,0.7)] opacity-95 brightness-90 contrast-125" />
+        <div className="absolute w-[350px] h-[350px] md:w-[500px] md:h-[500px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
+          <div className="absolute w-[280px] h-[280px] md:w-[420px] md:h-[420px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[50px] md:blur-[80px] opacity-80 transform-gpu"></div>
+          <img src="/planeta-oficial.png" alt="Planeta Oficial Los Hijos de Plutón" className="absolute w-full h-full object-contain drop-shadow-[0_0_35px_rgba(76,29,149,0.7)] opacity-95 brightness-90 contrast-125 transform-gpu" />
         </div>
 
-        <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-24 h-24 md:w-40 md:h-40 z-30 drop-shadow-[0_0_25px_rgba(229,192,161,1)] object-contain pointer-events-none" />
+        <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-20 h-20 md:w-36 md:h-36 z-30 drop-shadow-[0_0_20px_rgba(229,192,161,1)] object-contain pointer-events-none transform-gpu" />
 
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
           <div className="relative mb-3 grid place-items-center w-full z-10">
-            <motion.h1 className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center" animate={{ filter: ["blur(4px) brightness(1)", "blur(14px) brightness(1.6)", "blur(4px) brightness(1)"], opacity: [0.3, 0.9, 0.3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>EL CÓDICE<br />DE PLUTÓN</motion.h1>
+            <motion.h1 className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center" animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>EL CÓDICE<br />DE PLUTÓN</motion.h1>
             <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center">EL CÓDICE<br />DE PLUTÓN</h1>
           </div>
           <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">El santuario para los lectores y fans de Los Hijos de Plutón</p>
         </motion.div>
         
-        <div onClick={() => scrollToSection('oraculo-diario')} className="absolute bottom-6 cursor-pointer px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-[#E5C0A1]/20 shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:border-[#C8946E]/50 transition-all z-30 group">
+        <div onClick={() => scrollToSection('oraculo-diario')} className="absolute bottom-6 cursor-pointer px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-[#E5C0A1]/20 shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:border-[#C8946E]/50 transition-all z-30 group transform-gpu">
           <span className="text-[#C8946E] text-[11px] md:text-xs tracking-widest uppercase font-bold group-hover:drop-shadow-[0_0_8px_rgba(200,148,110,0.8)] transition-all">Desciende a las sombras ✦</span>
         </div>
       </section>
 
       {/* 2. NAVEGACIÓN ADHESIVA */}
-      <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transform-gpu">
         <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2 relative z-10">
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/grimorio">Grimorio</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/personajes">Personajes</Link></li>
@@ -744,7 +753,7 @@ export default function CodicePlutonPage() {
         <div className="max-w-4xl mx-auto space-y-4">
           <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>
           <p className="leading-relaxed font-light">
-            Este sitio web es un portal de fans no oficial creado sin ánimo de lucro por y para la comunidad de lectores de la obra literaria <span className="italic">Los Hijos de Plutón</span>. No está afiliado ni asociado oficialmente con los autores ni con las editoriales oficiales.
+            Este sitio web es un portal de fans no oficial creado sin ánimo de lucro por y para la comunidad de lectores de la obra literaria <span className="italic">Los Hijos de Plutón</span>. Não está afiliado ni asociado oficialmente con los autores ni con las editoriales oficiales.
           </p>
 
           <div className="pt-2 text-xs text-[#E5C0A1]">

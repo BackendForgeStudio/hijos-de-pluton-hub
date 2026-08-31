@@ -17,11 +17,11 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
   linajes: {
     titulo: "Los Cinco Altos Linajes",
     items: [
-      { nombre: "Evren", desc: "Dueños y custodios de la Academia Eclipse. Gobiernan Aškara, el centro financiero de Asthar, construido alrededor del monolito de Pirita. Impulsaron el Pacto del Velo." },
-      { nombre: "Helion", desc: "La élite política. Gobernantes de Damyra, una ciudad de palacios dorados. Su linaje suele liderar el Consejo de Asthar." },
-      { nombre: "Aurelis", desc: "Diplomáticos y pacifistas. Protectores del mundo humano y de las artes. Edificaron Eirholm entre mármol, cristal y hielo." },
-      { nombre: "Vesper", desc: "Eruditos e investigadores. Su ciudad, Eldcraig, se alza sobre acantilados repletos de bibliotecas y observatorios astronómicos." },
-      { nombre: "Draken", desc: "Custodios de la moralidad y la ética. Convirtieron los escarpados cañones de Zahari en inmensos santuarios." }
+      { nombre: "Evren", desc: "Dueños y custodios de la Academia Eclipse. Gobiernan Aškara, el centro financiero de Asthar, construido alrededor del monolito de Pirita. Impulsaron el Pacto del Velo.", img: "/images/linaje-evren.jpg" },
+      { nombre: "Helion", desc: "La élite política. Gobernantes de Damyra, una ciudad de palacios dorados. Su linaje suele liderar el Consejo de Asthar.", img: "/images/linaje-helion.jpg" },
+      { nombre: "Aurelis", desc: "Diplomáticos y pacifistas. Protectores del mundo humano y de las artes. Edificaron Eirholm entre mármol, cristal y hielo.", img: "/images/linaje-aurelis.jpg" },
+      { nombre: "Vesper", desc: "Eruditos e investigadores. Su ciudad, Eldcraig, se alza sobre acantilados repletos de bibliotecas y observatorios astronómicos.", img: "/images/linaje-vesper.jpg" },
+      { nombre: "Draken", desc: "Custodios de la moralidad y la ética. Convirtieron los escarpados cañones de Zahari en inmensos santuarios.", img: "/images/linaje-draken.jpg" }
     ]
   },
   leyes: {
@@ -64,15 +64,15 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
 
 const EsquinasReliquia = () => (
   <>
-    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#E5C0A1]/50"></div>
-    <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#E5C0A1]/50"></div>
-    <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#E5C0A1]/50"></div>
-    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#E5C0A1]/50"></div>
+    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#E5C0A1]/50 group-hover:border-[#C8946E] transition-colors duration-300 z-20"></div>
+    <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#E5C0A1]/50 group-hover:border-[#C8946E] transition-colors duration-300 z-20"></div>
+    <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#E5C0A1]/50 group-hover:border-[#C8946E] transition-colors duration-300 z-20"></div>
+    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#E5C0A1]/50 group-hover:border-[#C8946E] transition-colors duration-300 z-20"></div>
   </>
 );
 
 export default function GrimorioPage() {
-  const [categoriaActiva, setCategoriaActiva] = useState<CategoriaLore>('leyes');
+  const [categoriaActiva, setCategoriaActiva] = useState<CategoriaLore>('linajes');
 
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative py-16 px-6`}>
@@ -121,13 +121,25 @@ export default function GrimorioPage() {
               {DATOS_GRIMORIO[categoriaActiva].items.map((item, index) => (
                 <div 
                   key={index} 
-                  className={`p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(76,29,149,0.2)] transition-all duration-300 ${item.img ? 'min-h-[200px] flex flex-col justify-end' : 'bg-black/60 backdrop-blur-md'}`}
-                  style={{ backgroundImage: item.img ? `linear-gradient(to bottom, rgba(14, 7, 20, 0.4), rgba(10, 5, 14, 0.95)), url('${item.img}')` : 'none' }}
+                  className={`p-6 border border-[#E5C0A1]/20 relative overflow-hidden group hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.15)] transition-all duration-500 ${item.img ? 'min-h-[220px] flex flex-col justify-end' : 'bg-black/60 backdrop-blur-md'}`}
                 >
+                  {/* EFECTO DE IMAGEN CINEMÁTICA CON HOVER */}
+                  {item.img && (
+                    <>
+                      <div 
+                        className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out group-hover:scale-105 opacity-40 group-hover:opacity-75 grayscale-[30%] group-hover:grayscale-0"
+                        style={{ backgroundImage: `url('${item.img}')` }}
+                      ></div>
+                      {/* Degradado oscuro base para proteger siempre la legibilidad del texto */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#08040C] via-[#08040C]/80 to-transparent opacity-90"></div>
+                    </>
+                  )}
+
                   <EsquinasReliquia />
+                  
                   <div className="relative z-10">
                     <h3 className="text-xl text-[#F4F0EB] mb-3 group-hover:text-[#C8946E] transition-colors drop-shadow-md">{item.nombre}</h3>
-                    <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light leading-relaxed drop-shadow-md">{item.desc}</p>
+                    <p className="text-[#E5C0A1]/90 text-xs md:text-sm font-light leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{item.desc}</p>
                   </div>
                 </div>
               ))}

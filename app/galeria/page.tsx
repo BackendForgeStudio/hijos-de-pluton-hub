@@ -11,7 +11,7 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
-// BASE DE DATOS DE IMÁGENES DE LA GALERÍA (Sin 'todas')
+// BASE DE DATOS FUSIONADA DE IMÁGENES DE LA GALERÍA
 type CategoriaGaleria = 'visiones' | 'linajes' | 'leyes' | 'geografia' | 'clasificado';
 
 interface ImagenGaleria {
@@ -163,7 +163,7 @@ export default function GaleriaPage() {
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-2xl">Visiones capturadas de los lugares, linajes y secretos más enigmáticos de la Academia Eclipse.</p>
         </div>
 
-        {/* FILTROS (Sin la opción 'todas') */}
+        {/* FILTROS */}
         <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12 border-b border-[#E5C0A1]/20 pb-6">
           {(['visiones', 'linajes', 'leyes', 'geografia', 'clasificado'] as CategoriaGaleria[]).map((cat) => (
             <button
@@ -180,7 +180,7 @@ export default function GaleriaPage() {
           ))}
         </div>
 
-        {/* REJILLA DE IMÁGENES (Con AnimatePresence mode="wait" para evitar superposición) */}
+        {/* REJILLA DE IMÁGENES */}
         <div className="min-h-[50vh]">
           <AnimatePresence mode="wait">
             <motion.div
@@ -189,12 +189,12 @@ export default function GaleriaPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 md:gap-10"
             >
               {imagenesFiltradas.map((imagen) => (
                 <div
                   key={imagen.id}
-                  className="relative h-64 sm:h-56 aspect-[16/9] group cursor-pointer border border-[#E5C0A1]/20 overflow-hidden hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.2)] transition-all bg-[#140B1A]"
+                  className="relative w-full aspect-video group cursor-pointer border border-[#E5C0A1]/20 overflow-hidden hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.2)] transition-all bg-[#140B1A]"
                   onClick={() => setImagenModal(imagen)}
                 >
                   <div 

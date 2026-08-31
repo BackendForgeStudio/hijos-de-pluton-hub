@@ -276,14 +276,16 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 2. NAVEGACIÓN ADHESIVA (Actualizada con Rutas) */}
+      {/* 2. NAVEGACIÓN ADHESIVA (Actualizada con todas las nuevas rutas) */}
       <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2 relative z-10">
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/grimorio">Grimorio</Link></li>
+          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/personajes">Personajes</Link></li>
+          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/cartas-astrales">Cartas Astrales</Link></li>
+          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/pacto-del-velo">Pacto del Velo</Link></li>
           <li onClick={() => scrollToSection('test-casas')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Test Casas</li>
           <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Oráculo</li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/galeria">Galería</Link></li>
-          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/artefactos">Artefactos</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/circulo">El Círculo</Link></li>
         </ul>
       </nav>
@@ -317,7 +319,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 4. CAJAS ASIMÉTRICAS (Convertidas en Enlaces Router) */}
+      {/* 4. CAJAS ASIMÉTRICAS (Enlaces directos a todas las secciones nuevas) */}
       <section className="py-12 px-6 relative overflow-hidden transform-gpu z-10">
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
@@ -334,28 +336,28 @@ export default function CodicePlutonPage() {
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
             </Link>
             
-            <Link href="/artefactos" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-10" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
+            <Link href="/personajes" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-10" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Artefactos</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">Reliquias y Merch</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Anillos holográficos y ediciones especiales de la obra.</p>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Consejo</span>
+              <h3 className="text-xl text-[#F4F0EB] mb-2">Personajes</h3>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Fichas técnicas y cartas astrales de Lola, Cosmo, Evan y más.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Explorar ✦</span>
             </Link>
             
-            <Link href="/circulo" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
+            <Link href="/cartas-astrales" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Comunidad</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">El Círculo</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Únete a la resistencia oculta de Los Hijos de Plutón en Discord.</p>
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Unirse ✦</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Registro</span>
+              <h3 className="text-xl text-[#F4F0EB] mb-2">Cartas Astrales</h3>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Calcula tu frecuencia Numi y tu Bastión elemental asignado.</p>
+              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Descubrir ✦</span>
             </Link>
             
-            <Link href="/manuscritos" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-14" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
+            <Link href="/pacto-del-velo" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-14" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Manuscritos</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">Capítulos Inéditos</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Expedientes clasificados y teorías del Consejo de Asthar.</p>
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Desvelar ✦</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Leyes</span>
+              <h3 className="text-xl text-[#F4F0EB] mb-2">Pacto del Velo</h3>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Manifiesto oficial sobre la Akinesis cognitiva y la magia solar.</p>
+              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
             </Link>
           </div>
         </div>
@@ -435,7 +437,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 11. CAPTACIÓN */}
+      {/* 7. CAPTACIÓN */}
       <section className="py-16 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           
@@ -473,7 +475,7 @@ export default function CodicePlutonPage() {
         </motion.div>
       </section>
 
-      {/* 12. PIE DE PÁGINA */}
+      {/* 8. PIE DE PÁGINA */}
       <footer className="py-12 px-6 bg-black/95 backdrop-blur-lg border-t border-[#E5C0A1]/15 text-center text-[11px] text-[#E5C0A1]/60 relative z-10">
         <div className="max-w-4xl mx-auto space-y-4">
           <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>

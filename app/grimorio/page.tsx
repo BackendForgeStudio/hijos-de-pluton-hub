@@ -27,18 +27,18 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
   leyes: {
     titulo: "Doce Leyes de la Manifestación Natal",
     items: [
-      { nombre: "Aries (Pirokinesis)", desc: "Control del fuego y la energía calórica. Pueden arder sin quemarse y calcinar amenazas." },
-      { nombre: "Tauro (Taurokinesis)", desc: "Capacidad de volverse físicamente indestructibles. La piel se endurece, los músculos crecen y emergen cuernos dorados de la frente." },
-      { nombre: "Géminis (Duplikinesis)", desc: "El desdoblamiento. Pueden dividir su identidad original en dos gemelos físicos con personalidades independientes." },
-      { nombre: "Cáncer (Patokinesis)", desc: "Influencia directa sobre las emociones físicas. Capacidad de generar potentes campos de fuerza y escudos indestructibles." },
-      { nombre: "Leo (Heliokinesis)", desc: "Control absoluto sobre la luz. Pueden emitir un resplandor dorado propio y cegar a sus enemigos." },
-      { nombre: "Virgo (Biokinesis)", desc: "Magia celular. Sanadores capaces de reescribir y reparar tejidos vivos con energía azulada." },
-      { nombre: "Libra (Gravitokinesis)", desc: "Manipulación de la gravedad. Pueden suspender objetos y personas, o aplastarlos contra el suelo." },
-      { nombre: "Escorpio (Umbrakinesis)", desc: "Control de las sombras y la penumbra. Capacidad de canalizar energía negativa y crear portales oscuros." },
-      { nombre: "Sagitario (Chorokinesis)", desc: "Especialistas en la materialización de flechas de energía pura y la apertura de portales espaciales." },
-      { nombre: "Capricornio (Akinesis)", desc: "El límite y la estructura. Capacidad de inmovilizar procesos moleculares y fijaciones sinápticas (modificación de recuerdos)." },
-      { nombre: "Acuario (Electrokinesis)", desc: "Dominio absoluto sobre los flujos eléctricos y la tecnología." },
-      { nombre: "Piscis (Onirokinesis)", desc: "Navegantes de los sueños. Capaces de proyectar realidades en mentes ajenas, crear niebla densa y levitar sutilmente." }
+      { nombre: "Aries (Pirokinesis)", desc: "Control del fuego y la energía calórica. Pueden arder sin quemarse y calcinar amenazas.", img: "/images/ley-aries.jpg" },
+      { nombre: "Tauro (Taurokinesis)", desc: "Capacidad de volverse físicamente indestructibles. La piel se endurece, los músculos crecen y emergen cuernos dorados de la frente.", img: "/images/ley-tauro.jpg" },
+      { nombre: "Géminis (Duplikinesis)", desc: "El desdoblamiento. Pueden dividir su identidad original en dos gemelos físicos con personalidades independientes.", img: "/images/ley-geminis.jpg" },
+      { nombre: "Cáncer (Patokinesis)", desc: "Influencia directa sobre las emociones físicas. Capacidad de generar potentes campos de fuerza y escudos indestructibles.", img: "/images/ley-cancer.jpg" },
+      { nombre: "Leo (Heliokinesis)", desc: "Control absoluto sobre la luz. Pueden emitir un resplandor dorado propio y cegar a sus enemigos.", img: "/images/ley-leo.jpg" },
+      { nombre: "Virgo (Biokinesis)", desc: "Magia celular. Sanadores capaces de reescribir y reparar tejidos vivos con energía azulada.", img: "/images/ley-virgo.jpg" },
+      { nombre: "Libra (Gravitokinesis)", desc: "Manipulación de la gravedad. Pueden suspender objetos y personas, o aplastarlos contra el suelo.", img: "/images/ley-libra.jpg" },
+      { nombre: "Escorpio (Umbrakinesis)", desc: "Control de las sombras y la penumbra. Capacidad de canalizar energía negativa y crear portales oscuros.", img: "/images/ley-escorpio.jpg" },
+      { nombre: "Sagitario (Chorokinesis)", desc: "Especialistas en la materialización de flechas de energía pura y la apertura de portales espaciales.", img: "/images/ley-sagitario.jpg" },
+      { nombre: "Capricornio (Akinesis)", desc: "El límite y la estructura. Capacidad de inmovilizar procesos moleculares y fijaciones sinápticas (modificación de recuerdos).", img: "/images/ley-capricornio.jpg" },
+      { nombre: "Acuario (Electrokinesis)", desc: "Dominio absoluto sobre los flujos eléctricos y la tecnología.", img: "/images/ley-acuario.jpg" },
+      { nombre: "Piscis (Onirokinesis)", desc: "Navegantes de los sueños. Capaces de proyectar realidades en mentes ajenas, crear niebla densa y levitar sutilmente.", img: "/images/ley-piscis.jpg" }
     ]
   },
   lugares: {
@@ -123,14 +123,12 @@ export default function GrimorioPage() {
                   key={index} 
                   className={`p-6 border border-[#E5C0A1]/20 relative overflow-hidden group hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.15)] transition-all duration-500 ${item.img ? 'min-h-[220px] flex flex-col justify-end' : 'bg-black/60 backdrop-blur-md'}`}
                 >
-                  {/* EFECTO DE IMAGEN CINEMÁTICA CON HOVER */}
                   {item.img && (
                     <>
                       <div 
                         className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out group-hover:scale-105 opacity-40 group-hover:opacity-75 grayscale-[30%] group-hover:grayscale-0"
                         style={{ backgroundImage: `url('${item.img}')` }}
                       ></div>
-                      {/* Degradado oscuro base para proteger siempre la legibilidad del texto */}
                       <div className="absolute inset-0 bg-gradient-to-t from-[#08040C] via-[#08040C]/80 to-transparent opacity-90"></div>
                     </>
                   )}

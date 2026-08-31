@@ -11,8 +11,8 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
-// BASE DE DATOS FUSIONADA DE IMÁGENES DE LA GALERÍA
-type CategoriaGaleria = 'todas' | 'visiones' | 'linajes' | 'leyes' | 'geografia' | 'clasificado';
+// BASE DE DATOS DE IMÁGENES DE LA GALERÍA (Sin 'todas')
+type CategoriaGaleria = 'visiones' | 'linajes' | 'leyes' | 'geografia' | 'clasificado';
 
 interface ImagenGaleria {
   id: string;
@@ -23,7 +23,7 @@ interface ImagenGaleria {
 }
 
 const IMAGENES: ImagenGaleria[] = [
-  // VISIONES ORIGINALES (Las que ya tenías)
+  // VISIONES
   { id: 'v1', titulo: 'El Umbral', desc: 'El vórtice violeta en la Selva Negra.', categoria: 'visiones', src: '/images/galeria-1.jpg' },
   { id: 'v2', titulo: 'La Cascada Invertida', desc: 'El lago de Aškara donde el agua asciende hacia el cielo.', categoria: 'visiones', src: '/images/galeria-2.jpg' },
   { id: 'v3', titulo: 'El Laberinto de Asterión', desc: 'El coliseo mecánico durante El Giro.', categoria: 'visiones', src: '/images/galeria-3.jpg' },
@@ -82,13 +82,11 @@ const IconoDescargar = () => (
 );
 
 export default function GaleriaPage() {
-  const [filtroActivo, setFiltroActivo] = useState<CategoriaGaleria>('todas');
+  const [filtroActivo, setFiltroActivo] = useState<CategoriaGaleria>('visiones');
   const [imagenModal, setImagenModal] = useState<ImagenGaleria | null>(null);
   const [descargando, setDescargando] = useState(false);
 
-  const imagenesFiltradas = filtroActivo === 'todas' 
-    ? IMAGENES 
-    : IMAGENES.filter(img => img.categoria === filtroActivo);
+  const imagenesFiltradas = IMAGENES.filter(img => img.categoria === filtroActivo);
 
   // FUNCIÓN PARA DESCARGAR LA IMAGEN CON LA MARCA DE AGUA EN EL CANVAS
   const descargarConMarcaDeAgua = (imagen: ImagenGaleria) => {
@@ -110,27 +108,22 @@ export default function GaleriaPage() {
         return;
       }
 
-      // 1. Dibujar la imagen original
       ctx.drawImage(imgElement, 0, 0, canvas.width, canvas.height);
 
-      // 2. Fondo semi-transparente para asegurar la legibilidad de la marca de agua
       ctx.fillStyle = "rgba(8, 4, 12, 0.75)";
       const barHeight = 80;
       ctx.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
 
-      // 3. Escribir la marca de agua elegante a la derecha
       ctx.fillStyle = "#C8946E";
       ctx.font = "bold 24px sans-serif";
       ctx.textAlign = "right";
       ctx.textBaseline = "middle";
       ctx.fillText("ELCODICEDEPLUTON.COM  ✦  SANTUARIO OFICIAL", canvas.width - 40, canvas.height - (barHeight / 2));
 
-      // 4. Escribir el título de la imagen a la izquierda
       ctx.fillStyle = "rgba(244, 240, 235, 0.9)";
       ctx.textAlign = "left";
       ctx.fillText(imagen.titulo, 40, canvas.height - (barHeight / 2));
 
-      // 5. Iniciar la descarga
       try {
         const link = document.createElement('a');
         link.download = `el-codice-de-pluton-${imagen.titulo.toLowerCase().replace(/[^a-z0-9]/g, '-')}.jpg`;
@@ -170,9 +163,9 @@ export default function GaleriaPage() {
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-2xl">Visiones capturadas de los lugares, linajes y secretos más enigmáticos de la Academia Eclipse.</p>
         </div>
 
-        {/* FILTROS */}
+        {/* FILTROS (Sin la opción 'todas') */}
         <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12 border-b border-[#E5C0A1]/20 pb-6">
-          {(['todas', 'visiones', 'linajes', 'leyes', 'geografia', 'clasificado'] as CategoriaGaleria[]).map((cat) => (
+          {(['visiones', 'linajes', 'leyes', 'geografia', 'clasificado'] as CategoriaGaleria[]).map((cat) => (
             <button
               key={cat}
               onClick={() => setFiltroActivo(cat)}
@@ -182,46 +175,47 @@ export default function GaleriaPage() {
                   : 'text-[#E5C0A1]/50 hover:text-[#C8946E] border border-transparent'
               }`}
             >
-              {cat === 'todas' ? 'Todos los Archivos' : cat === 'visiones' ? 'Visiones' : cat === 'linajes' ? 'Linajes' : cat === 'leyes' ? 'Kinesis' : cat === 'geografia' ? 'Lugares' : 'Clasificado'}
+              {cat === 'visiones' ? 'Visiones' : cat === 'linajes' ? 'Linajes' : cat === 'leyes' ? 'Kinesis' : cat === 'geografia' ? 'Lugares' : 'Clasificado'}
             </button>
           ))}
         </div>
 
-        {/* REJILLA DE IMÁGENES */}
-        <motion.div 
-          layout
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
-        >
-          <AnimatePresence>
-            {imagenesFiltradas.map((imagen) => (
-              <motion.div
-                key={imagen.id}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ duration: 0.3 }}
-                className="relative h-64 sm:h-56 aspect-[16/9] group cursor-pointer border border-[#E5C0A1]/20 overflow-hidden hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.2)] transition-all bg-[#140B1A]"
-                onClick={() => setImagenModal(imagen)}
-              >
-                <div 
-                  className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100 grayscale-[40%] group-hover:grayscale-0"
-                  style={{ backgroundImage: `url('${imagen.src}')` }}
-                ></div>
-                
-                {/* Degradado para mejorar la legibilidad del texto en miniatura */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:via-black/20 transition-all duration-500"></div>
-                
-                <EsquinasReliquia />
-                
-                <div className="absolute bottom-4 left-4 right-4 z-10 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                  <h3 className="text-[#F4F0EB] text-sm md:text-base font-bold drop-shadow-md group-hover:text-[#C8946E] transition-colors">{imagen.titulo}</h3>
-                  <p className="text-[9px] md:text-[10px] text-[#E5C0A1]/0 group-hover:text-[#E5C0A1]/80 uppercase tracking-widest mt-1 transition-all duration-300 line-clamp-2">{imagen.desc}</p>
+        {/* REJILLA DE IMÁGENES (Con AnimatePresence mode="wait" para evitar superposición) */}
+        <div className="min-h-[50vh]">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={filtroActivo}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            >
+              {imagenesFiltradas.map((imagen) => (
+                <div
+                  key={imagen.id}
+                  className="relative h-64 sm:h-56 aspect-[16/9] group cursor-pointer border border-[#E5C0A1]/20 overflow-hidden hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.2)] transition-all bg-[#140B1A]"
+                  onClick={() => setImagenModal(imagen)}
+                >
+                  <div 
+                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110 opacity-70 group-hover:opacity-100 grayscale-[40%] group-hover:grayscale-0"
+                    style={{ backgroundImage: `url('${imagen.src}')` }}
+                  ></div>
+                  
+                  {/* Degradado para mejorar la legibilidad del texto en miniatura */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:via-black/20 transition-all duration-500"></div>
+                  
+                  <EsquinasReliquia />
+                  
+                  <div className="absolute bottom-4 left-4 right-4 z-10 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="text-[#F4F0EB] text-sm md:text-base font-bold drop-shadow-md group-hover:text-[#C8946E] transition-colors">{imagen.titulo}</h3>
+                    <p className="text-[9px] md:text-[10px] text-[#E5C0A1]/0 group-hover:text-[#E5C0A1]/80 uppercase tracking-widest mt-1 transition-all duration-300 line-clamp-2">{imagen.desc}</p>
+                  </div>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </motion.div>
           </AnimatePresence>
-        </motion.div>
+        </div>
 
       </div>
 

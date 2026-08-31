@@ -1,14 +1,27 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import localFont from 'next/font/local';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const academiaFont = localFont({
   src: '../fonts/AcademiaEclipse.ttf',
   variable: '--font-academia',
   display: 'swap',
 });
+
+interface Teoria {
+  id: number;
+  autor: string;
+  mensaje: string;
+  created_at: string;
+}
 
 const EsquinasReliquia = () => (
   <>
@@ -20,6 +33,70 @@ const EsquinasReliquia = () => (
 );
 
 export default function CirculoPage() {
+  const [teorias, setTeorias] = useState<Teoria[]>([]);
+  const [autor, setAutor] = useState('');
+  const [mensaje, setMensaje] = useState('');
+  const [enviando, setEnviando] = useState(false);
+  const [estadoEnvio, setEstadoEnvio] = useState<string | null>(null);
+
+  useEffect(() => {
+    cargarTeorias();
+  }, []);
+
+  const cargarTeorias = async () => {
+    if (!supabaseUrl || !supabaseKey) {
+      // Datos simulados si Supabase no está configurado todavía
+      setTeorias([
+        { id: 1, autor: "Iniciado #42", mensaje: "Cosmo no murió en el agujero negro de sombras... su anillo astral sigue emitiendo una frecuencia débil.", created_at: new Date().toISOString() },
+        { id: 2, autor: "Sagitario Anónimo", mensaje: "¿Alguien más cree que Lucio está protegiendo a Lola a espaldas del Consejo desde el primer día?", created_at: new Date().toISOString() }
+      ]);
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('teorias_pluton')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(10);
+
+    if (!error && data) {
+      setTeorias(data);
+    }
+  };
+
+  const enviarTeoria = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!autor.trim() || !mensaje.trim()) return;
+
+    setEnviando(true);
+    setEstadoEnvio(null);
+
+    if (!supabaseUrl || !supabaseKey) {
+      setTimeout(() => {
+        setTeorias([{ id: Date.now(), autor, mensaje, created_at: new Date().toISOString() }, ...teorias]);
+        setAutor('');
+        setMensaje('');
+        setEnviando(false);
+        setEstadoEnvio("✨ Teoría transmitida de forma encriptada por los túneles.");
+      }, 600);
+      return;
+    }
+
+    const { error } = await supabase
+      .from('teorias_pluton')
+      .insert([{ autor, mensaje }]);
+
+    if (error) {
+      setEstadoEnvio("❌ Interferencia cósmica al enviar la teoría.");
+    } else {
+      setEstadoEnvio("✨ Teoría transmitida con éxito a los sótanos.");
+      setAutor('');
+      setMensaje('');
+      cargarTeorias();
+    }
+    setEnviando(false);
+  };
+
   return (
     <main className={`bg-[#050208] text-[#F4F0EB] min-h-screen ${academiaFont.className} relative py-16 px-6 overflow-hidden`}>
       
@@ -35,46 +112,75 @@ export default function CirculoPage() {
             ← Volver a la Superficie
           </Link>
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3">Sótanos de Eclipse</span>
-          <h1 className="text-4xl md:text-5xl text-[#F4F0EB] mb-4 drop-shadow-[0_0_15px_rgba(76,29,149,0.5)]">Los Hijos de Plutón</h1>
+          <h1 className="text-4xl md:text-5xl text-[#F4F0EB] mb-4 drop-shadow-[0_0_15px_rgba(76,29,149,0.5)]">La Red de Los Hijos de Plutón</h1>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-xl mx-auto leading-relaxed">
-            "Dejamos de buscar una revolución y nos convertimos en una red de contención oculta." Únete a la resistencia de Dante y Evan en las sombras de Asthar.
+            Tablón clandestino de teorías. Deja tus sospechas sobre el Consejo, los Evren y el destino de Asthar sin ser detectado.
           </p>
         </div>
 
+        {/* Formulario para enviar teoría */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="p-8 md:p-12 border border-[#E5C0A1]/20 bg-black/80 backdrop-blur-md relative text-center shadow-[0_0_40px_rgba(0,0,0,0.8)]"
+          className="p-8 border border-[#E5C0A1]/20 bg-black/80 backdrop-blur-md relative mb-12 shadow-[0_0_30px_rgba(0,0,0,0.8)]"
         >
           <EsquinasReliquia />
+          <h3 className="text-xl text-[#F4F0EB] mb-4">Transmitir Mensaje Clandestino</h3>
           
-          <div className="mb-8">
-            <svg className="w-16 h-16 mx-auto text-[#C8946E] drop-shadow-[0_0_15px_rgba(200,148,110,0.4)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-            </svg>
-          </div>
+          <form onSubmit={enviarTeoria} className="space-y-4">
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-[#C8946E] mb-1 font-bold">Alias / Pseudónimo Numi</label>
+              <input 
+                type="text" 
+                required
+                value={autor}
+                onChange={(e) => setAutor(e.target.value)}
+                placeholder="Ej. Espontáneo Anónimo" 
+                className="w-full px-4 py-3 bg-black border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] focus:outline-none focus:border-[#C8946E]"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-[#C8946E] mb-1 font-bold">Teoría o Hallazgo</label>
+              <textarea 
+                required
+                rows={3}
+                value={mensaje}
+                onChange={(e) => setMensaje(e.target.value)}
+                placeholder="Escribe tu teoría sobre los capítulos..." 
+                className="w-full px-4 py-3 bg-black border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] focus:outline-none focus:border-[#C8946E] resize-none"
+              ></textarea>
+            </div>
+            <div className="text-right">
+              <button 
+                type="submit"
+                disabled={enviando}
+                className="px-6 py-2.5 bg-gradient-to-b from-[#1E0B2B] to-[#0A050E] text-[#F4F0EB] font-bold uppercase tracking-[0.2em] text-[10px] border border-[#E5C0A1]/40 hover:border-[#C8946E] transition-all cursor-pointer shadow-md"
+              >
+                {enviando ? 'Transmitiendo...' : 'Enviar a los Sótanos'}
+              </button>
+            </div>
+          </form>
 
-          <h3 className="text-2xl text-[#F4F0EB] mb-4">El Santuario de la Comunidad</h3>
-          <p className="text-[#E5C0A1]/70 text-sm font-light mb-8 max-w-lg mx-auto">
-            El Consejo prohíbe el uso de la energía plutoniana. Aquí, debatimos teorías sobre la Moldavita, Herea y el futuro de Asthar lejos de los ojos de los Altos Linajes.
-          </p>
-
-          <a 
-            href="https://discord.com" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-block relative overflow-hidden px-10 py-4 bg-gradient-to-b from-[#1E0B2B] to-[#0A050E] text-[#F4F0EB] font-bold uppercase tracking-[0.2em] text-xs border border-[#C8946E]/50 shadow-[0_0_20px_rgba(76,29,149,0.5)] hover:shadow-[0_0_30px_rgba(200,148,110,0.6)] hover:border-[#C8946E] transition-all duration-500 group"
-          >
-            <span className="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-[#E5C0A1]/20 to-transparent -skew-x-45 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-            <span className="relative z-10 flex items-center gap-3">
-              Conectar al Círculo (Discord) ✦
-            </span>
-          </a>
+          {estadoEnvio && (
+            <p className="mt-4 text-xs text-[#E5C0A1] text-center font-light">{estadoEnvio}</p>
+          )}
         </motion.div>
 
-        <div className="mt-12 text-center text-[10px] uppercase tracking-widest text-[#E5C0A1]/40">
-          <p>Solo para Espontáneos confirmados. Mantén tu presencia oculta.</p>
+        {/* Mural de Teorías */}
+        <div className="space-y-6">
+          <h3 className="text-lg text-[#C8946E] uppercase tracking-widest text-center mb-6">Transmisiones Recientes de la Resistencia</h3>
+          
+          {teorias.map((t) => (
+            <div key={t.id} className="p-6 border border-[#E5C0A1]/20 bg-black/60 backdrop-blur-md relative group">
+              <EsquinasReliquia />
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-bold text-[#E5C0A1] tracking-wider">✦ {t.autor}</span>
+                <span className="text-[10px] text-[#E5C0A1]/40">{new Date(t.created_at).toLocaleDateString()}</span>
+              </div>
+              <p className="text-[#F4F0EB]/90 text-xs md:text-sm font-light leading-relaxed">{t.mensaje}</p>
+            </div>
+          ))}
         </div>
 
       </div>

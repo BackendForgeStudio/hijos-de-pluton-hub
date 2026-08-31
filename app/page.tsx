@@ -221,6 +221,7 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
+  // FUNCIÓN DESCARGA: Centrada, subida y con sombreado dinámico
   const descargarTarjetaTest = () => {
     if (!bastionResultado || generandoImagen) return;
     setGenerandoImagen(true);
@@ -247,28 +248,43 @@ export default function CodicePlutonPage() {
       const textColorSecondary = fondoTarjeta === 'dorada' ? '#3B1E08' : '#E5C0A1';
       const accentColor = fondoTarjeta === 'dorada' ? '#8B4513' : '#C8946E';
 
+      // Sombreado para dar profundidad y evitar aspecto artificial
+      if (fondoTarjeta === 'oscura') {
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetX = 2;
+        ctx.shadowOffsetY = 2;
+      } else {
+        ctx.shadowColor = 'rgba(59, 30, 8, 0.3)';
+        ctx.shadowBlur = 3;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 1;
+      }
+
+      // Textos Centrales (Subidos unos 15-20px para centrarlos mejor)
       ctx.fillStyle = accentColor;
       ctx.font = 'bold 20px sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('ACADEMIA ECLIPSE — ASTHAR', canvas.width / 2, 170);
+      ctx.fillText('ACADEMIA ECLIPSE — ASTHAR', canvas.width / 2, 155);
 
       ctx.fillStyle = textColorPrimary;
       ctx.font = 'bold 64px serif';
-      ctx.fillText(info.nombre, canvas.width / 2, 240);
+      ctx.fillText(info.nombre, canvas.width / 2, 220);
 
       ctx.fillStyle = textColorSecondary;
       ctx.font = 'bold 28px sans-serif';
-      ctx.fillText(info.emblema, canvas.width / 2, 290);
+      ctx.fillText(info.emblema, canvas.width / 2, 275);
 
       ctx.fillStyle = accentColor;
       ctx.font = 'bold 20px sans-serif';
-      ctx.fillText(info.kinesis, canvas.width / 2, 335);
+      ctx.fillText(info.kinesis, canvas.width / 2, 320);
 
+      // Descripción adaptativa
       ctx.fillStyle = textColorSecondary;
       ctx.font = '24px sans-serif';
       const palabras = info.descripcion.split(' ');
       let linea = '';
-      let y = 410; 
+      let y = 390; 
       const maxWidth = 750;
 
       for (let n = 0; n < palabras.length; n++) {
@@ -285,22 +301,29 @@ export default function CodicePlutonPage() {
       }
       ctx.fillText(linea, canvas.width / 2, y);
 
-      // Línea divisoria inferior
+      // Quitar sombra para la línea divisoria
+      ctx.shadowColor = 'transparent';
       ctx.beginPath();
-      ctx.moveTo(canvas.width / 2 - 300, 500);
-      ctx.lineTo(canvas.width / 2 + 300, 500);
+      ctx.moveTo(canvas.width / 2 - 300, 480);
+      ctx.lineTo(canvas.width / 2 + 300, 480);
       ctx.strokeStyle = fondoTarjeta === 'dorada' ? 'rgba(139, 69, 19, 0.3)' : 'rgba(229, 192, 161, 0.2)';
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // Textos inferiores agrupados en el centro
+      // Restaurar sombra para el texto inferior
+      if (fondoTarjeta === 'oscura') {
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
+      } else {
+        ctx.shadowColor = 'rgba(59, 30, 8, 0.3)';
+      }
+
       ctx.fillStyle = accentColor;
       ctx.font = 'bold 16px sans-serif';
       ctx.textAlign = 'right';
-      ctx.fillText('ELCODICEDEPLUTON.COM', canvas.width / 2 - 40, 530);
+      ctx.fillText('ELCODICEDEPLUTON.COM', canvas.width / 2 - 40, 510);
       
       ctx.textAlign = 'left';
-      ctx.fillText('✦ CÓDICE DE PLUTÓN', canvas.width / 2 + 40, 530);
+      ctx.fillText('✦ CÓDICE DE PLUTÓN', canvas.width / 2 + 40, 510);
 
       try {
         const link = document.createElement('a');
@@ -381,6 +404,11 @@ export default function CodicePlutonPage() {
       element.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  // Estilo dinámico de sombra para la web
+  const textShadowStyle = fondoTarjeta === 'dorada' 
+    ? { textShadow: '0px 1px 2px rgba(59,30,8,0.3)' } 
+    : { textShadow: '0px 2px 4px rgba(0,0,0,0.8)' };
 
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
@@ -567,7 +595,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE BASTIONES AMPLIADO CON SELECTOR DE TARJETA LÍMPIO */}
+      {/* 6. TEST DE BASTIONES AMPLIADO CON SELECTOR DE TARJETA LÍMPIO Y SOMBREADO */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
@@ -617,7 +645,7 @@ export default function CodicePlutonPage() {
                   </div>
                 </div>
 
-                {/* TARJETA VISUAL DE RESULTADO DINÁMICA (Ratio exacto y textos centrados) */}
+                {/* TARJETA VISUAL DE RESULTADO DINÁMICA (Textos centrados y sombreados) */}
                 <div 
                   className={`w-full aspect-[1200/630] flex flex-col justify-center items-center text-center relative mb-6 shadow-2xl transition-all duration-500 rounded-xl overflow-hidden ${fondoTarjeta === 'dorada' ? 'text-[#1E0B2B]' : 'text-[#F4F0EB]'}`}
                   style={{ 
@@ -625,14 +653,16 @@ export default function CodicePlutonPage() {
                     backgroundSize: '100% 100%' 
                   }}
                 >
-                  <div className="relative z-10 w-[80%] md:w-[70%] flex flex-col items-center">
+                  <div 
+                    className="relative z-10 w-[80%] md:w-[70%] flex flex-col items-center -mt-2 md:-mt-4"
+                    style={textShadowStyle}
+                  >
                     <span className={`text-[8px] md:text-[10px] uppercase tracking-widest block mb-1 md:mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#8B4513]' : 'text-[#C8946E]'}`}>Academia Eclipse — Asthar</span>
-                    <h3 className="text-2xl md:text-4xl mb-2 md:mb-3 drop-shadow-sm font-serif">{BASTIONES_INFO[bastionResultado].nombre}</h3>
+                    <h3 className="text-2xl md:text-4xl mb-2 md:mb-3 font-serif">{BASTIONES_INFO[bastionResultado].nombre}</h3>
                     <p className={`text-[10px] md:text-sm mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#3B1E08]' : 'text-[#E5C0A1]'}`}>{BASTIONES_INFO[bastionResultado].emblema}</p>
                     <p className={`text-[8px] md:text-[10px] mb-3 md:mb-4 font-bold tracking-widest uppercase ${fondoTarjeta === 'dorada' ? 'text-[#8B4513]' : 'text-[#C8946E]'}`}>{BASTIONES_INFO[bastionResultado].kinesis}</p>
                     <p className={`text-[10px] md:text-xs font-medium leading-relaxed mb-4 md:mb-6 ${fondoTarjeta === 'dorada' ? 'text-[#3B1E08]' : 'text-[#E5C0A1]/90'}`}>{BASTIONES_INFO[bastionResultado].descripcion}</p>
                     
-                    {/* Texto inferior centrado con separador */}
                     <div className={`w-full pt-3 md:pt-4 border-t flex justify-center gap-6 md:gap-16 items-center text-[7px] md:text-[9px] tracking-widest uppercase font-bold ${fondoTarjeta === 'dorada' ? 'border-[#8B4513]/30 text-[#8B4513]' : 'border-[#E5C0A1]/20 text-[#C8946E]'}`}>
                       <span>elcodicedepluton.com</span>
                       <span>✦ Códice de Plutón</span>

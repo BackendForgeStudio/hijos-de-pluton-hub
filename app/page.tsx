@@ -222,7 +222,7 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
-  // FUNCIÓN DESCARGA ACTUALIZADA PARA CARGAR IMÁGENES Y COLORES DINÁMICOS
+  // FUNCIÓN DESCARGA: Dibuja imagen de fondo pura + texto (sin marcos extra)
   const descargarTarjetaTest = () => {
     if (!bastionResultado || generandoImagen) return;
     setGenerandoImagen(true);
@@ -243,7 +243,7 @@ export default function CodicePlutonPage() {
     imagenFondo.src = fondoTarjeta === 'dorada' ? '/tarjeta-dorada.jpg' : '/tarjeta-oscura.jpg';
 
     imagenFondo.onload = () => {
-      // 1. Dibujar el fondo elegido
+      // 1. Dibujar el fondo ornamental elegido puro
       ctx.drawImage(imagenFondo, 0, 0, canvas.width, canvas.height);
 
       // Paletas de color según la tarjeta
@@ -561,7 +561,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE BASTIONES AMPLIADO CON SELECTOR DE TARJETA */}
+      {/* 6. TEST DE BASTIONES AMPLIADO CON SELECTOR DE TARJETA LÍMPIO */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
@@ -611,15 +611,12 @@ export default function CodicePlutonPage() {
                   </div>
                 </div>
 
-                {/* TARJETA VISUAL DE RESULTADO DINÁMICA */}
+                {/* TARJETA VISUAL DE RESULTADO DINÁMICA (Sin bordes manuales y sin filtro) */}
                 <div 
-                  className={`p-8 border text-center relative mb-6 shadow-2xl transition-all duration-500 bg-cover bg-center ${fondoTarjeta === 'dorada' ? 'border-[#8B4513] text-[#1E0B2B]' : 'border-[#C8946E] text-[#F4F0EB]'}`}
+                  className={`p-8 text-center relative mb-6 shadow-2xl transition-all duration-500 bg-cover bg-center rounded-xl overflow-hidden ${fondoTarjeta === 'dorada' ? 'text-[#1E0B2B]' : 'text-[#F4F0EB]'}`}
                   style={{ backgroundImage: `url(${fondoTarjeta === 'dorada' ? '/tarjeta-dorada.jpg' : '/tarjeta-oscura.jpg'})` }}
                 >
-                  {/* Overlay oscuro sutil solo si es dorada para asegurar que se lea en pantallas pequeñas, en el canvas se pinta limpio */}
-                  {fondoTarjeta === 'dorada' && <div className="absolute inset-0 bg-white/40 pointer-events-none rounded"></div>}
-                  
-                  <div className="relative z-10">
+                  <div className="relative z-10 py-6">
                     <span className={`text-[10px] uppercase tracking-widest block mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#8B4513]' : 'text-[#C8946E]'}`}>Academia Eclipse — Asthar</span>
                     <h3 className="text-3xl md:text-4xl mb-3 drop-shadow-sm font-serif">{BASTIONES_INFO[bastionResultado].nombre}</h3>
                     <p className={`text-xs md:text-sm mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#3B1E08]' : 'text-[#E5C0A1]'}`}>{BASTIONES_INFO[bastionResultado].emblema}</p>

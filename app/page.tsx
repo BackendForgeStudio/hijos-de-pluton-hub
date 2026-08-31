@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import localFont from 'next/font/local';
 import Link from 'next/link';
@@ -371,11 +371,18 @@ export default function CodicePlutonPage() {
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-[#08040C] to-transparent"></div>
       </div>
 
-      {/* 1. HERO ASTRAL (Anillo ampliado para que no quede oculto bajo el planeta) */}
+      {/* 1. HERO ASTRAL (ANILLO MUCHO MÁS GRANDE PARA QUE DESTAQUE) */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
 
-        <motion.img src="/anillo.png" alt="Anillo Astrológico" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 120, ease: "linear" }} style={{ willChange: "transform" }} className="absolute w-[850px] h-[850px] md:w-[1350px] md:h-[1350px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu" />
+        <motion.img 
+          src="/anillo.png" 
+          alt="Anillo Astrológico" 
+          animate={{ rotate: 360 }} 
+          transition={{ repeat: Infinity, duration: 120, ease: "linear" }} 
+          style={{ willChange: "transform" }} 
+          className="absolute w-[1100px] h-[1100px] md:w-[1700px] md:h-[1700px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu" 
+        />
 
         <div className="absolute w-[380px] h-[380px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
           <div className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[60px] md:blur-[90px] opacity-80"></div>

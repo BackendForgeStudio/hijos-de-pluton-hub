@@ -147,7 +147,6 @@ const IconoEclipse = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" 
 
 export default function CodicePlutonPage() {
   const [profeciaActual, setProfeciaActual] = useState("Pulsa el cristal para invocar tu profecía diaria.");
-  const [animandoOraculo, setAnimandoOraculo] = useState(false);
   const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
 
   const [preguntaActual, setPreguntaActual] = useState(0);
@@ -190,42 +189,52 @@ export default function CodicePlutonPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // EFECTO DE SONIDO MÁGICO NATIVO (Sintetizador Web Audio API)
-  const reproducirSonidoMagico = () => {
+  // EFECTO DE SONIDO TIPO "GOLPE DE HECHIZO MÁGICO" (Web Audio API)
+  const reproducirSonidoHechizo = () => {
     try {
       const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
       if (!AudioContext) return;
       const ctx = new AudioContext();
 
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
+      // Oscilador 1: Impacto grave (sub grave)
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = 'triangle';
+      osc1.frequency.setValueAtTime(150, ctx.currentTime);
+      osc1.frequency.exponentialRampToValueAtTime(30, ctx.currentTime + 0.6);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(440, ctx.currentTime); // La4
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.8);
+      gain1.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain1.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
 
-      gain.gain.setValueAtTime(0.15, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.2);
+      osc1.connect(gain1);
+      gain1.connect(ctx.destination);
 
-      osc.connect(gain);
-      gain.connect(ctx.destination);
+      // Oscilador 2: Chispa o brillo mágico ascendente (efecto de hechizo)
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(300, ctx.currentTime);
+      osc2.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.5);
 
-      osc.start();
-      osc.stop(ctx.currentTime + 1.2);
+      gain2.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain2.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+
+      osc2.connect(gain2);
+      gain2.connect(ctx.destination);
+
+      osc1.start();
+      osc2.start();
+      osc1.stop(ctx.currentTime + 0.6);
+      osc2.stop(ctx.currentTime + 0.5);
     } catch {
-      // Si el navegador bloquea audio por política de interacción, se ignora silenciosamente
+      // Ignorar bloqueos de autoplay del navegador
     }
   };
 
   const consultarOraculo = () => {
-    setAnimandoOraculo(true);
-    reproducirSonidoMagico();
-
-    setTimeout(() => {
-      const randomIndex = Math.floor(Math.random() * PROFECIAS.length);
-      setProfeciaActual(PROFECIAS[randomIndex]);
-      setAnimandoOraculo(false);
-    }, 400);
+    reproducirSonidoHechizo();
+    const randomIndex = Math.floor(Math.random() * PROFECIAS.length);
+    setProfeciaActual(PROFECIAS[randomIndex]);
   };
 
   const seleccionarRespuesta = (bastion: string) => {
@@ -248,15 +257,19 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
-  // GENERAR Y DESCARGAR IMAGEN DEL RESULTADO DEL TEST
   const descargarTarjetaTest = async () => {
     if (!tarjetaRef.current) return;
     setCapturandoImage(true);
+    
+    // Pequeño retardo para garantizar que el DOM esté renderizado al 100%
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
     try {
       const canvas = await html2canvas(tarjetaRef.current, {
         scale: 2,
         backgroundColor: '#08040C',
-        useCORS: true
+        useCORS: true,
+        logging: false
       });
       const link = document.createElement('a');
       link.download = 'mi-bastion-eclipse.png';
@@ -461,7 +474,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 5. ORÁCULO DIARIO MÁGICO (CON SONIDO Y RESPLANDOR) */}
+      {/* 5. ORÁCULO DIARIO MÁGICO (CON DESTELLO EN EL TEXTO Y SONIDO DE HECHIZO) */}
       <section id="oraculo-diario" className="py-12 px-6 text-center transform-gpu relative z-10">
         <div className="max-w-2xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
@@ -470,26 +483,24 @@ export default function CodicePlutonPage() {
           <h2 className="text-3xl text-[#F4F0EB] mb-4">El Oráculo de Plutón</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Pulsa el sello para invocar la advertencia mística que marcará tu destino.</p>
 
-          <motion.div 
-            animate={animandoOraculo ? { scale: [1, 1.03, 1], filter: ["brightness(1)", "brightness(1.8) drop-shadow(0 0 30px #E5C0A1)", "brightness(1)"] } : {}}
-            transition={{ duration: 0.4 }}
-            className="p-8 border border-[#E5C0A1]/30 mb-8 relative group shadow-[0_0_40px_rgba(46,16,101,0.5)] bg-black/90 backdrop-blur-md overflow-hidden"
-          >
+          <div className="p-8 border border-[#E5C0A1]/30 mb-8 relative group shadow-[0_0_40px_rgba(46,16,101,0.5)] bg-black/90 backdrop-blur-md overflow-hidden">
             <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-[#C8946E] to-transparent"></div>
             <EsquinasReliquia />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-[#4C1D95]/20 blur-2xl rounded-full pointer-events-none"></div>
             
-            <motion.p 
-              key={profeciaActual}
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3 }}
-              className="text-base md:text-xl text-[#F4F0EB] italic font-light min-h-[60px] flex items-center justify-center relative z-10 drop-shadow-md"
-            >
-              {profeciaActual}
-            </motion.p>
-          </motion.div>
+            <AnimatePresence mode="wait">
+              <motion.p 
+                key={profeciaActual}
+                initial={{ opacity: 0, scale: 0.9, filter: "drop-shadow(0 0 25px rgba(229,192,161,1)) brightness(2)" }}
+                animate={{ opacity: 1, scale: 1, filter: "drop-shadow(0 0 0px rgba(229,192,161,0)) brightness(1)" }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="text-base md:text-xl text-[#F4F0EB] italic font-light min-h-[60px] flex items-center justify-center relative z-10"
+              >
+                {profeciaActual}
+              </motion.p>
+            </AnimatePresence>
+          </div>
 
           <BotonReliquia onClick={consultarOraculo}>Invocar Profecía ✦</BotonReliquia>
         </div>

@@ -477,9 +477,9 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 2. NAVEGACIÓN ADHESIVA */}
+      {/* 2. NAVEGACIÓN ADHESIVA CON ENLACE A DISCORD */}
       <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transform-gpu">
-        <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2 relative z-10">
+        <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2 relative z-10 items-center">
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/grimorio">Grimorio</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/personajes">Personajes</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/cartas-astrales">Cartas Astrales</Link></li>
@@ -488,6 +488,18 @@ export default function CodicePlutonPage() {
           <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Oráculo</li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/galeria">Galería</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/circulo">El Círculo</Link></li>
+          
+          {/* BOTÓN DISCORD */}
+          <li>
+            <a 
+              href="https://discord.gg/22c8Xgmp" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="px-3 py-1.5 bg-[#2E1065]/80 border border-[#E5C0A1]/40 text-[#F4F0EB] rounded hover:border-[#C8946E] transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(76,29,149,0.3)] text-[10px]"
+            >
+              <span>✦ Discord</span>
+            </a>
+          </li>
         </ul>
       </nav>
 
@@ -757,7 +769,8 @@ export default function CodicePlutonPage() {
           </p>
 
           <div className="pt-2 text-xs text-[#E5C0A1]">
-            Contacto oficial: <a href="mailto:contacto@elcodicedepluton.com" className="text-[#C8946E] underline hover:text-[#F4F0EB] transition-colors">contacto@elcodicedepluton.com</a>
+            Contacto oficial: <a href="mailto:contacto@elcodicedepluton.com" className="text-[#C8946E] underline hover:text-[#F4F0EB] transition-colors">contacto@elcodicedepluton.com</a> | 
+            Comunidad: <a href="https://discord.gg/22c8Xgmp" target="_blank" rel="noopener noreferrer" className="text-[#C8946E] underline hover:text-[#F4F0EB] transition-colors ml-1">Discord Oficial</a>
           </div>
 
           <div className="pt-4 border-t border-[#E5C0A1]/10 flex flex-col sm:flex-row justify-between items-center gap-2">

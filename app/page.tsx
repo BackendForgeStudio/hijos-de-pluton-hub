@@ -80,25 +80,25 @@ const BASTIONES_INFO: Record<string, { nombre: string; descripcion: string; embl
   Fuego: {
     nombre: "Bastión de Fuego",
     descripcion: "Tu energía es directa, afilada y letal. El combate y el instinto dominan tu naturaleza. No estás aquí para retroceder, sino para arder sin destruirlo todo.",
-    emblema: "🔥 Signos: Aries, Leo, Sagitario",
+    emblema: "Signos: Aries, Leo, Sagitario",
     kinesis: "Doce Leyes: Pirokinesis, Heliokinesis, Chorokinesis."
   },
   Agua: {
     nombre: "Bastión de Agua",
     descripcion: "Sientes todo a un nivel insoportable. Tu poder transforma las emociones, navega por el mundo de los sueños y es capaz de dominar la oscuridad más profunda.",
-    emblema: "💧 Signos: Cáncer, Escorpio, Piscis",
+    emblema: "Signos: Cáncer, Escorpio, Piscis",
     kinesis: "Doce Leyes: Patokinesis, Umbrakinesis, Onirokinesis."
   },
   Tierra: {
     nombre: "Bastión de Tierra",
     descripcion: "Eres el límite, la estructura y la contención. Tu poder puede estabilizar células vivas, volverte físicamente indestructible o paralizar procesos atómicos.",
-    emblema: "🌿 Signos: Tauro, Virgo, Capricornio",
+    emblema: "Signos: Tauro, Virgo, Capricornio",
     kinesis: "Doce Leyes: Taurokinesis, Biokinesis, Akinesis."
   },
   Aire: {
     nombre: "Bastión de Aire",
     descripcion: "Eres libre, elocuente y mental. Dominas el espacio, la gravedad, los desdoblamientos de identidad y los flujos eléctricos y tecnológicos.",
-    emblema: "🌪️ Signos: Géminis, Libra, Acuario",
+    emblema: "Signos: Géminis, Libra, Acuario",
     kinesis: "Doce Leyes: Duplikinesis, Gravitokinesis, Electrokinesis."
   }
 };
@@ -673,7 +673,7 @@ export default function CodicePlutonPage() {
                   </div>
                 </div>
 
-                {/* BOTONES DE ACCION CON SVGs ELEGANTE */}
+                {/* BOTONES DE ACCION CON SVGs */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <BotonReliquia onClick={descargarTarjetaTest} disabled={generandoImagen}>
                     {generandoImagen ? 'Canalizando...' : (

@@ -43,7 +43,7 @@ const PREGUNTAS_TEST = [
     opciones: [
       { texto: "Lanzar proyectiles destructivos a distancia o iluminar el camino con mi propia luz.", bastion: "Fuego" },
       { texto: "Infiltrarme en las sombras de los muros o despistar a los rivales con ilusiones.", bastion: "Agua" },
-      { texto: "Endurecer mi piel para soportar el impacto o inmobilizar los engranajes de piedra.", bastion: "Tierra" },
+      { texto: "Endurecer mi piel para soportar el impacto o inmovilizar los engranajes de piedra.", bastion: "Tierra" },
       { texto: "Desdoblarme en dos cuerpos para explorar varias rutas o cruzar portales.", bastion: "Aire" }
     ]
   },
@@ -154,6 +154,10 @@ export default function CodicePlutonPage() {
   const [bastionResultado, setBastionResultado] = useState<string | null>(null);
   const [generandoImagen, setGenerandoImagen] = useState(false);
 
+  // Estado para el reproductor de ambiente sonoro
+  const [reproduciendo, setReproduciendo] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
   const [emailPacto, setEmailPacto] = useState("");
@@ -167,7 +171,7 @@ export default function CodicePlutonPage() {
       y: (Math.random() - 0.5) * 700, 
       delay: Math.random() * 5,
       duration: Math.random() * 5 + 3, 
-      size: Math.random() * 4 + 2 // Partículas más grandes y visibles
+      size: Math.random() * 4 + 2 
     }));
     setParticulas(nuevasParticulas);
 
@@ -184,8 +188,33 @@ export default function CodicePlutonPage() {
         });
       }
     }, 1000);
-    return () => clearInterval(interval);
+
+    // Inicializar audio ambiental (pista suave libre de derechos de ambiente espacial/místico)
+    audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=space-chillout-ambient-11019.mp3');
+    audioRef.current.loop = true;
+    audioRef.current.volume = 0.3;
+
+    return () => {
+      clearInterval(interval);
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+    };
   }, []);
+
+  const toggleAmbienteSonoro = () => {
+    if (!audioRef.current) return;
+    if (reproduciendo) {
+      audioRef.current.pause();
+      setReproduciendo(false);
+    } else {
+      audioRef.current.play().then(() => {
+        setReproduciendo(true);
+      }).catch(() => {
+        // Bloqueo de autoplay del navegador
+      });
+    }
+  };
 
   const consultarOraculo = () => {
     if (cargandoProfecia) return;
@@ -365,17 +394,29 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
+      {/* REPRODUCTOR DE AMBIENTE SONORO FLOTANTE (DISCRETO) */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <button 
+          onClick={toggleAmbienteSonoro}
+          className={`flex items-center gap-2 px-4 py-2.5 rounded-full backdrop-blur-md border transition-all shadow-[0_4px_20px_rgba(0,0,0,0.8)] cursor-pointer ${reproduciendo ? 'bg-[#2E1065]/90 border-[#C8946E] text-[#F4F0EB] shadow-[0_0_15px_rgba(200,148,110,0.5)]' : 'bg-black/80 border-[#E5C0A1]/30 text-[#E5C0A1]/70 hover:border-[#C8946E]'}`}
+        >
+          <span className={`text-xs ${reproduciendo ? 'animate-spin text-[#C8946E]' : ''}`}>✦</span>
+          <span className="text-[10px] uppercase tracking-widest font-bold">
+            {reproduciendo ? 'Ambiente Sonoro: Activo' : 'Activar Ambiente Sonoro'}
+          </span>
+        </button>
+      </div>
+
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.70] mix-blend-screen hidden md:block">
         <div className="absolute top-0 left-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/runas-izq.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 right-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/zodiaco-der.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-[#08040C] to-transparent"></div>
       </div>
 
-      {/* 1. HERO ASTRAL (Partículas con mayor brillo, tamaño y z-index superior para que destaquen) */}
+      {/* 1. HERO ASTRAL */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
 
-        {/* Anillo Astrológico Ampliado */}
         <motion.img 
           src="/anillo.png" 
           alt="Anillo Astrológico" 
@@ -385,7 +426,6 @@ export default function CodicePlutonPage() {
           className="absolute w-[1100px] h-[1100px] md:w-[1700px] md:h-[1700px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu" 
         />
 
-        {/* Partículas Estelares con Z-Index Superior (z-20) */}
         <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center overflow-hidden">
           {particulas.map((p) => (
             <motion.div 
@@ -658,13 +698,18 @@ export default function CodicePlutonPage() {
         </motion.div>
       </section>
 
-      {/* 8. PIE DE PÁGINA */}
+      {/* 8. PIE DE PÁGINA (CON CORREO DE CONTACTO Y AMBIENTE SONORO) */}
       <footer className="py-12 px-6 bg-black/95 backdrop-blur-lg border-t border-[#E5C0A1]/15 text-center text-[11px] text-[#E5C0A1]/60 relative z-10">
         <div className="max-w-4xl mx-auto space-y-4">
           <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>
           <p className="leading-relaxed font-light">
             Este sitio web es un portal de fans no oficial creado sin ánimo de lucro por y para la comunidad de lectores de la obra literaria <span className="italic">Los Hijos de Plutón</span>. No está afiliado ni asociado oficialmente con los autores ni con las editoriales oficiales.
           </p>
+          
+          <div className="pt-2 text-xs text-[#E5C0A1]">
+            Contacto oficial: <a href="mailto:contacto@elcodicedepluton.com" className="text-[#C8946E] underline hover:text-[#F4F0EB] transition-colors">contacto@elcodicedepluton.com</a>
+          </div>
+
           <div className="pt-4 border-t border-[#E5C0A1]/10 flex flex-col sm:flex-row justify-between items-center gap-2">
             <span>© 2026 elcodicedepluton.com — Todos los derechos reservados.</span>
             <span className="tracking-widest uppercase text-[#C8946E]">Santuario de la Academia Eclipse</span>

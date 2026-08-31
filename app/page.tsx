@@ -43,7 +43,7 @@ const PREGUNTAS_TEST = [
     opciones: [
       { texto: "Lanzar proyectiles destructivos a distancia o iluminar el camino con mi propia luz.", bastion: "Fuego" },
       { texto: "Infiltrarme en las sombras de los muros o despistar a los rivales con ilusiones.", bastion: "Agua" },
-      { texto: "Endurecer mi piel para soportar el impacto o inmovilizar los engranajes de piedra.", bastion: "Tierra" },
+      { texto: "Endurecer mi piel para soportar el impacto o inmobilizar los engranajes de piedra.", bastion: "Tierra" },
       { texto: "Desdoblarme en dos cuerpos para explorar varias rutas o cruzar portales.", bastion: "Aire" }
     ]
   },
@@ -161,13 +161,13 @@ export default function CodicePlutonPage() {
   const [mensajePacto, setMensajePacto] = useState("");
 
   useEffect(() => {
-    const nuevasParticulas = Array.from({ length: 35 }).map((_, i) => ({
+    const nuevasParticulas = Array.from({ length: 45 }).map((_, i) => ({
       id: i,
-      x: (Math.random() - 0.5) * 800, 
-      y: (Math.random() - 0.5) * 400, 
-      delay: Math.random() * 4,
-      duration: Math.random() * 4 + 4, 
-      size: Math.random() * 3 + 1.5 
+      x: (Math.random() - 0.5) * 1200, 
+      y: (Math.random() - 0.5) * 700, 
+      delay: Math.random() * 5,
+      duration: Math.random() * 5 + 3, 
+      size: Math.random() * 4 + 2 // Partículas más grandes y visibles
     }));
     setParticulas(nuevasParticulas);
 
@@ -371,10 +371,11 @@ export default function CodicePlutonPage() {
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-[#08040C] to-transparent"></div>
       </div>
 
-      {/* 1. HERO ASTRAL (ANILLO MUCHO MÁS GRANDE PARA QUE DESTAQUE) */}
+      {/* 1. HERO ASTRAL (Partículas con mayor brillo, tamaño y z-index superior para que destaquen) */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
 
+        {/* Anillo Astrológico Ampliado */}
         <motion.img 
           src="/anillo.png" 
           alt="Anillo Astrológico" 
@@ -384,6 +385,20 @@ export default function CodicePlutonPage() {
           className="absolute w-[1100px] h-[1100px] md:w-[1700px] md:h-[1700px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu" 
         />
 
+        {/* Partículas Estelares con Z-Index Superior (z-20) */}
+        <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center overflow-hidden">
+          {particulas.map((p) => (
+            <motion.div 
+              key={p.id} 
+              className="absolute bg-[#FFF5EE] rounded-full blur-[0.5px] shadow-[0_0_12px_rgba(229,192,161,0.9)]" 
+              style={{ width: p.size, height: p.size }} 
+              initial={{ opacity: 0, x: p.x, y: p.y, scale: 0 }} 
+              animate={{ opacity: [0, 1, 0], scale: [0, 1.2, 0.4], y: [p.y, p.y - 180], x: [p.x, p.x + (Math.random() * 60 - 30)] }} 
+              transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }} 
+            />
+          ))}
+        </div>
+
         <div className="absolute w-[380px] h-[380px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
           <div className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[60px] md:blur-[90px] opacity-80"></div>
           <img src="/planeta-oficial.png" alt="Planeta Oficial Los Hijos de Plutón" className="absolute w-full h-full object-contain drop-shadow-[0_0_40px_rgba(76,29,149,0.7)] opacity-95 brightness-90 contrast-125" />
@@ -392,12 +407,6 @@ export default function CodicePlutonPage() {
         <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-24 h-24 md:w-40 md:h-40 z-30 drop-shadow-[0_0_25px_rgba(229,192,161,1)] object-contain pointer-events-none" />
 
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1.2 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] pointer-events-none z-0">
-            {particulas.map((p) => (
-              <motion.div key={p.id} className="absolute bg-[#E5C0A1] rounded-full blur-[1px] shadow-[0_0_8px_rgba(229,192,161,0.8)]" style={{ width: p.size, height: p.size, left: '50%', top: '50%' }} initial={{ opacity: 0, x: p.x, y: p.y, scale: 0 }} animate={{ opacity: [0, 0.9, 0], scale: [0, 1, 0.5], y: [p.y, p.y - 120], x: [p.x, p.x + (Math.random() * 40 - 20)] }} transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }} />
-            ))}
-          </div>
-
           <div className="relative mb-3 grid place-items-center w-full z-10">
             <motion.h1 className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center" animate={{ filter: ["blur(4px) brightness(1)", "blur(14px) brightness(1.6)", "blur(4px) brightness(1)"], opacity: [0.3, 0.9, 0.3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>EL CÓDICE<br />DE PLUTÓN</motion.h1>
             <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center">EL CÓDICE<br />DE PLUTÓN</h1>

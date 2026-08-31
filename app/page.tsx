@@ -152,6 +152,9 @@ export default function CodicePlutonPage() {
   const [preguntaActual, setPreguntaActual] = useState(0);
   const [puntosBastion, setPuntosBastion] = useState({ Fuego: 0, Agua: 0, Tierra: 0, Aire: 0 });
   const [bastionResultado, setBastionResultado] = useState<string | null>(null);
+  
+  // ESTADO PARA LA ELECCIÓN DEL FONDO
+  const [fondoTarjeta, setFondoTarjeta] = useState<'oscura' | 'dorada'>('oscura');
   const [generandoImagen, setGenerandoImagen] = useState(false);
 
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
@@ -219,6 +222,7 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
+  // FUNCIÓN DESCARGA ACTUALIZADA PARA CARGAR IMÁGENES Y COLORES DINÁMICOS
   const descargarTarjetaTest = () => {
     if (!bastionResultado || generandoImagen) return;
     setGenerandoImagen(true);
@@ -234,71 +238,80 @@ export default function CodicePlutonPage() {
       return;
     }
 
-    ctx.fillStyle = '#08040C';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    const imagenFondo = new Image();
+    imagenFondo.crossOrigin = "anonymous";
+    imagenFondo.src = fondoTarjeta === 'dorada' ? '/tarjeta-dorada.jpg' : '/tarjeta-oscura.jpg';
 
-    ctx.strokeStyle = '#C8946E';
-    ctx.lineWidth = 4;
-    ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
+    imagenFondo.onload = () => {
+      // 1. Dibujar el fondo elegido
+      ctx.drawImage(imagenFondo, 0, 0, canvas.width, canvas.height);
 
-    ctx.fillStyle = '#E5C0A1';
-    ctx.fillRect(36, 36, 12, 12);
-    ctx.fillRect(canvas.width - 48, 36, 12, 12);
-    ctx.fillRect(36, canvas.height - 48, 12, 12);
-    ctx.fillRect(canvas.width - 48, canvas.height - 48, 12, 12);
+      // Paletas de color según la tarjeta
+      const textColorPrimary = fondoTarjeta === 'dorada' ? '#1E0B2B' : '#F4F0EB';
+      const textColorSecondary = fondoTarjeta === 'dorada' ? '#3B1E08' : '#E5C0A1';
+      const accentColor = fondoTarjeta === 'dorada' ? '#8B4513' : '#C8946E';
 
-    ctx.fillStyle = '#C8946E';
-    ctx.font = 'bold 20px sans-serif';
-    ctx.textAlign = 'center';
-    ctx.fillText('ACADEMIA ECLIPSE — REGISTRO CENTRAL DE ASTHAR', canvas.width / 2, 110);
+      // 2. Textos Centrales
+      ctx.fillStyle = accentColor;
+      ctx.font = 'bold 20px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('ACADEMIA ECLIPSE — REGISTRO CENTRAL DE ASTHAR', canvas.width / 2, 140);
 
-    ctx.fillStyle = '#F4F0EB';
-    ctx.font = 'bold 52px serif';
-    ctx.fillText(info.nombre, canvas.width / 2, 190);
+      ctx.fillStyle = textColorPrimary;
+      ctx.font = 'bold 64px serif';
+      ctx.fillText(info.nombre, canvas.width / 2, 230);
 
-    ctx.fillStyle = '#E5C0A1';
-    ctx.font = 'bold 24px sans-serif';
-    ctx.fillText(info.emblema, canvas.width / 2, 240);
+      ctx.fillStyle = textColorSecondary;
+      ctx.font = 'bold 28px sans-serif';
+      ctx.fillText(info.emblema, canvas.width / 2, 290);
 
-    ctx.fillStyle = '#C8946E';
-    ctx.font = 'bold 18px sans-serif';
-    ctx.fillText(info.kinesis, canvas.width / 2, 280);
+      ctx.fillStyle = accentColor;
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText(info.kinesis, canvas.width / 2, 335);
 
-    ctx.fillStyle = '#E5C0A1';
-    ctx.font = '22px sans-serif';
-    const palabras = info.descripcion.split(' ');
-    let linea = '';
-    let y = 350;
-    const maxWidth = 900;
+      // 3. Descripción adaptativa con saltos de línea
+      ctx.fillStyle = textColorSecondary;
+      ctx.font = '24px sans-serif';
+      const palabras = info.descripcion.split(' ');
+      let linea = '';
+      let y = 410;
+      const maxWidth = 800;
 
-    for (let n = 0; n < palabras.length; n++) {
-      const testLine = linea + palabras[n] + ' ';
-      const metrics = ctx.measureText(testLine);
-      const testWidth = metrics.width;
-      if (testWidth > maxWidth && n > 0) {
-        ctx.fillText(linea, canvas.width / 2, y);
-        linea = palabras[n] + ' ';
-        y += 35;
-      } else {
-        linea = testLine;
+      for (let n = 0; n < palabras.length; n++) {
+        const testLine = linea + palabras[n] + ' ';
+        const metrics = ctx.measureText(testLine);
+        const testWidth = metrics.width;
+        if (testWidth > maxWidth && n > 0) {
+          ctx.fillText(linea, canvas.width / 2, y);
+          linea = palabras[n] + ' ';
+          y += 38;
+        } else {
+          linea = testLine;
+        }
       }
-    }
-    ctx.fillText(linea, canvas.width / 2, y);
+      ctx.fillText(linea, canvas.width / 2, y);
 
-    ctx.fillStyle = '#C8946E';
-    ctx.font = 'bold 20px sans-serif';
-    ctx.fillText('elcodicedepluton.com  ✦  Santuario de la Academia Eclipse', canvas.width / 2, 550);
+      ctx.fillStyle = accentColor;
+      ctx.font = 'bold 18px sans-serif';
+      ctx.fillText('elcodicedepluton.com  ✦  Santuario de la Academia Eclipse', canvas.width / 2, 540);
 
-    try {
-      const link = document.createElement('a');
-      link.download = `mi-bastion-${bastionResultado.toLowerCase()}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    } catch (err) {
-      console.error(err);
-    } finally {
+      // 4. Iniciar Descarga
+      try {
+        const link = document.createElement('a');
+        link.download = `mi-bastion-${bastionResultado.toLowerCase()}-${fondoTarjeta}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (err) {
+        console.error("Error al generar tarjeta:", err);
+      } finally {
+        setGenerandoImagen(false);
+      }
+    };
+
+    imagenFondo.onerror = () => {
+      console.error("No se pudo cargar la imagen de fondo");
       setGenerandoImagen(false);
-    }
+    };
   };
 
   const compartirResultado = async () => {
@@ -548,7 +561,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE BASTIONES AMPLIADO CON TARJETA GENERADA POR CANVAS */}
+      {/* 6. TEST DE BASTIONES AMPLIADO CON SELECTOR DE TARJETA */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
@@ -581,24 +594,49 @@ export default function CodicePlutonPage() {
             ) : (
               <div className="text-center py-6 relative z-10">
                 
-                {/* TARJETA VISUAL DE RESULTADO */}
-                <div className="p-8 bg-[#08040C] border border-[#C8946E] text-center relative mb-6 shadow-2xl">
-                  <span className="text-[10px] uppercase tracking-widest text-[#C8946E] block mb-2 font-bold relative z-10">Academia Eclipse — Asthar</span>
-                  <h3 className="text-3xl md:text-4xl text-[#F4F0EB] mb-3 relative z-10 drop-shadow-md">{BASTIONES_INFO[bastionResultado].nombre}</h3>
-                  <p className="text-[#E5C0A1] text-xs md:text-sm mb-2 font-bold relative z-10">{BASTIONES_INFO[bastionResultado].emblema}</p>
-                  <p className="text-[#C8946E] text-[10px] mb-4 font-bold tracking-widest uppercase relative z-10">{BASTIONES_INFO[bastionResultado].kinesis}</p>
-                  <p className="text-[#E5C0A1]/90 text-xs font-light leading-relaxed mb-6 relative z-10 px-2">{BASTIONES_INFO[bastionResultado].descripcion}</p>
+                {/* Selector de Fondo */}
+                <div className="mb-6">
+                  <p className="text-[10px] uppercase tracking-widest text-[#E5C0A1]/70 mb-3">Estilo del pergamino</p>
+                  <div className="flex justify-center gap-4">
+                    <button 
+                      onClick={() => setFondoTarjeta('oscura')}
+                      className={`w-20 h-12 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'oscura' ? 'border-2 border-[#C8946E] shadow-[0_0_15px_rgba(200,148,110,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
+                      style={{ backgroundImage: "url('/tarjeta-oscura.jpg')" }}
+                    />
+                    <button 
+                      onClick={() => setFondoTarjeta('dorada')}
+                      className={`w-20 h-12 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'dorada' ? 'border-2 border-[#8B4513] shadow-[0_0_15px_rgba(139,69,19,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
+                      style={{ backgroundImage: "url('/tarjeta-dorada.jpg')" }}
+                    />
+                  </div>
+                </div>
+
+                {/* TARJETA VISUAL DE RESULTADO DINÁMICA */}
+                <div 
+                  className={`p-8 border text-center relative mb-6 shadow-2xl transition-all duration-500 bg-cover bg-center ${fondoTarjeta === 'dorada' ? 'border-[#8B4513] text-[#1E0B2B]' : 'border-[#C8946E] text-[#F4F0EB]'}`}
+                  style={{ backgroundImage: `url(${fondoTarjeta === 'dorada' ? '/tarjeta-dorada.jpg' : '/tarjeta-oscura.jpg'})` }}
+                >
+                  {/* Overlay oscuro sutil solo si es dorada para asegurar que se lea en pantallas pequeñas, en el canvas se pinta limpio */}
+                  {fondoTarjeta === 'dorada' && <div className="absolute inset-0 bg-white/40 pointer-events-none rounded"></div>}
                   
-                  <div className="pt-4 border-t border-[#E5C0A1]/20 flex justify-between items-center text-[9px] text-[#C8946E] tracking-widest uppercase relative z-10 font-bold">
-                    <span>elcodicedepluton.com</span>
-                    <span>✦ Códice de Plutón</span>
+                  <div className="relative z-10">
+                    <span className={`text-[10px] uppercase tracking-widest block mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#8B4513]' : 'text-[#C8946E]'}`}>Academia Eclipse — Asthar</span>
+                    <h3 className="text-3xl md:text-4xl mb-3 drop-shadow-sm font-serif">{BASTIONES_INFO[bastionResultado].nombre}</h3>
+                    <p className={`text-xs md:text-sm mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#3B1E08]' : 'text-[#E5C0A1]'}`}>{BASTIONES_INFO[bastionResultado].emblema}</p>
+                    <p className={`text-[10px] mb-4 font-bold tracking-widest uppercase ${fondoTarjeta === 'dorada' ? 'text-[#8B4513]' : 'text-[#C8946E]'}`}>{BASTIONES_INFO[bastionResultado].kinesis}</p>
+                    <p className={`text-xs font-medium leading-relaxed mb-6 px-2 ${fondoTarjeta === 'dorada' ? 'text-[#3B1E08]' : 'text-[#E5C0A1]/90'}`}>{BASTIONES_INFO[bastionResultado].descripcion}</p>
+                    
+                    <div className={`pt-4 border-t flex justify-between items-center text-[9px] tracking-widest uppercase font-bold ${fondoTarjeta === 'dorada' ? 'border-[#8B4513]/30 text-[#8B4513]' : 'border-[#E5C0A1]/20 text-[#C8946E]'}`}>
+                      <span>elcodicedepluton.com</span>
+                      <span>✦ Códice de Plutón</span>
+                    </div>
                   </div>
                 </div>
 
                 {/* BOTONES DE ACCION */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <BotonReliquia onClick={descargarTarjetaTest} disabled={generandoImagen}>
-                    {generandoImagen ? 'Generando Imagen...' : 'Descargar Tarjeta'}
+                    {generandoImagen ? 'Canalizando...' : 'Descargar Tarjeta'}
                   </BotonReliquia>
                   <button onClick={compartirResultado} className="px-6 py-3 bg-[#2E1065]/60 border border-[#E5C0A1]/40 text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:border-[#C8946E] transition-all cursor-pointer">
                     Compartir Resultado ✦

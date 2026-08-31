@@ -132,6 +132,7 @@ const BotonReliquia = ({ children, onClick, type = "button", disabled = false }:
   </button>
 );
 
+// ICONOS SVG ELEGANTES
 const IconoSelloArcano = () => (
   <svg className="w-8 h-8 text-[#C8946E] drop-shadow-[0_0_10px_rgba(200,148,110,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12" cy="12" r="9" strokeWidth="1.5" strokeDasharray="3 3"/>
@@ -140,9 +141,18 @@ const IconoSelloArcano = () => (
     <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
   </svg>
 );
-
 const IconoOraculo = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>);
 const IconoEclipse = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>);
+const IconoDescargar = () => (
+  <svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+  </svg>
+);
+const IconoCompartir = () => (
+  <svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+  </svg>
+);
 
 export default function CodicePlutonPage() {
   const [profeciaActual, setProfeciaActual] = useState("Pulsa el cristal para invocar tu profecía diaria.");
@@ -221,7 +231,6 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
-  // FUNCIÓN DESCARGA: Centrada, subida y con sombreado dinámico
   const descargarTarjetaTest = () => {
     if (!bastionResultado || generandoImagen) return;
     setGenerandoImagen(true);
@@ -248,7 +257,6 @@ export default function CodicePlutonPage() {
       const textColorSecondary = fondoTarjeta === 'dorada' ? '#3B1E08' : '#E5C0A1';
       const accentColor = fondoTarjeta === 'dorada' ? '#8B4513' : '#C8946E';
 
-      // Sombreado para dar profundidad y evitar aspecto artificial
       if (fondoTarjeta === 'oscura') {
         ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
         ctx.shadowBlur = 6;
@@ -261,7 +269,6 @@ export default function CodicePlutonPage() {
         ctx.shadowOffsetY = 1;
       }
 
-      // Textos Centrales (Subidos unos 15-20px para centrarlos mejor)
       ctx.fillStyle = accentColor;
       ctx.font = 'bold 20px sans-serif';
       ctx.textAlign = 'center';
@@ -279,7 +286,6 @@ export default function CodicePlutonPage() {
       ctx.font = 'bold 20px sans-serif';
       ctx.fillText(info.kinesis, canvas.width / 2, 320);
 
-      // Descripción adaptativa
       ctx.fillStyle = textColorSecondary;
       ctx.font = '24px sans-serif';
       const palabras = info.descripcion.split(' ');
@@ -301,7 +307,6 @@ export default function CodicePlutonPage() {
       }
       ctx.fillText(linea, canvas.width / 2, y);
 
-      // Quitar sombra para la línea divisoria
       ctx.shadowColor = 'transparent';
       ctx.beginPath();
       ctx.moveTo(canvas.width / 2 - 300, 480);
@@ -310,7 +315,6 @@ export default function CodicePlutonPage() {
       ctx.lineWidth = 1;
       ctx.stroke();
 
-      // Restaurar sombra para el texto inferior
       if (fondoTarjeta === 'oscura') {
         ctx.shadowColor = 'rgba(0, 0, 0, 0.8)';
       } else {
@@ -405,7 +409,6 @@ export default function CodicePlutonPage() {
     }
   };
 
-  // Estilo dinámico de sombra para la web
   const textShadowStyle = fondoTarjeta === 'dorada' 
     ? { textShadow: '0px 1px 2px rgba(59,30,8,0.3)' } 
     : { textShadow: '0px 2px 4px rgba(0,0,0,0.8)' };
@@ -595,7 +598,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE BASTIONES AMPLIADO CON SELECTOR DE TARJETA LÍMPIO Y SOMBREADO */}
+      {/* 6. TEST DE BASTIONES AMPLIADO */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
@@ -645,7 +648,7 @@ export default function CodicePlutonPage() {
                   </div>
                 </div>
 
-                {/* TARJETA VISUAL DE RESULTADO DINÁMICA (Textos centrados y sombreados) */}
+                {/* TARJETA VISUAL DE RESULTADO DINÁMICA */}
                 <div 
                   className={`w-full aspect-[1200/630] flex flex-col justify-center items-center text-center relative mb-6 shadow-2xl transition-all duration-500 rounded-xl overflow-hidden ${fondoTarjeta === 'dorada' ? 'text-[#1E0B2B]' : 'text-[#F4F0EB]'}`}
                   style={{ 
@@ -670,13 +673,17 @@ export default function CodicePlutonPage() {
                   </div>
                 </div>
 
-                {/* BOTONES DE ACCION */}
+                {/* BOTONES DE ACCION CON SVGs ELEGANTE */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <BotonReliquia onClick={descargarTarjetaTest} disabled={generandoImagen}>
-                    {generandoImagen ? 'Canalizando...' : 'Descargar Tarjeta'}
+                    {generandoImagen ? 'Canalizando...' : (
+                      <span className="flex items-center justify-center">
+                        <IconoDescargar /> Descargar Tarjeta
+                      </span>
+                    )}
                   </BotonReliquia>
-                  <button onClick={compartirResultado} className="px-6 py-3 bg-[#2E1065]/60 border border-[#E5C0A1]/40 text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:border-[#C8946E] transition-all cursor-pointer">
-                    Compartir Resultado ✦
+                  <button onClick={compartirResultado} className="flex items-center justify-center px-6 py-3 bg-[#2E1065]/60 border border-[#E5C0A1]/40 text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:border-[#C8946E] transition-all cursor-pointer">
+                    <IconoCompartir /> Compartir Resultado
                   </button>
                 </div>
 

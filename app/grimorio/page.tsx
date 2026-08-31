@@ -54,10 +54,10 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
   clasificado: {
     titulo: "Archivos Clasificados (Nivel Evren)",
     items: [
-      { nombre: "Dilución Inversa", desc: "El ADN humano no diluye la genética Numi, la concentra. Por eso, los Espontáneos desarrollan poderes mucho más fuertes e inestables que los nacidos en Asthar." },
-      { nombre: "Moldavita", desc: "Vidrio originado por impacto meteórico. Utilizado por los Evren en una máquina que genera interferencias destructivas para anular y 'vaciar' los poderes de los Espontáneos." },
-      { nombre: "La Anomalía Herea", desc: "La sexta luna de Plutón. Los nacidos bajo el cruce de sus restos espaciales poseen un amplificador de energía incontrolable, causando combustión si no se canaliza." },
-      { nombre: "El Poder Plutoniano", desc: "La capacidad prohibida de corromper el poder Solar. Genera destrucción masiva (agujeros negros, mareas de sombras) y está penado por el Consejo de Asthar." }
+      { nombre: "Dilución Inversa", desc: "El ADN humano no diluye la genética Numi, la concentra. Por eso, los Espontáneos desarrollan poderes mucho más fuertes e inestables que los nacidos en Asthar.", img: "/images/clasificado-dilucion.jpg" },
+      { nombre: "Moldavita", desc: "Vidrio originado por impacto meteórico. Utilizado por los Evren en una máquina que genera interferencias destructivas para anular y 'vaciar' los poderes de los Espontáneos.", img: "/images/clasificado-moldavita.jpg" },
+      { nombre: "La Anomalía Herea", desc: "La sexta luna de Plutón. Los nacidos bajo el cruce de sus restos espaciales poseen un amplificador de energía incontrolable, causando combustión si no se canaliza.", img: "/images/clasificado-herea.jpg" },
+      { nombre: "El Poder Plutoniano", desc: "La capacidad prohibida de corromper el poder Solar. Genera destrucción masiva (agujeros negros, mareas de sombras) y está penado por el Consejo de Asthar.", img: "/images/clasificado-plutoniano.jpg" }
     ]
   }
 };

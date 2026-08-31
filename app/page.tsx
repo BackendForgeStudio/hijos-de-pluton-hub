@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import localFont from 'next/font/local';
+import Link from 'next/link';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
@@ -40,7 +41,7 @@ const PREGUNTAS_TEST = [
     opciones: [
       { texto: "Lanzar proyectiles destructivos a distancia o iluminar el camino con mi propia luz.", bastion: "Fuego" },
       { texto: "Infiltrarme en las sombras de los muros o despistar a los rivales con ilusiones.", bastion: "Agua" },
-      { fractional: false, texto: "Endurecer mi piel para soportar el impacto o inmovilizar los engranajes de piedra.", bastion: "Tierra" },
+      { texto: "Endurecer mi piel para soportar el impacto o inmovilizar los engranajes de piedra.", bastion: "Tierra" },
       { texto: "Desdoblarme en dos cuerpos para explorar varias rutas o cruzar portales.", bastion: "Aire" }
     ]
   },
@@ -82,8 +83,6 @@ const BASTIONES_INFO: Record<string, { nombre: string; descripcion: string; embl
   }
 };
 
-/* --- COMPONENTES VISUALES --- */
-
 const DivisorEstelar = () => (
   <div className="w-full flex justify-center items-center py-8 opacity-80">
     <div className="w-24 md:w-48 h-[1px] bg-gradient-to-r from-transparent to-[#E5C0A1]/50"></div>
@@ -124,10 +123,6 @@ const IconoSelloArcano = () => (
 
 const IconoOraculo = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>);
 const IconoEclipse = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>);
-const IconoGrimorio = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" /></svg>);
-const IconoEnigma = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>);
-const IconoGaleria = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>);
-const IconoFAQ = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" /></svg>);
 
 export default function CodicePlutonPage() {
   const [profeciaActual, setProfeciaActual] = useState("Pulsa el cristal para invocar tu profecía diaria.");
@@ -136,10 +131,6 @@ export default function CodicePlutonPage() {
   const [preguntaActual, setPreguntaActual] = useState(0);
   const [puntosBastion, setPuntosBastion] = useState({ Fuego: 0, Agua: 0, Tierra: 0, Aire: 0 });
   const [bastionResultado, setBastionResultado] = useState<string | null>(null);
-
-  const [respuestaEnigma, setRespuestaEnigma] = useState("");
-  const [mensajeEnigma, setMensajeEnigma] = useState("");
-  const [imagenSeleccionada, setImagenSeleccionada] = useState<string | null>(null);
 
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
@@ -199,15 +190,6 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
-  const verificarEnigma = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (respuestaEnigma.toLowerCase().trim() === "moldavita") {
-      setMensajeEnigma("✨ ¡Correcto! La piedra de la interferencia destructiva. Los archivos de Caelus han sido expuestos.");
-    } else {
-      setMensajeEnigma("❌ Frecuencia errónea. Sigue buscando entre los archivos del laboratorio Evren.");
-    }
-  };
-
   const sellarPacto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!emailPacto) return;
@@ -256,7 +238,6 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
-      {/* FONDOS LATERALES MÍSTICOS */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.70] mix-blend-screen hidden md:block">
         <div className="absolute top-0 left-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/runas-izq.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 right-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/zodiaco-der.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
@@ -295,16 +276,15 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 2. NAVEGACIÓN ADHESIVA */}
+      {/* 2. NAVEGACIÓN ADHESIVA (Actualizada con Rutas) */}
       <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2 relative z-10">
-          <li onClick={() => scrollToSection('lore')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">La Obra</li>
-          <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Oráculo</li>
+          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/grimorio">Grimorio</Link></li>
           <li onClick={() => scrollToSection('test-casas')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Test Casas</li>
-          <li onClick={() => scrollToSection('grimorio')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Grimorio</li>
-          <li onClick={() => scrollToSection('enigma')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Enigma</li>
-          <li onClick={() => scrollToSection('galeria')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Galería</li>
-          <li onClick={() => scrollToSection('faq')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">FAQ</li>
+          <li onClick={() => scrollToSection('oraculo-diario')} className="hover:text-[#C8946E] cursor-pointer transition-colors py-1">Oráculo</li>
+          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/galeria">Galería</Link></li>
+          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/artefactos">Artefactos</Link></li>
+          <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/circulo">El Círculo</Link></li>
         </ul>
       </nav>
 
@@ -337,8 +317,8 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 4. CAJAS ASIMÉTRICAS */}
-      <section id="lore" className="py-12 px-6 relative overflow-hidden transform-gpu z-10">
+      {/* 4. CAJAS ASIMÉTRICAS (Convertidas en Enlaces Router) */}
+      <section className="py-12 px-6 relative overflow-hidden transform-gpu z-10">
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-2 tracking-wider">Los Archivos del Códice</h2>
@@ -346,37 +326,37 @@ export default function CodicePlutonPage() {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
-            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300 cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
+            <Link href="/grimorio" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Volumen I</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">La Obra y el Lore</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Descubre la verdad sobre los Espontáneos y el Pacto del Velo.</p>
+              <h3 className="text-xl text-[#F4F0EB] mb-2">El Grimorio</h3>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Descubre la verdad sobre los Espontáneos y las 12 Leyes Numi.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
-            </div>
+            </Link>
             
-            <div id="merch" className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 cursor-pointer md:mt-10" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
+            <Link href="/artefactos" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-10" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Artefactos</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">Reliquias y Merch</h3>
               <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Anillos holográficos y ediciones especiales de la obra.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Explorar ✦</span>
-            </div>
+            </Link>
             
-            <div id="discord" className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300 cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
+            <Link href="/circulo" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Comunidad</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">El Círculo (Discord)</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Únete a la resistencia secreta de Los Hijos de Plutón.</p>
+              <h3 className="text-xl text-[#F4F0EB] mb-2">El Círculo</h3>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Únete a la resistencia oculta de Los Hijos de Plutón en Discord.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Unirse ✦</span>
-            </div>
+            </Link>
             
-            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 cursor-pointer md:mt-14" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
+            <Link href="/manuscritos" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-14" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
               <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Manuscritos</span>
               <h3 className="text-xl text-[#F4F0EB] mb-2">Capítulos Inéditos</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Expedientes clasificados del Consejo de Asthar.</p>
+              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Expedientes clasificados y teorías del Consejo de Asthar.</p>
               <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Desvelar ✦</span>
-            </div>
+            </Link>
           </div>
         </div>
       </section>
@@ -409,13 +389,13 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE BASTIONES (NUEVO LORE) */}
+      {/* 6. TEST DE BASTIONES */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
             <IconoEclipse /> Evaluación de Contención <IconoEclipse />
           </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">Las Doce Leyes de la Manifestación Natal</h2>
+          <h2 className="text-3xl text-[#F4F0EB] mb-3">Las Doce Leyes de Asthar</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Descubre a qué Bastión de la Academia Eclipse perteneces según tus decisiones ante el peligro.</p>
 
           <div className="p-8 border border-[#E5C0A1]/30 text-left relative bg-black/90 backdrop-blur-md shadow-[0_0_40px_rgba(76,29,149,0.3)] overflow-hidden">
@@ -449,124 +429,6 @@ export default function CodicePlutonPage() {
                 <BotonReliquia onClick={reiniciarTest}>Repetir Evaluación</BotonReliquia>
               </div>
             )}
-          </div>
-        </div>
-      </section>
-
-      <DivisorEstelar />
-
-      {/* 7. EL GRIMORIO */}
-      <section id="grimorio" className="py-12 px-6 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
-          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-            <IconoGrimorio /> Enciclopedia Numi <IconoGrimorio />
-          </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">Archivos de Asthar</h2>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Expedientes clasificados, Altos Linajes y Mineralogía Avanzada.</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
-              <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente I</span>
-              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Altos Linajes</h3>
-              <p className="text-xs text-[#E5C0A1]/70 font-light">Evren, Helion, Aurelis, Vesper y Draken.</p>
-            </div>
-            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
-              <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente II</span>
-              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Dilución Inversa</h3>
-              <p className="text-xs text-[#E5C0A1]/70 font-light">La verdad genética de los Espontáneos.</p>
-            </div>
-            <div className="p-6 border border-[#E5C0A1]/30 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.2)] transition-all cursor-pointer" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.85), rgba(10, 5, 14, 0.95)), url('/images/textura-grimorio.jpg')" }}>
-              <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-1">Expediente III</span>
-              <h3 className="text-lg text-[#F4F0EB] mb-1 font-medium group-hover:text-[#C8946E] transition-colors">Mineralogía</h3>
-              <p className="text-xs text-[#E5C0A1]/70 font-light">Amplificadores astrales y anulación celular.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <DivisorEstelar />
-
-      {/* 8. ENIGMA (ACTUALIZADO CON MOLDAVITA) */}
-      <section id="enigma" className="py-12 px-6 text-center relative z-10">
-        <div className="max-w-xl mx-auto">
-          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-            <IconoEnigma /> Reto Semanal <IconoEnigma />
-          </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">El Enigma del Consejo</h2>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-8">“¿Qué mineral verde de origen meteórico utilizan los Evren para cancelar la frecuencia Numi de los Espontáneos?”</p>
-          <form onSubmit={verificarEnigma} className="flex flex-col sm:flex-row gap-4 justify-center mb-6">
-            <input type="text" value={respuestaEnigma} onChange={(e) => setRespuestaEnigma(e.target.value)} placeholder="Palabra secreta..." className="px-6 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] md:w-72 focus:outline-none focus:border-[#C8946E] transition-colors shadow-inner" />
-            <BotonReliquia type="submit">Desencriptar</BotonReliquia>
-          </form>
-          {mensajeEnigma && <p className="text-xs text-[#E5C0A1] p-4 bg-black/90 backdrop-blur-md border border-[#E5C0A1]/30 inline-block shadow-[0_0_20px_rgba(229,192,161,0.15)]">{mensajeEnigma}</p>}
-        </div>
-      </section>
-
-      <DivisorEstelar />
-
-      {/* 9. GALERÍA DE VISIONES */}
-      <section id="galeria" className="py-12 px-6 text-center relative z-10">
-        <div className="max-w-4xl mx-auto">
-          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-            <IconoGaleria /> Archivo Visual <IconoGaleria />
-          </span>
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">Galería de Asthar</h2>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Pulsa sobre cualquier visión para observarla a tamaño real.</p>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            <div onClick={() => setImagenSeleccionada('/images/galeria-1.jpg')} className="h-64 border border-[#E5C0A1]/30 p-4 flex flex-col justify-end relative bg-cover bg-center group overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.8)] cursor-pointer hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(147,51,234,0.3)] transition-all duration-300" style={{ backgroundImage: "url('/images/galeria-1.jpg')" }}>
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent group-hover:via-black/20 transition-all"></div>
-              <EsquinasReliquia />
-              <div className="relative z-10">
-                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena I</span>
-                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium group-hover:text-[#C8946E] transition-colors">La Cascada Invertida</h3>
-              </div>
-            </div>
-
-            <div onClick={() => setImagenSeleccionada('/images/galeria-2.jpg')} className="h-64 border border-[#E5C0A1]/30 p-4 flex flex-col justify-end relative bg-cover bg-center group overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.8)] cursor-pointer hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(229,192,161,0.2)] transition-all duration-300" style={{ backgroundImage: "url('/images/galeria-2.jpg')" }}>
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent group-hover:via-black/20 transition-all"></div>
-              <EsquinasReliquia />
-              <div className="relative z-10">
-                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena II</span>
-                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium group-hover:text-[#C8946E] transition-colors">El Laberinto de Asterión</h3>
-              </div>
-            </div>
-
-            <div onClick={() => setImagenSeleccionada('/images/galeria-3.jpg')} className="h-64 border border-[#E5C0A1]/30 p-4 flex flex-col justify-end relative bg-cover bg-center group overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.8)] cursor-pointer hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(147,51,234,0.3)] transition-all duration-300" style={{ backgroundImage: "url('/images/galeria-3.jpg')" }}>
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent group-hover:via-black/20 transition-all"></div>
-              <EsquinasReliquia />
-              <div className="relative z-10">
-                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold">Escena III</span>
-                <h3 className="text-sm md:text-base text-[#F4F0EB] font-medium group-hover:text-[#C8946E] transition-colors">Sello de Plutón</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <DivisorEstelar />
-
-      {/* 10. FAQ */}
-      <section id="faq" className="py-12 px-6 relative z-10">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-              <IconoFAQ /> Base de Conocimiento <IconoFAQ />
-            </span>
-            <h2 className="text-3xl text-[#F4F0EB]">Preguntas Frecuentes</h2>
-          </div>
-          <div className="space-y-4 text-xs md:text-sm">
-            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.95), rgba(15, 8, 20, 0.98)), url('/images/textura-grimorio.jpg')" }}>
-              <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿Qué es el Pacto del Velo?</h3>
-              <p className="text-[#E5C0A1]/80 font-light leading-relaxed">Es el acuerdo histórico que separa el mundo Numi (Asthar) del plano terrestre, prohibiendo la intervención mágica directa en la Tierra para evitar el colapso de ambas realidades.</p>
-            </div>
-            <div className="p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center shadow-lg" style={{ backgroundImage: "linear-gradient(to bottom, rgba(15, 8, 20, 0.95), rgba(15, 8, 20, 0.98)), url('/images/textura-grimorio.jpg')" }}>
-              <h3 className="font-medium text-[#F4F0EB] mb-2 text-base">¿Quiénes son Los Hijos de Plutón?</h3>
-              <p className="text-[#E5C0A1]/80 font-light leading-relaxed">Una resistencia oculta en los sótanos de Eclipse fundada originalmente por Dante y ahora liderada por Evan. Su misión es proteger a los Espontáneos de la purga de los Altos Linajes.</p>
-            </div>
           </div>
         </div>
       </section>
@@ -616,7 +478,7 @@ export default function CodicePlutonPage() {
         <div className="max-w-4xl mx-auto space-y-4">
           <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>
           <p className="leading-relaxed font-light">
-            Este sitio web es un portal de fans no oficial creado sin ánimo de lucro por y para la comunidad de lectores de la obra literaria <span className="italic">Los Hijos de Plutón</span>, escrita por Augusta Thoenig y Fran de Solas. No está afiliado, respaldado ni asociado oficialmente con los autores ni con la editorial Montena o Penguin Random House. Todos los derechos sobre la propiedad intelectual pertenecen a sus respectivos propietarios legales.
+            Este sitio web es un portal de fans no oficial creado sin ánimo de lucro por y para la comunidad de lectores de la obra literaria <span className="italic">Los Hijos de Plutón</span>. No está afiliado ni asociado oficialmente con los autores ni con las editoriales oficiales.
           </p>
           <div className="pt-4 border-t border-[#E5C0A1]/10 flex flex-col sm:flex-row justify-between items-center gap-2">
             <span>© 2026 elcodicedepluton.com — Todos los derechos reservados.</span>
@@ -624,18 +486,6 @@ export default function CodicePlutonPage() {
           </div>
         </div>
       </footer>
-
-      {/* MODAL / VISOR DE IMAGEN */}
-      {imagenSeleccionada && (
-        <div onClick={() => setImagenSeleccionada(null)} className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 cursor-pointer">
-          <div className="relative max-w-4xl max-h-[90vh] w-full flex items-center justify-center" onClick={(e) => e.stopPropagation()}>
-            <img src={imagenSeleccionada} alt="Visión ampliada" className="max-h-[85vh] max-w-full object-contain border border-[#E5C0A1]/40 shadow-[0_0_50px_rgba(76,29,149,0.5)]" />
-            <button onClick={() => setImagenSeleccionada(null)} className="absolute top-2 right-2 bg-black/80 text-[#E5C0A1] border border-[#E5C0A1]/40 px-3 py-1 text-xs uppercase tracking-widest hover:bg-[#C8946E] hover:text-black transition-all cursor-pointer">
-              Cerrar ✕
-            </button>
-          </div>
-        </div>
-      )}
     </main>
   );
 }

@@ -154,9 +154,11 @@ export default function CodicePlutonPage() {
   const [bastionResultado, setBastionResultado] = useState<string | null>(null);
   const [generandoImagen, setGenerandoImagen] = useState(false);
 
-  // Estado para el reproductor de ambiente sonoro
+  // Estado para el sintetizador de ambiente sonoro estelar
   const [reproduciendo, setReproduciendo] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioCtxRef = useRef<AudioContext | null>(null);
+  const gainNodeRef = useRef<GainNode | null>(null);
+  const oscRef = useRef<OscillatorNode | null>(null);
 
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
@@ -189,30 +191,62 @@ export default function CodicePlutonPage() {
       }
     }, 1000);
 
-    // Inicializar audio ambiental (pista suave libre de derechos de ambiente espacial/místico)
-    audioRef.current = new Audio('https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf756.mp3?filename=space-chillout-ambient-11019.mp3');
-    audioRef.current.loop = true;
-    audioRef.current.volume = 0.3;
-
     return () => {
       clearInterval(interval);
-      if (audioRef.current) {
-        audioRef.current.pause();
+      if (audioCtxRef.current) {
+        audioCtxRef.current.close();
       }
     };
   }, []);
 
+  // AMBIENTE SONORO ESTELAR NATIVO (Sintetizador Web Audio API garantizado)
   const toggleAmbienteSonoro = () => {
-    if (!audioRef.current) return;
-    if (reproduciendo) {
-      audioRef.current.pause();
-      setReproduciendo(false);
-    } else {
-      audioRef.current.play().then(() => {
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+      if (!AudioCtx) return;
+
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new AudioCtx();
+      }
+
+      if (reproduciendo) {
+        if (gainNodeRef.current && audioCtxRef.current) {
+          gainNodeRef.current.gain.exponentialRampToValueAtTime(0.0001, audioCtxRef.current.currentTime + 1);
+          setTimeout(() => {
+            if (oscRef.current) {
+              oscRef.current.stop();
+              oscRef.current.disconnect();
+              oscRef.current = null;
+            }
+          }, 1000);
+        }
+        setReproduciendo(false);
+      } else {
+        if (audioCtxRef.current.state === 'suspended') {
+          audioCtxRef.current.resume();
+        }
+
+        const ctx = audioCtxRef.current;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        // Tono místico profundo tipo pad espacial (acorde armónico)
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(110, ctx.currentTime); // La2
+
+        gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.08, ctx.currentTime + 2);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        oscRef.current = osc;
+        gainNodeRef.current = gain;
         setReproduciendo(true);
-      }).catch(() => {
-        // Bloqueo de autoplay del navegador
-      });
+      }
+    } catch (e) {
+      console.error("Error al reproducir ambiente sonoro:", e);
     }
   };
 
@@ -394,7 +428,7 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
-      {/* REPRODUCTOR DE AMBIENTE SONORO FLOTANTE (DISCRETO) */}
+      {/* REPRODUCTOR DE AMBIENTE SONORO FLOTANTE (ESTELAR) */}
       <div className="fixed bottom-6 right-6 z-50">
         <button 
           onClick={toggleAmbienteSonoro}
@@ -698,14 +732,14 @@ export default function CodicePlutonPage() {
         </motion.div>
       </section>
 
-      {/* 8. PIE DE PÁGINA (CON CORREO DE CONTACTO Y AMBIENTE SONORO) */}
+      {/* 8. PIE DE PÁGINA */}
       <footer className="py-12 px-6 bg-black/95 backdrop-blur-lg border-t border-[#E5C0A1]/15 text-center text-[11px] text-[#E5C0A1]/60 relative z-10">
         <div className="max-w-4xl mx-auto space-y-4">
           <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>
           <p className="leading-relaxed font-light">
             Este sitio web es un portal de fans no oficial creado sin ánimo de lucro por y para la comunidad de lectores de la obra literaria <span className="italic">Los Hijos de Plutón</span>. No está afiliado ni asociado oficialmente con los autores ni con las editoriales oficiales.
           </p>
-          
+
           <div className="pt-2 text-xs text-[#E5C0A1]">
             Contacto oficial: <a href="mailto:contacto@elcodicedepluton.com" className="text-[#C8946E] underline hover:text-[#F4F0EB] transition-colors">contacto@elcodicedepluton.com</a>
           </div>

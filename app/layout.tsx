@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ReproductorGlobal from "@/components/ReproductorGlobal";
+import { ReproductorProvider } from "@/components/ReproductorProvider";
 
 export const metadata: Metadata = {
   title: "El Códice de Plutón | Santuario Oficial de Los Hijos de Plutón",
@@ -15,8 +16,10 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className="bg-[#08040C] text-[#F4F0EB] antialiased">
-        {children}
-        <ReproductorGlobal />
+        <ReproductorProvider>
+          {children}
+          <ReproductorGlobal />
+        </ReproductorProvider>
       </body>
     </html>
   );

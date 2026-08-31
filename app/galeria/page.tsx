@@ -15,9 +15,9 @@ const VISIONES = [
   { id: 1, src: '/images/galeria-1.jpg', titulo: 'El Umbral', desc: 'El vórtice violeta en la Selva Negra.' },
   { id: 2, src: '/images/galeria-2.jpg', titulo: 'La Cascada Invertida', desc: 'El lago de Aškara donde el agua asciende hacia el cielo.' },
   { id: 3, src: '/images/galeria-3.jpg', titulo: 'El Laberinto de Asterión', desc: 'El coliseo mecánico durante El Giro.' },
-  { id: 4, src: '/images/galeria-4.jpg', titulo: 'El Aula de Contención', desc: 'Turmalina negra y aislamiento absoluto.' },
-  { id: 5, src: '/images/galeria-5.jpg', titulo: 'El Cobertizo', desc: 'Refugio subterráneo durante la tormenta magnética.' },
-  { id: 6, src: '/images/galeria-6.jpg', titulo: 'El Auditorio', desc: 'Sede del Consejo de Asthar.' }
+  { id: 4, src: '/images/galeria-4.jpg', titulo: 'Baile de las Dos Lunas', desc: 'El salón de gala bajo la luz astral.' },
+  { id: 5, src: '/images/galeria-5.jpg', titulo: 'Aula de Contención', desc: 'Turmalina negra y aislamiento absoluto.' },
+  { id: 6, src: '/images/galeria-6.jpg', titulo: 'Tormenta en el Cobertizo', desc: 'Refugio subterráneo durante el caos magnético.' }
 ];
 
 const EsquinasReliquia = () => (

@@ -6,14 +6,14 @@ import Link from 'next/link';
 import localFont from 'next/font/local';
 
 const academiaFont = localFont({
-  src: '../fonts/AcademiaEclipse.ttf', // Asegúrate de que la ruta apunte correctamente a tu carpeta fonts
+  src: '../fonts/AcademiaEclipse.ttf', 
   variable: '--font-academia',
   display: 'swap',
 });
 
 type CategoriaLore = 'linajes' | 'leyes' | 'lugares' | 'clasificado';
 
-const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: string; desc: string; icono?: string }[] }> = {
+const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: string; desc: string; img?: string }[] }> = {
   linajes: {
     titulo: "Los Cinco Altos Linajes",
     items: [
@@ -44,18 +44,19 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
   lugares: {
     titulo: "Geografía de Asthar",
     items: [
-      { nombre: "Academia Eclipse", desc: "Santuario y frontera. Protegida por un bosque denso y una entrada interdimensional oculta en la Selva Negra terrestre." },
-      { nombre: "El Laberinto de Asterión", desc: "Un coliseo gigantesco de doce puertas zodiacales. Sus muros y rutas cambian violentamente cuando un competidor alcanza su emblema (El Giro)." },
-      { nombre: "La Cascada Invertida", desc: "Lago oculto al norte del bosque de Aškara. El agua no cae, sino que asciende desde un monolito negro hacia el cielo." },
-      { nombre: "El Aula de Contención", desc: "Sala revestida de turmalina negra simétrica, diseñada para absorber cualquier onda expansiva y evitar fugas de energía Numi." }
+      { nombre: "Aškara (Evren)", desc: "El centro financiero. Construido alrededor de un inmenso monolito de pirita, cruzado por canales de agua cristalina.", img: "/images/askara-evren.jpg" },
+      { nombre: "Damyra (Helion)", desc: "La capital política. Palacios de oro brillante y piedra blanca iluminados por una intensa luz solar.", img: "/images/damyra-helion.jpg" },
+      { nombre: "Eirholm (Aurelis)", desc: "Ciudad de paz y arte. Erigida sobre hielo eterno, mármol blanco y cristal bajo auroras boreales.", img: "/images/eirholm-aurelis.jpg" },
+      { nombre: "Eldcraig (Vesper)", desc: "Santuario erudito. Bibliotecas y observatorios astronómicos sobre acantilados rocosos junto al mar.", img: "/images/eldcraig-vesper.jpg" },
+      { nombre: "Zahari (Draken)", desc: "Monumento espiritual. Inmensos santuarios tallados directamente en la roca rojiza de cañones escarpados.", img: "/images/zahari-draken.jpg" }
     ]
   },
   clasificado: {
     titulo: "Archivos Clasificados (Nivel Evren)",
     items: [
-      { nombre: "Dilución Inversa", desc: "El ADN humano no diluye la genética Numi, la concentra. Por eso, los Espontáneos nacidos en la Tierra desarrollan poderes mucho más fuertes e inestables que los nacidos en Asthar." },
-      { nombre: "Moldavita", desc: "Vidrio originado por impacto meteórico. Utilizado ilegalmente por los Evren en una máquina que genera interferencias destructivas para anular y 'vaciar' los poderes de los Espontáneos." },
-      { nombre: "La Anomalía Herea", desc: "La sexta luna destruida de Plutón. Los nacidos bajo el cruce de sus restos espaciales poseen un amplificador de energía infinito e incontrolable, causando combustión interna si no se canaliza." },
+      { nombre: "Dilución Inversa", desc: "El ADN humano no diluye la genética Numi, la concentra. Por eso, los Espontáneos desarrollan poderes mucho más fuertes e inestables que los nacidos en Asthar." },
+      { nombre: "Moldavita", desc: "Vidrio originado por impacto meteórico. Utilizado por los Evren en una máquina que genera interferencias destructivas para anular y 'vaciar' los poderes de los Espontáneos." },
+      { nombre: "La Anomalía Herea", desc: "La sexta luna de Plutón. Los nacidos bajo el cruce de sus restos espaciales poseen un amplificador de energía incontrolable, causando combustión si no se canaliza." },
       { nombre: "El Poder Plutoniano", desc: "La capacidad prohibida de corromper el poder Solar. Genera destrucción masiva (agujeros negros, mareas de sombras) y está penado por el Consejo de Asthar." }
     ]
   }
@@ -75,7 +76,6 @@ export default function GrimorioPage() {
 
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative py-16 px-6`}>
-      {/* Fondo Texturizado */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.40] mix-blend-screen">
         <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] bg-cover bg-center mix-blend-overlay"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[#08040C] via-transparent to-[#08040C]"></div>
@@ -83,7 +83,6 @@ export default function GrimorioPage() {
 
       <div className="max-w-5xl mx-auto relative z-10">
         
-        {/* Encabezado y Navegación Atrás */}
         <div className="flex flex-col items-center text-center mb-12">
           <Link href="/" className="text-[#C8946E] text-[10px] uppercase tracking-widest hover:text-[#F4F0EB] transition-colors mb-8 border-b border-transparent hover:border-[#C8946E] pb-1">
             ← Volver al Santuario
@@ -93,7 +92,6 @@ export default function GrimorioPage() {
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-2xl">Archivos desencriptados del Registro Central. Información vital para todo iniciado y Espontáneo de la Academia Eclipse.</p>
         </div>
 
-        {/* Pestañas de Navegación */}
         <div className="flex flex-wrap justify-center gap-2 md:gap-4 mb-10 border-b border-[#E5C0A1]/20 pb-4">
           {(Object.keys(DATOS_GRIMORIO) as CategoriaLore[]).map((cat) => (
             <button
@@ -110,7 +108,6 @@ export default function GrimorioPage() {
           ))}
         </div>
 
-        {/* Contenido Dinámico */}
         <div className="min-h-[50vh]">
           <AnimatePresence mode="wait">
             <motion.div
@@ -122,10 +119,16 @@ export default function GrimorioPage() {
               className="grid grid-cols-1 md:grid-cols-2 gap-6"
             >
               {DATOS_GRIMORIO[categoriaActiva].items.map((item, index) => (
-                <div key={index} className="p-6 border border-[#E5C0A1]/20 relative bg-black/60 backdrop-blur-md hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(76,29,149,0.2)] transition-all duration-300 group">
+                <div 
+                  key={index} 
+                  className={`p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(76,29,149,0.2)] transition-all duration-300 ${item.img ? 'min-h-[200px] flex flex-col justify-end' : 'bg-black/60 backdrop-blur-md'}`}
+                  style={{ backgroundImage: item.img ? `linear-gradient(to bottom, rgba(14, 7, 20, 0.4), rgba(10, 5, 14, 0.95)), url('${item.img}')` : 'none' }}
+                >
                   <EsquinasReliquia />
-                  <h3 className="text-xl text-[#F4F0EB] mb-3 group-hover:text-[#C8946E] transition-colors">{item.nombre}</h3>
-                  <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light leading-relaxed">{item.desc}</p>
+                  <div className="relative z-10">
+                    <h3 className="text-xl text-[#F4F0EB] mb-3 group-hover:text-[#C8946E] transition-colors drop-shadow-md">{item.nombre}</h3>
+                    <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light leading-relaxed drop-shadow-md">{item.desc}</p>
+                  </div>
                 </div>
               ))}
             </motion.div>

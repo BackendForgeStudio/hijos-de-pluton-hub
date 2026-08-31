@@ -33,6 +33,13 @@ const EsquinasReliquia = () => (
   </>
 );
 
+const IconoRunaSvg = () => (
+  <svg className="w-4 h-4 text-[#C8946E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="12" cy="12" r="9" strokeWidth="1.5" strokeDasharray="3 3"/>
+    <path d="M12 7V17M7 12H17" strokeWidth="1.5" strokeLinecap="round"/>
+  </svg>
+);
+
 export default function CirculoPage() {
   const [teorias, setTeorias] = useState<Teoria[]>([]);
   const [autor, setAutor] = useState('');
@@ -50,7 +57,6 @@ export default function CirculoPage() {
     }
     setDeviceId(id);
 
-    // Opcional: Autocompletar el alias si ya lo usó en este navegador antes
     const savedAlias = localStorage.getItem('eclipse_user_alias');
     if (savedAlias) setAutor(savedAlias);
 
@@ -85,7 +91,6 @@ export default function CirculoPage() {
 
     const aliasLimpio = autor.trim();
 
-    // 1. Verificar si el autor ya existe en la tabla de dueños
     const { data: registroAutor, error: errorRegistro } = await supabase
       .from('autores_registrados')
       .select('dispositivo_hash')
@@ -93,21 +98,18 @@ export default function CirculoPage() {
       .single();
 
     if (errorRegistro && errorRegistro.code !== 'PGRST116') {
-      // Error real de red/base de datos
       setEstadoEnvio("❌ Interferencia cósmica al verificar el pseudónimo.");
       setEnviando(false);
       return;
     }
 
     if (registroAutor) {
-      // Si el autor ya existe, comprobamos si el dispositivo actual es el dueño legítimo
       if (registroAutor.dispositivo_hash !== deviceId) {
-        setEstadoEnvio("⚠️ Este pseudónimo ya pertenece a otra frecuencia estelar. Elige uno propio.");
+        setEstadoEnvio("⚠️ Este pseudónimo ya pertenece a otro usuario registrado. Elige uno propio.");
         setEnviando(false);
         return;
       }
     } else {
-      // Si el autor no existe, lo registramos como propiedad de este dispositivo
       const { error: errorNuevo } = await supabase
         .from('autores_registrados')
         .insert([{ autor: aliasLimpio, dispositivo_hash: deviceId }]);
@@ -119,7 +121,6 @@ export default function CirculoPage() {
       }
     }
 
-    // 2. Guardar la teoría en el tablón
     const { error: errorTeoria } = await supabase
       .from('teorias_pluton')
       .insert([{ autor: aliasLimpio, mensaje, runas: 0 }]);
@@ -146,7 +147,7 @@ export default function CirculoPage() {
       .single();
 
     if (existente) {
-      setModalMensaje("⚠️ Tu frecuencia ya ha otorgado una Runa a esta transmisión anteriormente.");
+      setModalMensaje("Ya has otorgado una Runa a esta transmisión anteriormente.");
       return;
     }
 
@@ -155,7 +156,7 @@ export default function CirculoPage() {
       .insert([{ teoria_id: id, dispositivo_hash: deviceId }]);
 
     if (errorRegistro) {
-      setModalMensaje("⚠️ No se pudo registrar tu Runa en el Consejo.");
+      setModalMensaje("No se pudo registrar tu Runa en el Consejo.");
       return;
     }
 
@@ -174,7 +175,7 @@ export default function CirculoPage() {
   return (
     <main className={`bg-[#050208] text-[#F4F0EB] min-h-screen ${academiaFont.className} relative py-16 px-6 overflow-hidden`}>
       
-      {/* VENTANA MODAL FLOTANTE */}
+      {/* VENTANA MODAL FLOTANTE INTERNA */}
       <AnimatePresence>
         {modalMensaje && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
@@ -185,6 +186,9 @@ export default function CirculoPage() {
               className="p-6 border border-[#C8946E] bg-[#08040C] max-w-md w-full relative text-center shadow-[0_0_30px_rgba(200,148,110,0.3)]"
             >
               <EsquinasReliquia />
+              <div className="flex justify-center mb-3">
+                <IconoRunaSvg />
+              </div>
               <span className="text-[#C8946E] text-[10px] uppercase tracking-widest font-bold block mb-2">Aviso del Registro Central</span>
               <p className="text-xs md:text-sm text-[#F4F0EB] font-light mb-6 leading-relaxed">{modalMensaje}</p>
               <button 
@@ -211,8 +215,8 @@ export default function CirculoPage() {
           </Link>
           <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3">Terminal Clandestina de Eclipse</span>
           <h1 className="text-4xl md:text-5xl text-[#F4F0EB] mb-4 drop-shadow-[0_0_15px_rgba(76,29,149,0.5)]">La Red de Los Hijos de Plutón</h1>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-xl mx-auto leading-relaxed">
-            Tablón de teorías ocultas. Canal cifrado (Tus pseudónimos quedan vinculados exclusivamente a tu frecuencia/navegador).
+          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-2xl mx-auto leading-relaxed">
+            Un espacio dedicado a la comunidad de lectores para debatir sobre los misterios de la novela, proponer teorías sobre el futuro de los personajes, descifrar las intenciones ocultas de los Altos Linajes y compartir análisis sobre las leyes de Asthar. Tu pseudónimo queda reservado de forma exclusiva para ti.
           </p>
         </div>
 
@@ -286,7 +290,8 @@ export default function CirculoPage() {
                   onClick={() => otorgarRuna(t.id, t.runas)}
                   className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-[#C8946E] bg-[#1E0B2B]/60 px-3 py-1.5 border border-[#E5C0A1]/30 hover:border-[#C8946E] transition-all cursor-pointer"
                 >
-                  <span>✦ Marcar con Runa</span>
+                  <IconoRunaSvg />
+                  <span>Marcar con Runa</span>
                   <span className="bg-black px-2 py-0.5 rounded text-[#F4F0EB] font-mono">{t.runas}</span>
                 </button>
               </div>

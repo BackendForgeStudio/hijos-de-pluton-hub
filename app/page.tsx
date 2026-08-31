@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import localFont from 'next/font/local';
 import Link from 'next/link';
@@ -15,14 +15,6 @@ const academiaFont = localFont({
   variable: '--font-academia',
   display: 'swap',
 });
-
-// PLAYLIST OFICIAL DE LA ACADEMIA ECLIPSE
-const PLAYLIST = [
-  { titulo: "Academic Ostinato", archivo: "/Academic-Ostinato.mp3" },
-  { titulo: "Observatory", archivo: "/Observatory.mp3" },
-  { titulo: "Subterranean", archivo: "/Subterranean.mp3" },
-  { titulo: "Academic Ostinato 2", archivo: "/Academic-Ostinato-2.mp3" }
-];
 
 // PROFECÍAS CANÓNICAS DE ECLIPSE
 const PROFECIAS = [
@@ -162,12 +154,6 @@ export default function CodicePlutonPage() {
   const [bastionResultado, setBastionResultado] = useState<string | null>(null);
   const [generandoImagen, setGenerandoImagen] = useState(false);
 
-  // Estados del Reproductor Avanzado
-  const [reproduciendo, setReproduciendo] = useState(false);
-  const [pistaActualIndex, setPistaActualIndex] = useState(0);
-  const [volumen, setVolumen] = useState(0.4);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
   const [emailPacto, setEmailPacto] = useState("");
@@ -199,64 +185,8 @@ export default function CodicePlutonPage() {
       }
     }, 1000);
 
-    // Inicializar el elemento de Audio con la primera pista
-    audioRef.current = new Audio(PLAYLIST[0].archivo);
-    audioRef.current.volume = volumen;
-    audioRef.current.loop = false;
-
-    audioRef.current.addEventListener('ended', () => {
-      siguientePistaAutomatica();
-    });
-
-    return () => {
-      clearInterval(interval);
-      if (audioRef.current) {
-        audioRef.current.pause();
-        audioRef.current = null;
-      }
-    };
+    return () => clearInterval(interval);
   }, []);
-
-  const siguientePistaAutomatica = () => {
-    setPistaActualIndex((prevIndex) => {
-      const siguienteIndex = (prevIndex + 1) % PLAYLIST.length;
-      if (audioRef.current) {
-        audioRef.current.src = PLAYLIST[siguienteIndex].archivo;
-        audioRef.current.play().catch(() => {});
-      }
-      return siguienteIndex;
-    });
-  };
-
-  const toggleReproductor = () => {
-    if (!audioRef.current) return;
-    if (reproduciendo) {
-      audioRef.current.pause();
-      setReproduciendo(false);
-    } else {
-      audioRef.current.play().then(() => {
-        setReproduciendo(true);
-      }).catch(() => {});
-    }
-  };
-
-  const cambiarSiguientePista = () => {
-    if (!audioRef.current) return;
-    const siguienteIndex = (pistaActualIndex + 1) % PLAYLIST.length;
-    setPistaActualIndex(siguienteIndex);
-    audioRef.current.src = PLAYLIST[siguienteIndex].archivo;
-    if (reproduciendo) {
-      audioRef.current.play().catch(() => {});
-    }
-  };
-
-  const ajustarVolumen = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const nuevoVol = parseFloat(e.target.value);
-    setVolumen(nuevoVol);
-    if (audioRef.current) {
-      audioRef.current.volume = nuevoVol;
-    }
-  };
 
   const consultarOraculo = () => {
     if (cargandoProfecia) return;
@@ -436,54 +366,6 @@ export default function CodicePlutonPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative`}>
       
-      {/* REPRODUCTOR FLOTANTE AVANZADO CON TOQUE MÁGICO */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <div className="flex flex-col items-end gap-2 p-3 bg-[#08040C]/95 backdrop-blur-md border border-[#C8946E]/50 rounded-lg shadow-[0_0_25px_rgba(76,29,149,0.5)]">
-          
-          {/* Título de la pista y estado */}
-          <div className="flex items-center gap-2 px-2 text-left w-full max-w-[220px]">
-            <span className={`text-xs ${reproduciendo ? 'animate-spin text-[#C8946E]' : 'text-[#E5C0A1]/50'}`}>✦</span>
-            <div className="overflow-hidden whitespace-nowrap">
-              <p className="text-[10px] text-[#C8946E] uppercase tracking-widest font-bold truncate">
-                {reproduciendo ? PLAYLIST[pistaActualIndex].titulo : 'Santuario Silencioso'}
-              </p>
-            </div>
-          </div>
-
-          {/* Controles: Play/Pause, Siguiente y Volumen */}
-          <div className="flex items-center gap-3 px-1">
-            <button 
-              onClick={toggleReproductor}
-              className="px-3 py-1.5 bg-[#2E1065] border border-[#E5C0A1]/40 text-[#F4F0EB] text-[10px] uppercase tracking-widest font-bold rounded hover:border-[#C8946E] transition-all cursor-pointer shadow"
-            >
-              {reproduciendo ? 'Pausar' : 'Reproducir'}
-            </button>
-
-            <button 
-              onClick={cambiarSiguientePista}
-              title="Siguiente pista"
-              className="px-2.5 py-1.5 bg-black/60 border border-[#E5C0A1]/30 text-[#C8946E] text-xs rounded hover:border-[#C8946E] transition-all cursor-pointer"
-            >
-              ⏭
-            </button>
-
-            <div className="flex items-center gap-1.5 pl-1 border-l border-[#E5C0A1]/20">
-              <span className="text-[9px] text-[#E5C0A1]/60">Vol</span>
-              <input 
-                type="range" 
-                min="0" 
-                max="1" 
-                step="0.05" 
-                value={volumen} 
-                onChange={ajustarVolumen}
-                className="w-16 accent-[#C8946E] cursor-pointer h-1 bg-black rounded"
-              />
-            </div>
-          </div>
-
-        </div>
-      </div>
-
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.70] mix-blend-screen hidden md:block">
         <div className="absolute top-0 left-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/runas-izq.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 right-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/zodiaco-der.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />

@@ -218,7 +218,6 @@ export default function CodicePlutonPage() {
     setBastionResultado(null);
   };
 
-  // GENERADOR NATIVO DE TARJETA GRAFICA EN CANVAS (EVITA ERRORES DE LIBRERIAS EXTERNAS)
   const descargarTarjetaTest = () => {
     if (!bastionResultado || generandoImagen) return;
     setGenerandoImagen(true);
@@ -226,7 +225,7 @@ export default function CodicePlutonPage() {
     const info = BASTIONES_INFO[bastionResultado];
     const canvas = document.createElement('canvas');
     canvas.width = 1200;
-    canvas.height = 630; // Formato estandar para redes sociales
+    canvas.height = 630;
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
@@ -234,44 +233,36 @@ export default function CodicePlutonPage() {
       return;
     }
 
-    // Fondo oscuro profundo
     ctx.fillStyle = '#08040C';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Marco exterior dorado/bronce
     ctx.strokeStyle = '#C8946E';
     ctx.lineWidth = 4;
     ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
 
-    // Decoración esquinas
     ctx.fillStyle = '#E5C0A1';
     ctx.fillRect(36, 36, 12, 12);
     ctx.fillRect(canvas.width - 48, 36, 12, 12);
     ctx.fillRect(36, canvas.height - 48, 12, 12);
     ctx.fillRect(canvas.width - 48, canvas.height - 48, 12, 12);
 
-    // Título superior
     ctx.fillStyle = '#C8946E';
     ctx.font = 'bold 20px sans-serif';
     ctx.textAlign = 'center';
     ctx.fillText('ACADEMIA ECLIPSE — REGISTRO CENTRAL DE ASTHAR', canvas.width / 2, 110);
 
-    // Nombre del Bastión
     ctx.fillStyle = '#F4F0EB';
     ctx.font = 'bold 52px serif';
     ctx.fillText(info.nombre, canvas.width / 2, 190);
 
-    // Emblema / Signos
     ctx.fillStyle = '#E5C0A1';
     ctx.font = 'bold 24px sans-serif';
     ctx.fillText(info.emblema, canvas.width / 2, 240);
 
-    // Kinesis
     ctx.fillStyle = '#C8946E';
     ctx.font = 'bold 18px sans-serif';
     ctx.fillText(info.kinesis, canvas.width / 2, 280);
 
-    // Descripción (con salto de línea automático simple)
     ctx.fillStyle = '#E5C0A1';
     ctx.font = '22px sans-serif';
     const palabras = info.descripcion.split(' ');
@@ -293,12 +284,10 @@ export default function CodicePlutonPage() {
     }
     ctx.fillText(linea, canvas.width / 2, y);
 
-    // Marca de agua inferior (Publicidad para atraer fans)
     ctx.fillStyle = '#C8946E';
     ctx.font = 'bold 20px sans-serif';
     ctx.fillText('elcodicedepluton.com  ✦  Santuario de la Academia Eclipse', canvas.width / 2, 550);
 
-    // Descargar imagen
     try {
       const link = document.createElement('a');
       link.download = `mi-bastion-${bastionResultado.toLowerCase()}.png`;
@@ -382,11 +371,11 @@ export default function CodicePlutonPage() {
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-[#08040C] to-transparent"></div>
       </div>
 
-      {/* 1. HERO ASTRAL */}
+      {/* 1. HERO ASTRAL (Anillo ampliado para que no quede oculto bajo el planeta) */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
 
-        <motion.img src="/anillo.png" alt="Anillo Astrológico" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 120, ease: "linear" }} style={{ willChange: "transform" }} className="absolute w-[700px] h-[700px] md:w-[1100px] md:h-[1100px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu" />
+        <motion.img src="/anillo.png" alt="Anillo Astrológico" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 120, ease: "linear" }} style={{ willChange: "transform" }} className="absolute w-[850px] h-[850px] md:w-[1350px] md:h-[1350px] max-w-none -z-20 opacity-85 object-contain pointer-events-none select-none transform-gpu" />
 
         <div className="absolute w-[380px] h-[380px] md:w-[520px] md:h-[520px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
           <div className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[60px] md:blur-[90px] opacity-80"></div>

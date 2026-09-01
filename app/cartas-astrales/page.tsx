@@ -252,19 +252,20 @@ export default function CartasAstralesPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#08040C]/85 via-[#08040C]/50 to-[#08040C]"></div>
       </div>
 
-      {/* RUEDA ASTRAL CON FÍSICAS SUAVES Y MÁSCARA RADIAL (Borra los bordes cuadrados) */}
+      {/* RUEDA ASTRAL CON FÍSICAS SUAVES Y MÁSCARA RADIAL MÁS AGRESIVA */}
       <motion.div
         className="fixed top-1/2 left-1/2 w-[800px] h-[800px] md:w-[1200px] md:h-[1200px] opacity-40 mix-blend-screen pointer-events-none z-0"
         style={{ 
           x: "-50%",
           y: "-50%",
-          rotate: rotation, // Ligado a nuestro motor de físicas
+          rotate: rotation,
           backgroundImage: "url('/images/rueda-astral.jpg')", 
           backgroundSize: 'contain', 
           backgroundPosition: 'center', 
           backgroundRepeat: 'no-repeat',
-          WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 65%)',
-          maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 65%)'
+          // closest-side hace que el gradiente termine antes de tocar los bordes del contenedor
+          WebkitMaskImage: 'radial-gradient(closest-side, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%)',
+          maskImage: 'radial-gradient(closest-side, rgba(0,0,0,1) 30%, rgba(0,0,0,0) 85%)'
         }}
       />
 

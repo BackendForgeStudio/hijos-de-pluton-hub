@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence, useMotionValue, useAnimationFrame } from 'framer-motion';
 import Link from 'next/link';
 import localFont from 'next/font/local';
 
@@ -64,6 +64,21 @@ export default function CartasAstralesPage() {
   
   const [fondoTarjeta, setFondoTarjeta] = useState<'oscura' | 'dorada'>('oscura');
   const [generandoImagen, setGenerandoImagen] = useState(false);
+
+  // --- MOTOR DE FÍSICAS PARA LA RUEDA ASTRAL ---
+  const rotation = useMotionValue(0);
+  const currentSpeed = useRef(2.5); // Velocidad inicial (rápida para la intro)
+  
+  useAnimationFrame((t, delta) => {
+    // Definimos la velocidad objetivo: 2.5 (rápido) si está escaneando/intro, 0.15 (súper lento) en reposo
+    const targetSpeed = (introActiva || analizando) ? 2.5 : 0.15;
+    
+    // Suavizado (Lerp) para acelerar y frenar fluidamente
+    currentSpeed.current += (targetSpeed - currentSpeed.current) * 0.03;
+    
+    // Aplicamos la rotación según el tiempo transcurrido (delta) para fluidez en cualquier pantalla
+    rotation.set(rotation.get() + currentSpeed.current * (delta / 16.66));
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -229,7 +244,7 @@ export default function CartasAstralesPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative py-16 px-6 overflow-hidden`}>
       
-      {/* FONDO OBSERVATORIO CON MAYOR OPACIDAD (50%) */}
+      {/* FONDO OBSERVATORIO */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div 
           className="absolute inset-0 bg-[url('/images/fondo-observatorio.jpg')] bg-cover bg-center opacity-50 mix-blend-screen"
@@ -237,21 +252,19 @@ export default function CartasAstralesPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#08040C]/85 via-[#08040C]/50 to-[#08040C]"></div>
       </div>
 
-      {/* RUEDA ASTRAL GIRATORIA CON MAYOR OPACIDAD (40%) Y REEVALUACIÓN DE VELOCIDAD */}
+      {/* RUEDA ASTRAL CON FÍSICAS SUAVES Y MÁSCARA RADIAL (Borra los bordes cuadrados) */}
       <motion.div
-        key={introActiva ? 'intro-rapida' : analizando ? 'analizando-rapida' : 'reposo-lenta'}
-        animate={{ rotate: 360 }}
-        transition={{
-          repeat: Infinity,
-          duration: (introActiva || analizando) ? 4 : 90, 
-          ease: "linear"
-        }}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] md:w-[1200px] md:h-[1200px] opacity-40 mix-blend-screen pointer-events-none z-0"
+        className="fixed top-1/2 left-1/2 w-[800px] h-[800px] md:w-[1200px] md:h-[1200px] opacity-40 mix-blend-screen pointer-events-none z-0"
         style={{ 
+          x: "-50%",
+          y: "-50%",
+          rotate: rotation, // Ligado a nuestro motor de físicas
           backgroundImage: "url('/images/rueda-astral.jpg')", 
           backgroundSize: 'contain', 
           backgroundPosition: 'center', 
-          backgroundRepeat: 'no-repeat' 
+          backgroundRepeat: 'no-repeat',
+          WebkitMaskImage: 'radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 65%)',
+          maskImage: 'radial-gradient(circle, rgba(0,0,0,1) 35%, rgba(0,0,0,0) 65%)'
         }}
       />
 

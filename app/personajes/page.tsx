@@ -149,7 +149,7 @@ const EsquinasReliquia = () => (
 );
 
 const BarraEstadistica = ({ label, value, colorHex }: { label: string; value: number; colorHex: string }) => (
-  <div className="mb-3 w-full">
+  <div className="mb-3 w-full relative z-10">
     <div className="flex justify-between text-[9px] uppercase tracking-widest mb-1.5">
       <span className="text-[#E5C0A1]/80">{label}</span>
       <span style={{ color: colorHex }} className="font-bold">{value}%</span>
@@ -166,17 +166,25 @@ const BarraEstadistica = ({ label, value, colorHex }: { label: string; value: nu
   </div>
 );
 
-// Iconos Vectoriales
+// ICONOS VECTORIALES
 const IconoConstelacion = () => (
-  <svg className="w-4 h-4 text-[#C8946E] mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+  <svg className="w-4 h-4 text-[#C8946E] mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <circle cx="18" cy="6" r="2"/><circle cx="6" cy="12" r="2"/><circle cx="12" cy="18" r="2"/>
     <path d="M17 7l-10 4m5 6l-5-5"/>
   </svg>
 );
 
 const IconoOjo = () => (
-  <svg className="w-4 h-4 text-[#C8946E] mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+  <svg className="w-4 h-4 text-[#C8946E] mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+  </svg>
+);
+
+// NUEVO ICONO: Fisura en el Velo (Reemplaza al emoji de advertencia)
+const IconoFisura = () => (
+  <svg className="w-3.5 h-3.5 text-red-400/90 mr-2 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+    <path d="M12 2L22 12L12 22L2 12L12 2Z" strokeDasharray="4 2" strokeOpacity="0.5"/>
+    <path d="M11 6L14 12L10 14L13 20" strokeLinecap="round" strokeLinejoin="round" className="text-red-500 drop-shadow-[0_0_3px_rgba(239,68,68,1)]"/>
   </svg>
 );
 
@@ -236,33 +244,39 @@ export default function PersonajesPage() {
                 transition={{ duration: 0.4, ease: "easeOut" }}
                 className="relative border border-[#E5C0A1]/30 bg-[#0A050E]/95 shadow-[0_0_40px_rgba(76,29,149,0.2)] overflow-hidden"
               >
-                {/* Imagen Esotérica de Fondo (Constelaciones/Runas) */}
-                <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-15 mix-blend-screen pointer-events-none transition-all duration-1000"
-                  style={{ backgroundImage: `url('/images/expediente-${personajeSeleccionado.slug}.jpg')` }}
-                ></div>
                 
-                {/* Gradiente para asegurar legibilidad */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A050E] via-[#0A050E]/80 to-transparent pointer-events-none"></div>
+                {/* NUEVO: SELLO ARCANO DE CLASIFICACIÓN */}
+                <div className="absolute -top-16 -right-16 w-64 h-64 md:w-80 md:h-80 opacity-50 mix-blend-screen pointer-events-none">
+                  {/* Contenedor circular con la imagen del expediente */}
+                  <div 
+                    className="absolute inset-0 rounded-full border border-[#C8946E]/30 bg-cover bg-center"
+                    style={{ backgroundImage: `url('/images/expediente-${personajeSeleccionado.slug}.jpg')` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-tr from-[#0A050E]/80 to-transparent rounded-full"></div>
+                  </div>
+                  {/* Anillos de contención mágicos giratorios */}
+                  <div className="absolute inset-0 rounded-full border border-dashed border-[#C8946E]/30 scale-105 animate-[spin_40s_linear_infinite]"></div>
+                  <div className="absolute inset-0 rounded-full border-t border-b border-[#C8946E]/40 scale-[1.15] animate-[spin_60s_linear_reverse_infinite]"></div>
+                </div>
 
                 <div className="relative z-10 p-8 md:p-10">
                   <EsquinasReliquia />
                   
                   {/* Encabezado del Expediente */}
                   <div className="flex justify-between items-start mb-6">
-                    <div>
+                    <div className="max-w-[70%]">
                       <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-2">{personajeSeleccionado.rol}</span>
-                      <h2 className="text-3xl md:text-4xl text-[#F4F0EB]">{personajeSeleccionado.nombre}</h2>
+                      <h2 className="text-3xl md:text-4xl text-[#F4F0EB] relative z-10">{personajeSeleccionado.nombre}</h2>
                     </div>
-                    <div className="text-right">
-                      <span className="text-[9px] uppercase tracking-widest text-red-400 font-mono block border border-red-900/50 bg-red-950/30 px-2 py-1">
+                    <div className="text-right relative z-10">
+                      <span className="text-[9px] uppercase tracking-widest text-red-400 font-mono block border border-red-900/50 bg-red-950/30 px-2 py-1 backdrop-blur-sm">
                         {personajeSeleccionado.expediente.estado}
                       </span>
                     </div>
                   </div>
 
                   {/* Datos Básicos con Iconos */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 pb-6 border-b border-[#E5C0A1]/15 text-xs">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 pb-6 border-b border-[#E5C0A1]/15 text-xs relative z-10">
                     <div className="flex items-center">
                       <IconoConstelacion />
                       <div>
@@ -279,7 +293,7 @@ export default function PersonajesPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-8">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-8 relative z-10">
                     {/* Descripción y Anomalías */}
                     <div>
                       <p className="text-xs md:text-sm text-[#E5C0A1]/90 font-light leading-relaxed mb-6">
@@ -290,8 +304,9 @@ export default function PersonajesPage() {
                         <span className="text-[#C8946E] font-bold block uppercase tracking-widest mb-3 text-[10px]">Registro de Anomalías</span>
                         <ul className="space-y-2">
                           {personajeSeleccionado.expediente.anomalias.map((anomalia, idx) => (
-                            <li key={idx} className="text-xs text-[#E5C0A1]/80 font-light flex gap-2 items-start">
-                              <span className="text-red-400/80 mt-0.5">⚠️</span> {anomalia}
+                            <li key={idx} className="text-xs text-[#E5C0A1]/80 font-light flex items-start">
+                              <IconoFisura />
+                              <span className="leading-relaxed">{anomalia}</span>
                             </li>
                           ))}
                         </ul>
@@ -299,7 +314,8 @@ export default function PersonajesPage() {
                     </div>
 
                     {/* Estadísticas de Contención */}
-                    <div className="bg-black/40 border border-[#E5C0A1]/10 p-5 backdrop-blur-sm">
+                    <div className="bg-black/40 border border-[#E5C0A1]/10 p-5 backdrop-blur-sm relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#4C1D95]/10 rounded-full blur-2xl -z-10"></div>
                       <span className="text-[#C8946E] font-bold block uppercase tracking-widest mb-5 text-[10px] text-center border-b border-[#E5C0A1]/10 pb-2">
                         Métricas de Contención
                       </span>
@@ -309,9 +325,9 @@ export default function PersonajesPage() {
                     </div>
                   </div>
 
-                  {/* Notas del Custodio (Estilo Máquina de escribir / Reporte) */}
-                  <div className="bg-[#100A14] p-5 border-l-4 border-[#C8946E] mb-8 relative">
-                    <div className="absolute top-0 right-0 p-2 opacity-20">
+                  {/* Notas del Custodio */}
+                  <div className="bg-[#100A14] p-5 border-l-4 border-[#C8946E] mb-8 relative z-10 shadow-inner">
+                    <div className="absolute top-0 right-0 p-2 opacity-10">
                       <IconoOjo />
                     </div>
                     <span className="font-mono text-[9px] uppercase tracking-widest text-[#E5C0A1]/50 block mb-2">Adjunto: Notas del Custodio</span>
@@ -321,7 +337,7 @@ export default function PersonajesPage() {
                   </div>
 
                   {/* Frase canónica */}
-                  <blockquote className="text-center p-4 border-t border-b border-[#E5C0A1]/10 text-xs text-[#F4F0EB] italic font-light tracking-wide">
+                  <blockquote className="text-center p-4 border-t border-b border-[#E5C0A1]/10 text-xs text-[#F4F0EB] italic font-light tracking-wide relative z-10">
                     {personajeSeleccionado.frase}
                   </blockquote>
 

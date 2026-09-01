@@ -53,7 +53,6 @@ const IconoDescargar = () => (
 );
 
 export default function CartasAstralesPage() {
-  // ESTADO DE INTRODUCCIÓN CINESTÉTICA
   const [introActiva, setIntroActiva] = useState(true);
 
   const [dia, setDia] = useState('');
@@ -66,11 +65,10 @@ export default function CartasAstralesPage() {
   const [fondoTarjeta, setFondoTarjeta] = useState<'oscura' | 'dorada'>('oscura');
   const [generandoImagen, setGenerandoImagen] = useState(false);
 
-  // Efecto para la introducción de 2 segundos al cargar la página
   useEffect(() => {
     const timer = setTimeout(() => {
       setIntroActiva(false);
-    }, 2000); // 2 segundos de giro rápido visual
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
 
@@ -231,23 +229,24 @@ export default function CartasAstralesPage() {
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative py-16 px-6 overflow-hidden`}>
       
-      {/* FONDO OBSERVATORIO */}
+      {/* FONDO OBSERVATORIO CON MAYOR OPACIDAD (50%) */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div 
-          className="absolute inset-0 bg-[url('/images/fondo-observatorio.jpg')] bg-cover bg-center opacity-30 mix-blend-screen"
+          className="absolute inset-0 bg-[url('/images/fondo-observatorio.jpg')] bg-cover bg-center opacity-50 mix-blend-screen"
         ></div>
-        <div className="absolute inset-0 bg-gradient-to-b from-[#08040C]/90 via-[#08040C]/60 to-[#08040C]"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#08040C]/85 via-[#08040C]/50 to-[#08040C]"></div>
       </div>
 
-      {/* RUEDA ASTRAL GIRATORIA - Gira rápido en la intro o analizando, lento el resto del tiempo */}
+      {/* RUEDA ASTRAL GIRATORIA CON MAYOR OPACIDAD (40%) Y REEVALUACIÓN DE VELOCIDAD */}
       <motion.div
+        key={introActiva ? 'intro-rapida' : analizando ? 'analizando-rapida' : 'reposo-lenta'}
         animate={{ rotate: 360 }}
         transition={{
           repeat: Infinity,
           duration: (introActiva || analizando) ? 4 : 90, 
           ease: "linear"
         }}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] md:w-[1200px] md:h-[1200px] opacity-25 mix-blend-screen pointer-events-none z-0"
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] md:w-[1200px] md:h-[1200px] opacity-40 mix-blend-screen pointer-events-none z-0"
         style={{ 
           backgroundImage: "url('/images/rueda-astral.jpg')", 
           backgroundSize: 'contain', 

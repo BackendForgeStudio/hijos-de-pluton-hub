@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import localFont from 'next/font/local';
@@ -53,6 +53,9 @@ const IconoDescargar = () => (
 );
 
 export default function CartasAstralesPage() {
+  // ESTADO DE INTRODUCCIÓN CINESTÉTICA
+  const [introActiva, setIntroActiva] = useState(true);
+
   const [dia, setDia] = useState('');
   const [mes, setMes] = useState('Enero');
   const [nombre, setNombre] = useState('');
@@ -60,9 +63,16 @@ export default function CartasAstralesPage() {
   const [analizando, setAnalizando] = useState(false);
   const [mensajeCarga, setMensajeCarga] = useState(MENSAJES_LORE[0]);
   
-  // Estados para descarga de pergamino
   const [fondoTarjeta, setFondoTarjeta] = useState<'oscura' | 'dorada'>('oscura');
   const [generandoImagen, setGenerandoImagen] = useState(false);
+
+  // Efecto para la introducción de 2 segundos al cargar la página
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIntroActiva(false);
+    }, 2000); // 2 segundos de giro rápido visual
+    return () => clearTimeout(timer);
+  }, []);
 
   const calcularSigno = (d: number, m: string) => {
     if ((m === 'Enero' && d <= 19) || (m === 'Diciembre' && d >= 22)) return 'Capricornio';
@@ -100,7 +110,7 @@ export default function CartasAstralesPage() {
       if (data) setResultado(data);
       setAnalizando(false);
       setMensajeCarga(MENSAJES_LORE[0]);
-    }, 3200); // Simulamos el cálculo mecánico del astrolabio
+    }, 3200);
   };
 
   const descargarCartaAstral = () => {
@@ -229,12 +239,12 @@ export default function CartasAstralesPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-[#08040C]/90 via-[#08040C]/60 to-[#08040C]"></div>
       </div>
 
-      {/* RUEDA ASTRAL GIRATORIA */}
+      {/* RUEDA ASTRAL GIRATORIA - Gira rápido en la intro o analizando, lento el resto del tiempo */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{
           repeat: Infinity,
-          duration: analizando ? 5 : 90, // Gira rápido si está analizando, súper lento si está en reposo
+          duration: (introActiva || analizando) ? 4 : 90, 
           ease: "linear"
         }}
         className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] md:w-[1200px] md:h-[1200px] opacity-25 mix-blend-screen pointer-events-none z-0"
@@ -246,148 +256,157 @@ export default function CartasAstralesPage() {
         }}
       />
 
-      <div className="max-w-4xl mx-auto relative z-10">
-        
-        {/* CABECERA */}
-        <div className="flex flex-col items-center text-center mb-12">
-          <Link href="/" className="text-[#C8946E] text-[10px] uppercase tracking-widest hover:text-[#F4F0EB] transition-colors mb-8 border-b border-transparent hover:border-[#C8946E] pb-1">
-            ← Volver al Santuario
-          </Link>
-          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 drop-shadow-[0_0_8px_rgba(200,148,110,0.5)]">Registro Central de Asthar</span>
-          <h1 className="text-4xl md:text-5xl text-[#F4F0EB] mb-4 drop-shadow-[0_0_15px_rgba(229,192,161,0.3)]">Generador de Carta Astral</h1>
-          <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-2xl">Introduce tus coordenadas de nacimiento para que el astrolabio de Eldcraig calcule tu frecuencia Numi y el Bastión asignado.</p>
-        </div>
-
-        {/* FORMULARIO ESOTÉRICO (Glassmorphism) */}
-        <div className="bg-white/[0.03] backdrop-blur-xl border border-[#E5C0A1]/20 p-8 shadow-[0_0_40px_rgba(76,29,149,0.2)] relative mb-12">
-          <EsquinasReliquia />
-          <form onSubmit={analizarFrecuencia} className="flex flex-col items-center gap-6 relative z-10">
+      <AnimatePresence>
+        {!introActiva && (
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="max-w-4xl mx-auto relative z-10"
+          >
             
-            <div className="w-full max-w-md">
-              <label className="block text-[10px] uppercase tracking-widest text-[#E5C0A1]/80 mb-2 font-bold">Identificador de Iniciado (Opcional)</label>
-              <input 
-                type="text" 
-                value={nombre} 
-                onChange={(e) => setNombre(e.target.value)} 
-                placeholder="Ej: Evan Vesper" 
-                className="w-full bg-black/40 backdrop-blur-sm border border-[#E5C0A1]/20 p-4 text-[#F4F0EB] focus:outline-none focus:border-[#C8946E] focus:bg-black/70 transition-all duration-300 text-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.4)]"
-              />
+            {/* CABECERA */}
+            <div className="flex flex-col items-center text-center mb-12">
+              <Link href="/" className="text-[#C8946E] text-[10px] uppercase tracking-widest hover:text-[#F4F0EB] transition-colors mb-8 border-b border-transparent hover:border-[#C8946E] pb-1">
+                ← Volver al Santuario
+              </Link>
+              <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 drop-shadow-[0_0_8px_rgba(200,148,110,0.5)]">Registro Central de Asthar</span>
+              <h1 className="text-4xl md:text-5xl text-[#F4F0EB] mb-4 drop-shadow-[0_0_15px_rgba(229,192,161,0.3)]">Generador de Carta Astral</h1>
+              <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-2xl">Introduce tus coordenadas de nacimiento para que el astrolabio de Eldcraig calcule tu frecuencia Numi y el Bastión asignado.</p>
             </div>
 
-            <div className="w-full max-w-md flex flex-col sm:flex-row gap-4">
-              <div className="flex-1">
-                <label className="block text-[10px] uppercase tracking-widest text-[#E5C0A1]/80 mb-2 font-bold">Día Natal</label>
-                <input 
-                  type="number" 
-                  min="1" 
-                  max="31" 
-                  required
-                  value={dia} 
-                  onChange={(e) => setDia(e.target.value)} 
-                  placeholder="20" 
-                  className="w-full bg-black/40 backdrop-blur-sm border border-[#E5C0A1]/20 p-4 text-[#F4F0EB] focus:outline-none focus:border-[#C8946E] focus:bg-black/70 transition-all duration-300 text-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.4)]"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-[10px] uppercase tracking-widest text-[#E5C0A1]/80 mb-2 font-bold">Ciclo Lunar (Mes)</label>
-                <select 
-                  value={mes} 
-                  onChange={(e) => setMes(e.target.value)} 
-                  className="w-full bg-black/40 backdrop-blur-sm border border-[#E5C0A1]/20 p-4 text-[#F4F0EB] focus:outline-none focus:border-[#C8946E] focus:bg-black/70 transition-all duration-300 text-sm cursor-pointer appearance-none shadow-[inset_0_0_15px_rgba(0,0,0,0.4)]"
-                >
-                  {MESES.map(m => <option key={m} value={m} className="bg-[#0A050E]">{m}</option>)}
-                </select>
-              </div>
-            </div>
-
-            <div className="mt-4 flex flex-col items-center min-h-[60px]">
-              {analizando ? (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="flex items-center gap-3 text-[#C8946E] font-mono text-xs uppercase tracking-widest"
-                >
-                  <span className="w-3 h-3 rounded-full bg-[#C8946E] animate-ping"></span>
-                  {mensajeCarga}
-                </motion.div>
-              ) : (
-                <button 
-                  type="submit" 
-                  className="relative overflow-hidden px-10 py-4 bg-gradient-to-b from-[#1E0B2B] to-[#0A050E] text-[#F4F0EB] font-bold uppercase tracking-[0.2em] text-xs border border-[#E5C0A1]/40 shadow-[0_0_20px_rgba(76,29,149,0.4)] hover:shadow-[0_0_30px_rgba(200,148,110,0.6)] hover:border-[#C8946E] transition-all duration-500 group"
-                >
-                  <span className="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-[#E5C0A1]/20 to-transparent -skew-x-45 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
-                  <span className="relative z-10">Analizar Frecuencia Astral</span>
-                </button>
-              )}
-            </div>
-          </form>
-        </div>
-
-        {/* RESULTADO DINÁMICO DESCLASIFICADO */}
-        <AnimatePresence mode="wait">
-          {resultado && (
-            <motion.div 
-              initial={{ opacity: 0, y: 40, scale: 0.98 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="w-full border border-[#C8946E]/50 bg-[#0A050E]/95 backdrop-blur-2xl overflow-hidden relative shadow-[0_0_60px_rgba(200,148,110,0.2)] flex flex-col md:flex-row"
-            >
-              {/* IMAGEN DE LA KINESIS */}
-              <div className="w-full md:w-1/2 h-64 md:h-auto relative border-b md:border-b-0 md:border-r border-[#C8946E]/30 overflow-hidden group">
-                <div 
-                  className="absolute inset-0 bg-cover bg-center opacity-80 group-hover:scale-105 transition-transform duration-700"
-                  style={{ backgroundImage: `url(${resultado.img})` }}
-                ></div>
-                <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0A050E] via-[#0A050E]/40 to-transparent"></div>
-              </div>
-
-              {/* INFORMACIÓN Y DESCARGA */}
-              <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center md:items-start text-center md:text-left relative z-10">
-                <EsquinasReliquia />
+            {/* FORMULARIO ESOTÉRICO */}
+            <div className="bg-white/[0.03] backdrop-blur-xl border border-[#E5C0A1]/20 p-8 shadow-[0_0_40px_rgba(76,29,149,0.2)] relative mb-12">
+              <EsquinasReliquia />
+              <form onSubmit={analizarFrecuencia} className="flex flex-col items-center gap-6 relative z-10">
                 
-                <span className="text-[#C8946E] text-[10px] uppercase tracking-widest font-bold mb-2">Signo Dominante: {resultado.signo}</span>
-                <h2 className="text-4xl text-[#F4F0EB] mb-2 font-serif">Bastión de {resultado.bastion}</h2>
-                <span className="text-[#E5C0A1] text-xs uppercase tracking-[0.3em] font-bold block mb-6 bg-white/5 inline-block px-3 py-1 border border-[#E5C0A1]/10">Ley Natal: {resultado.kinesis}</span>
-                <p className="text-[#E5C0A1]/90 text-sm font-light leading-relaxed mb-8">{resultado.desc}</p>
-                
-                {/* SELECTOR Y BOTÓN DE DESCARGA */}
-                <div className="w-full pt-6 border-t border-[#E5C0A1]/15 flex flex-col items-center md:items-start">
-                  <p className="text-[9px] uppercase tracking-widest text-[#E5C0A1]/60 mb-3 font-bold">Descargar Pergamino Oficial</p>
-                  
-                  <div className="flex gap-3 mb-4">
-                    <button 
-                      onClick={() => setFondoTarjeta('oscura')}
-                      className={`w-14 h-9 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'oscura' ? 'border-2 border-[#C8946E] shadow-[0_0_15px_rgba(200,148,110,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
-                      style={{ backgroundImage: "url('/tarjeta-oscura.jpg')" }}
-                      title="Versión Oscura"
-                    />
-                    <button 
-                      onClick={() => setFondoTarjeta('dorada')}
-                      className={`w-14 h-9 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'dorada' ? 'border-2 border-[#8B4513] shadow-[0_0_15px_rgba(139,69,19,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
-                      style={{ backgroundImage: "url('/tarjeta-dorada.jpg')" }}
-                      title="Versión Dorada"
+                <div className="w-full max-w-md">
+                  <label className="block text-[10px] uppercase tracking-widest text-[#E5C0A1]/80 mb-2 font-bold">Identificador de Iniciado (Opcional)</label>
+                  <input 
+                    type="text" 
+                    value={nombre} 
+                    onChange={(e) => setNombre(e.target.value)} 
+                    placeholder="Ej: Evan Vesper" 
+                    className="w-full bg-black/40 backdrop-blur-sm border border-[#E5C0A1]/20 p-4 text-[#F4F0EB] focus:outline-none focus:border-[#C8946E] focus:bg-black/70 transition-all duration-300 text-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.4)]"
+                  />
+                </div>
+
+                <div className="w-full max-w-md flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <label className="block text-[10px] uppercase tracking-widest text-[#E5C0A1]/80 mb-2 font-bold">Día Natal</label>
+                    <input 
+                      type="number" 
+                      min="1" 
+                      max="31" 
+                      required
+                      value={dia} 
+                      onChange={(e) => setDia(e.target.value)} 
+                      placeholder="20" 
+                      className="w-full bg-black/40 backdrop-blur-sm border border-[#E5C0A1]/20 p-4 text-[#F4F0EB] focus:outline-none focus:border-[#C8946E] focus:bg-black/70 transition-all duration-300 text-sm shadow-[inset_0_0_15px_rgba(0,0,0,0.4)]"
                     />
                   </div>
-
-                  <button 
-                    onClick={descargarCartaAstral}
-                    disabled={generandoImagen}
-                    className="flex items-center justify-center px-8 py-3 bg-[#2E1065]/80 border border-[#E5C0A1]/40 text-[#F4F0EB] font-bold uppercase tracking-widest text-[10px] hover:border-[#C8946E] hover:bg-[#3B1E08] transition-all cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.4)] w-full md:w-auto"
-                  >
-                    {generandoImagen ? 'Canalizando...' : (
-                      <>
-                        <IconoDescargar />
-                        Descargar Carta
-                      </>
-                    )}
-                  </button>
+                  <div className="flex-1">
+                    <label className="block text-[10px] uppercase tracking-widest text-[#E5C0A1]/80 mb-2 font-bold">Ciclo Lunar (Mes)</label>
+                    <select 
+                      value={mes} 
+                      onChange={(e) => setMes(e.target.value)} 
+                      className="w-full bg-black/40 backdrop-blur-sm border border-[#E5C0A1]/20 p-4 text-[#F4F0EB] focus:outline-none focus:border-[#C8946E] focus:bg-black/70 transition-all duration-300 text-sm cursor-pointer appearance-none shadow-[inset_0_0_15px_rgba(0,0,0,0.4)]"
+                    >
+                      {MESES.map(m => <option key={m} value={m} className="bg-[#0A050E]">{m}</option>)}
+                    </select>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
-      </div>
+                <div className="mt-4 flex flex-col items-center min-h-[60px]">
+                  {analizando ? (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="flex items-center gap-3 text-[#C8946E] font-mono text-xs uppercase tracking-widest"
+                    >
+                      <span className="w-3 h-3 rounded-full bg-[#C8946E] animate-ping"></span>
+                      {mensajeCarga}
+                    </motion.div>
+                  ) : (
+                    <button 
+                      type="submit" 
+                      className="relative overflow-hidden px-10 py-4 bg-gradient-to-b from-[#1E0B2B] to-[#0A050E] text-[#F4F0EB] font-bold uppercase tracking-[0.2em] text-xs border border-[#E5C0A1]/40 shadow-[0_0_20px_rgba(76,29,149,0.4)] hover:shadow-[0_0_30px_rgba(200,148,110,0.6)] hover:border-[#C8946E] transition-all duration-500 group"
+                    >
+                      <span className="absolute top-0 left-0 w-[200%] h-full bg-gradient-to-r from-transparent via-[#E5C0A1]/20 to-transparent -skew-x-45 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></span>
+                      <span className="relative z-10">Analizar Frecuencia Astral</span>
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+
+            {/* RESULTADO DINÁMICO DESCLASIFICADO */}
+            <AnimatePresence mode="wait">
+              {resultado && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 40, scale: 0.98 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ type: "spring", stiffness: 100, damping: 20 }}
+                  className="w-full border border-[#C8946E]/50 bg-[#0A050E]/95 backdrop-blur-2xl overflow-hidden relative shadow-[0_0_60px_rgba(200,148,110,0.2)] flex flex-col md:flex-row"
+                >
+                  {/* IMAGEN DE LA KINESIS */}
+                  <div className="w-full md:w-1/2 h-64 md:h-auto relative border-b md:border-b-0 md:border-r border-[#C8946E]/30 overflow-hidden group">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center opacity-80 group-hover:scale-105 transition-transform duration-700"
+                      style={{ backgroundImage: `url(${resultado.img})` }}
+                    ></div>
+                    <div className="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-[#0A050E] via-[#0A050E]/40 to-transparent"></div>
+                  </div>
+
+                  {/* INFORMACIÓN Y DESCARGA */}
+                  <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center items-center md:items-start text-center md:text-left relative z-10">
+                    <EsquinasReliquia />
+                    
+                    <span className="text-[#C8946E] text-[10px] uppercase tracking-widest font-bold mb-2">Signo Dominante: {resultado.signo}</span>
+                    <h2 className="text-4xl text-[#F4F0EB] mb-2 font-serif">Bastión de {resultado.bastion}</h2>
+                    <span className="text-[#E5C0A1] text-xs uppercase tracking-[0.3em] font-bold block mb-6 bg-white/5 inline-block px-3 py-1 border border-[#E5C0A1]/10">Ley Natal: {resultado.kinesis}</span>
+                    <p className="text-[#E5C0A1]/90 text-sm font-light leading-relaxed mb-8">{resultado.desc}</p>
+                    
+                    {/* SELECTOR Y BOTÓN DE DESCARGA */}
+                    <div className="w-full pt-6 border-t border-[#E5C0A1]/15 flex flex-col items-center md:items-start">
+                      <p className="text-[9px] uppercase tracking-widest text-[#E5C0A1]/60 mb-3 font-bold">Descargar Pergamino Oficial</p>
+                      
+                      <div className="flex gap-3 mb-4">
+                        <button 
+                          onClick={() => setFondoTarjeta('oscura')}
+                          className={`w-14 h-9 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'oscura' ? 'border-2 border-[#C8946E] shadow-[0_0_15px_rgba(200,148,110,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
+                          style={{ backgroundImage: "url('/tarjeta-oscura.jpg')" }}
+                          title="Versión Oscura"
+                        />
+                        <button 
+                          onClick={() => setFondoTarjeta('dorada')}
+                          className={`w-14 h-9 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'dorada' ? 'border-2 border-[#8B4513] shadow-[0_0_15px_rgba(139,69,19,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
+                          style={{ backgroundImage: "url('/tarjeta-dorada.jpg')" }}
+                          title="Versión Dorada"
+                        />
+                      </div>
+
+                      <button 
+                        onClick={descargarCartaAstral}
+                        disabled={generandoImagen}
+                        className="flex items-center justify-center px-8 py-3 bg-[#2E1065]/80 border border-[#E5C0A1]/40 text-[#F4F0EB] font-bold uppercase tracking-widest text-[10px] hover:border-[#C8946E] hover:bg-[#3B1E08] transition-all cursor-pointer shadow-[0_0_20px_rgba(76,29,149,0.4)] w-full md:w-auto"
+                      >
+                        {generandoImagen ? 'Canalizando...' : (
+                          <>
+                            <IconoDescargar />
+                            Descargar Carta
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </main>
   );
 }

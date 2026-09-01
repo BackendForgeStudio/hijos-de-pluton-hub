@@ -84,12 +84,17 @@ const EsquinasReliquia = () => (
 );
 
 const AdornoLibro = () => (
-  <div className="flex justify-center items-center py-6 opacity-60">
-    <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#C8946E]"></div>
-    <svg className="w-6 h-6 mx-4 text-[#C8946E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-      <path d="M12 2L15 8L22 9L17 14L18 21L12 17L6 21L7 14L2 9L9 8L12 2Z" strokeLinejoin="round"/>
+  <div className="flex justify-center items-center py-6 opacity-70">
+    <div className="w-20 h-[1px] bg-gradient-to-r from-transparent to-[#C8946E]/80"></div>
+    <svg className="w-7 h-7 mx-4 text-[#C8946E] drop-shadow-[0_0_8px_rgba(200,148,110,0.4)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+      {/* Rombo exterior estirado (Brújula celestial) */}
+      <path d="M12 2L15 10L22 12L15 14L12 22L9 14L2 12L9 10L12 2Z" strokeLinejoin="round" />
+      {/* Órbita interior fragmentada */}
+      <circle cx="12" cy="12" r="5.5" strokeDasharray="2 3" opacity="0.7" />
+      {/* Núcleo sólido (Eclipse/Plutón) */}
+      <circle cx="12" cy="12" r="2" fill="currentColor" />
     </svg>
-    <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#C8946E]"></div>
+    <div className="w-20 h-[1px] bg-gradient-to-l from-transparent to-[#C8946E]/80"></div>
   </div>
 );
 

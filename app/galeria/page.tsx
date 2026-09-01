@@ -12,7 +12,7 @@ const academiaFont = localFont({
 });
 
 // BASE DE DATOS FUSIONADA DE IMÁGENES DE LA GALERÍA
-type CategoriaGaleria = 'visiones' | 'linajes' | 'leyes' | 'geografia' | 'clasificado';
+type CategoriaGaleria = 'visiones' | 'expedientes' | 'reliquias' | 'linajes' | 'leyes' | 'geografia' | 'clasificado';
 
 interface ImagenGaleria {
   id: string;
@@ -23,13 +23,30 @@ interface ImagenGaleria {
 }
 
 const IMAGENES: ImagenGaleria[] = [
-  // VISIONES
+  // VISIONES (Entornos)
   { id: 'v1', titulo: 'El Umbral', desc: 'El vórtice violeta en la Selva Negra.', categoria: 'visiones', src: '/images/galeria-1.jpg' },
   { id: 'v2', titulo: 'La Cascada Invertida', desc: 'El lago de Aškara donde el agua asciende hacia el cielo.', categoria: 'visiones', src: '/images/galeria-2.jpg' },
   { id: 'v3', titulo: 'El Laberinto de Asterión', desc: 'El coliseo mecánico durante El Giro.', categoria: 'visiones', src: '/images/galeria-3.jpg' },
   { id: 'v4', titulo: 'Baile de las Dos Lunas', desc: 'El salón de gala bajo la luz astral.', categoria: 'visiones', src: '/images/galeria-4.jpg' },
   { id: 'v5', titulo: 'Aula de Contención', desc: 'Turmalina negra y aislamiento absoluto.', categoria: 'visiones', src: '/images/galeria-5.jpg' },
   { id: 'v6', titulo: 'Tormenta en el Cobertizo', desc: 'Refugio subterráneo durante el caos magnético.', categoria: 'visiones', src: '/images/galeria-6.jpg' },
+  { id: 'v7', titulo: 'Academia Eclipse', desc: 'Arquitectura gótica de obsidiana bajo el cielo estrellado.', categoria: 'visiones', src: '/images/galeria-academia.jpg' },
+  { id: 'v8', titulo: 'El Laberinto Cambiante', desc: 'Monolitos flotantes y ruinas esotéricas en la oscuridad.', categoria: 'visiones', src: '/images/galeria-laberinto.jpg' },
+  { id: 'v9', titulo: 'El Subsuelo', desc: 'Base clandestina de la Resistencia iluminada por cristales.', categoria: 'visiones', src: '/images/galeria-subsuelo.jpg' },
+
+  // EXPEDIENTES (Personajes / Astrología)
+  { id: 'e1', titulo: 'Expediente: Lola Connor', desc: 'Constelación de Escorpio. Amenaza Crítica.', categoria: 'expedientes', src: '/images/expediente-lola.jpg' },
+  { id: 'e2', titulo: 'Expediente: Cosmo Evren', desc: 'Astrolabio dorado. Heredero de Aškara.', categoria: 'expedientes', src: '/images/expediente-cosmo.jpg' },
+  { id: 'e3', titulo: 'Expediente: Evan Vesper', desc: 'Eclipse solar oscuro. Pirokinesis latente.', categoria: 'expedientes', src: '/images/expediente-evan.jpg' },
+  { id: 'e4', titulo: 'Expediente: Iris Aurelis', desc: 'Prisma dorado y luz etérea. Navegante onírica.', categoria: 'expedientes', src: '/images/expediente-iris.jpg' },
+  { id: 'e5', titulo: 'Expediente: Atlas Vesper', desc: 'Monolito geométrico. Escudos de energía infranqueables.', categoria: 'expedientes', src: '/images/expediente-atlas.jpg' },
+  { id: 'e6', titulo: 'Expediente: Gala', desc: 'Fases lunares plateadas. Maestría en Biokinesis.', categoria: 'expedientes', src: '/images/expediente-gala.jpg' },
+  { id: 'e7', titulo: 'Expediente: Lucio', desc: 'Sellos alquímicos de contención estricta.', categoria: 'expedientes', src: '/images/expediente-lucio.jpg' },
+
+  // RELIQUIAS (Objetos)
+  { id: 'r1', titulo: 'Daga de Obsidiana', desc: 'Arma ritual imbuida en fuego estelar.', categoria: 'reliquias', src: '/images/objeto-daga.jpg' },
+  { id: 'r2', titulo: 'Resonador Cuántico', desc: 'Mecanismo esotérico de modulación musical.', categoria: 'reliquias', src: '/images/objeto-resonador.jpg' },
+  { id: 'r3', titulo: 'Matriz de Moldavita', desc: 'Cristal puro silíceo. Interferencia Numi garantizada.', categoria: 'reliquias', src: '/images/objeto-moldavita.jpg' },
 
   // LINAJES
   { id: 'l1', titulo: 'Linaje Evren', desc: 'Dueños y custodios de la Academia Eclipse.', categoria: 'linajes', src: '/images/linaje-evren.jpg' },
@@ -59,11 +76,13 @@ const IMAGENES: ImagenGaleria[] = [
   { id: 'k11', titulo: 'Acuario (Electrokinesis)', desc: 'Dominio sobre tecnología y electricidad.', categoria: 'leyes', src: '/images/ley-acuario.jpg' },
   { id: 'k12', titulo: 'Piscis (Onirokinesis)', desc: 'Navegantes de los sueños.', categoria: 'leyes', src: '/images/ley-piscis.jpg' },
 
-  // CLASIFICADO
+  // CLASIFICADO / LORE
   { id: 'c1', titulo: 'Dilución Inversa', desc: 'El secreto del ADN Numi.', categoria: 'clasificado', src: '/images/clasificado-dilucion.jpg' },
   { id: 'c2', titulo: 'Moldavita', desc: 'Mecanismos de interferencia.', categoria: 'clasificado', src: '/images/clasificado-moldavita.jpg' },
   { id: 'c3', titulo: 'La Anomalía Herea', desc: 'La sexta luna de Plutón.', categoria: 'clasificado', src: '/images/clasificado-herea.jpg' },
-  { id: 'c4', titulo: 'El Poder Plutoniano', desc: 'La corrupción del poder Solar.', categoria: 'clasificado', src: '/images/clasificado-plutoniano.jpg' }
+  { id: 'c4', titulo: 'El Poder Plutoniano', desc: 'La corrupción del poder Solar.', categoria: 'clasificado', src: '/images/clasificado-plutoniano.jpg' },
+  { id: 'c5', titulo: 'El Monolito de Pirita', desc: 'Monumento esotérico brutalista de Asthar.', categoria: 'clasificado', src: '/images/lore-monolito.jpg' },
+  { id: 'c6', titulo: 'Terminal de Los Hijos', desc: 'Código rúnico y red clandestina.', categoria: 'clasificado', src: '/images/fondo-terminal.jpg' }
 ];
 
 const EsquinasReliquia = () => (
@@ -163,9 +182,9 @@ export default function GaleriaPage() {
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light max-w-2xl">Visiones capturadas de los lugares, linajes y secretos más enigmáticos de la Academia Eclipse.</p>
         </div>
 
-        {/* FILTROS */}
+        {/* FILTROS ACTUALIZADOS CON NUEVAS CATEGORÍAS */}
         <div className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12 border-b border-[#E5C0A1]/20 pb-6">
-          {(['visiones', 'linajes', 'leyes', 'geografia', 'clasificado'] as CategoriaGaleria[]).map((cat) => (
+          {(['visiones', 'expedientes', 'reliquias', 'linajes', 'leyes', 'geografia', 'clasificado'] as CategoriaGaleria[]).map((cat) => (
             <button
               key={cat}
               onClick={() => setFiltroActivo(cat)}
@@ -175,7 +194,14 @@ export default function GaleriaPage() {
                   : 'text-[#E5C0A1]/50 hover:text-[#C8946E] border border-transparent'
               }`}
             >
-              {cat === 'visiones' ? 'Visiones' : cat === 'linajes' ? 'Linajes' : cat === 'leyes' ? 'Kinesis' : cat === 'geografia' ? 'Lugares' : 'Clasificado'}
+              {
+                cat === 'visiones' ? 'Visiones' : 
+                cat === 'expedientes' ? 'Expedientes' :
+                cat === 'reliquias' ? 'Reliquias' :
+                cat === 'linajes' ? 'Linajes' : 
+                cat === 'leyes' ? 'Kinesis' : 
+                cat === 'geografia' ? 'Lugares' : 'Clasificado'
+              }
             </button>
           ))}
         </div>

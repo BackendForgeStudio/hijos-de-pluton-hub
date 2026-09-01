@@ -11,11 +11,12 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
-type CategoriaLore = 'linajes' | 'leyes' | 'lugares' | 'clasificado';
+type CategoriaLore = 'linajes' | 'leyes' | 'lugares' | 'reliquias' | 'clasificado';
 
-const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: string; desc: string; img?: string }[] }> = {
+const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; descripcion: string; items: { nombre: string; desc: string; img?: string }[] }> = {
   linajes: {
     titulo: "Los Cinco Altos Linajes",
+    descripcion: "Las familias fundadoras que rigen el destino y las leyes de Asthar.",
     items: [
       { nombre: "Evren", desc: "Dueños y custodios de la Academia Eclipse. Gobiernan Aškara, el centro financiero de Asthar, construido alrededor del monolito de Pirita. Impulsaron el Pacto del Velo.", img: "/images/linaje-evren.jpg" },
       { nombre: "Helion", desc: "La élite política. Gobernantes de Damyra, una ciudad de palacios dorados. Su linaje suele liderar el Consejo de Asthar.", img: "/images/linaje-helion.jpg" },
@@ -26,6 +27,7 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
   },
   leyes: {
     titulo: "Doce Leyes de la Manifestación Natal",
+    descripcion: "Las frecuencias Numi que dictan el poder de un individuo según su alineación astral.",
     items: [
       { nombre: "Aries (Pirokinesis)", desc: "Control del fuego y la energía calórica. Pueden arder sin quemarse y calcinar amenazas.", img: "/images/ley-aries.jpg" },
       { nombre: "Tauro (Taurokinesis)", desc: "Capacidad de volverse físicamente indestructibles. La piel se endurece, los músculos crecen y emergen cuernos dorados de la frente.", img: "/images/ley-tauro.jpg" },
@@ -43,6 +45,7 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
   },
   lugares: {
     titulo: "Geografía de Asthar",
+    descripcion: "Los grandes bastiones y ciudades que conforman el mundo oculto.",
     items: [
       { nombre: "Aškara (Evren)", desc: "El centro financiero. Construido alrededor de un inmenso monolito de pirita, cruzado por canales de agua cristalina.", img: "/images/askara-evren.jpg" },
       { nombre: "Damyra (Helion)", desc: "La capital política. Palacios de oro brillante y piedra blanca iluminados por una intensa luz solar.", img: "/images/damyra-helion.jpg" },
@@ -51,11 +54,20 @@ const DATOS_GRIMORIO: Record<CategoriaLore, { titulo: string; items: { nombre: s
       { nombre: "Zahari (Draken)", desc: "Monumento espiritual. Inmensos santuarios tallados directamente en la roca rojiza de cañones escarpados.", img: "/images/zahari-draken.jpg" }
     ]
   },
+  reliquias: {
+    titulo: "Reliquias y Artefactos",
+    descripcion: "Objetos imbuidos de energía y celosamente guardados por el Consejo.",
+    items: [
+      { nombre: "Daga de Obsidiana", desc: "Arma ritual tallada en obsidiana pura e imbuida en fuego estelar. Prohibida por su capacidad letal.", img: "/images/objeto-daga.jpg" },
+      { nombre: "Resonador Cuántico", desc: "Complejo mecanismo esotérico de modulación musical, capaz de alterar frecuencias Numi mediante el sonido.", img: "/images/objeto-resonador.jpg" },
+      { nombre: "Matriz de Moldavita", desc: "Vidrio originado por impacto meteórico. Utilizado por los Evren para generar interferencias destructivas que anulan los poderes Numi.", img: "/images/objeto-moldavita.jpg" }
+    ]
+  },
   clasificado: {
     titulo: "Archivos Clasificados (Nivel Evren)",
+    descripcion: "Información restringida. Su divulgación supone la expulsión inmediata de la Academia.",
     items: [
       { nombre: "Dilución Inversa", desc: "El ADN humano no diluye la genética Numi, la concentra. Por eso, los Espontáneos desarrollan poderes mucho más fuertes e inestables que los nacidos en Asthar.", img: "/images/clasificado-dilucion.jpg" },
-      { nombre: "Moldavita", desc: "Vidrio originado por impacto meteórico. Utilizado por los Evren en una máquina que genera interferencias destructivas para anular y 'vaciar' los poderes de los Espontáneos.", img: "/images/clasificado-moldavita.jpg" },
       { nombre: "La Anomalía Herea", desc: "La sexta luna de Plutón. Los nacidos bajo el cruce de sus restos espaciales poseen un amplificador de energía incontrolable, causando combustión si no se canaliza.", img: "/images/clasificado-herea.jpg" },
       { nombre: "El Poder Plutoniano", desc: "La capacidad prohibida de corromper el poder Solar. Genera destrucción masiva (agujeros negros, mareas de sombras) y está penado por el Consejo de Asthar.", img: "/images/clasificado-plutoniano.jpg" }
     ]
@@ -69,6 +81,16 @@ const EsquinasReliquia = () => (
     <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#E5C0A1]/50 group-hover:border-[#C8946E] transition-colors duration-300 z-20"></div>
     <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#E5C0A1]/50 group-hover:border-[#C8946E] transition-colors duration-300 z-20"></div>
   </>
+);
+
+const AdornoLibro = () => (
+  <div className="flex justify-center items-center py-6 opacity-60">
+    <div className="w-16 h-[1px] bg-gradient-to-r from-transparent to-[#C8946E]"></div>
+    <svg className="w-6 h-6 mx-4 text-[#C8946E]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+      <path d="M12 2L15 8L22 9L17 14L18 21L12 17L6 21L7 14L2 9L9 8L12 2Z" strokeLinejoin="round"/>
+    </svg>
+    <div className="w-16 h-[1px] bg-gradient-to-l from-transparent to-[#C8946E]"></div>
+  </div>
 );
 
 export default function GrimorioPage() {
@@ -97,50 +119,56 @@ export default function GrimorioPage() {
             <button
               key={cat}
               onClick={() => setCategoriaActiva(cat)}
-              className={`px-4 py-2 text-xs md:text-sm uppercase tracking-widest font-bold transition-all duration-300 ${
+              className={`px-4 py-2 text-[10px] md:text-xs uppercase tracking-widest font-bold transition-all duration-300 ${
                 categoriaActiva === cat 
                   ? 'text-[#F4F0EB] bg-[#C8946E]/20 border border-[#C8946E]/50 shadow-[0_0_15px_rgba(200,148,110,0.3)]' 
                   : 'text-[#E5C0A1]/50 hover:text-[#C8946E] border border-transparent'
               }`}
             >
-              {cat === 'linajes' ? 'Linajes' : cat === 'leyes' ? 'Doce Leyes' : cat === 'lugares' ? 'Geografía' : 'Clasificado'}
+              {cat === 'linajes' ? 'Linajes' : cat === 'leyes' ? 'Doce Leyes' : cat === 'lugares' ? 'Geografía' : cat === 'reliquias' ? 'Reliquias' : 'Clasificado'}
             </button>
           ))}
         </div>
 
-        <div className="min-h-[50vh]">
+        <div className="min-h-[50vh] bg-black/40 border border-[#E5C0A1]/10 backdrop-blur-md p-6 md:p-10 shadow-2xl relative">
+          <EsquinasReliquia />
           <AnimatePresence mode="wait">
             <motion.div
               key={categoriaActiva}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.4 }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              animate={{ opacity: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, filter: "blur(5px)" }}
+              transition={{ duration: 0.5 }}
             >
-              {DATOS_GRIMORIO[categoriaActiva].items.map((item, index) => (
-                <div 
-                  key={index} 
-                  className={`p-6 border border-[#E5C0A1]/20 relative overflow-hidden group hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.15)] transition-all duration-500 ${item.img ? 'min-h-[220px] flex flex-col justify-end' : 'bg-black/60 backdrop-blur-md'}`}
-                >
-                  {item.img && (
-                    <>
-                      <div 
-                        className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out group-hover:scale-105 opacity-40 group-hover:opacity-75 grayscale-[30%] group-hover:grayscale-0"
-                        style={{ backgroundImage: `url('${item.img}')` }}
-                      ></div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#08040C] via-[#08040C]/80 to-transparent opacity-90"></div>
-                    </>
-                  )}
+              <div className="text-center mb-10">
+                <h2 className="text-2xl md:text-3xl text-[#C8946E] font-serif mb-2">{DATOS_GRIMORIO[categoriaActiva].titulo}</h2>
+                <p className="text-[#E5C0A1]/70 text-xs md:text-sm tracking-wide font-light">{DATOS_GRIMORIO[categoriaActiva].descripcion}</p>
+                <AdornoLibro />
+              </div>
 
-                  <EsquinasReliquia />
-                  
-                  <div className="relative z-10">
-                    <h3 className="text-xl text-[#F4F0EB] mb-3 group-hover:text-[#C8946E] transition-colors drop-shadow-md">{item.nombre}</h3>
-                    <p className="text-[#E5C0A1]/90 text-xs md:text-sm font-light leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">{item.desc}</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {DATOS_GRIMORIO[categoriaActiva].items.map((item, index) => (
+                  <div 
+                    key={index} 
+                    className={`p-6 border border-[#E5C0A1]/20 relative overflow-hidden group hover:border-[#C8946E] hover:shadow-[0_0_25px_rgba(200,148,110,0.15)] transition-all duration-500 ${item.img ? 'min-h-[260px] flex flex-col justify-end' : 'bg-black/60'}`}
+                  >
+                    {item.img && (
+                      <>
+                        <div 
+                          className="absolute inset-0 bg-cover bg-center transition-all duration-700 ease-out group-hover:scale-105 opacity-40 group-hover:opacity-75 grayscale-[30%] group-hover:grayscale-0"
+                          style={{ backgroundImage: `url('${item.img}')` }}
+                        ></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#08040C] via-[#08040C]/70 to-transparent opacity-95 group-hover:opacity-80 transition-opacity duration-500"></div>
+                      </>
+                    )}
+
+                    <div className="relative z-10">
+                      <h3 className="text-xl text-[#F4F0EB] mb-3 group-hover:text-[#C8946E] transition-colors drop-shadow-[0_2px_4px_rgba(0,0,0,1)] border-b border-[#E5C0A1]/10 pb-2 inline-block">{item.nombre}</h3>
+                      <p className="text-[#E5C0A1]/90 text-xs md:text-sm font-light leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] bg-black/40 p-3 backdrop-blur-sm border-l-2 border-[#C8946E]">{item.desc}</p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>

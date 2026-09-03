@@ -16,18 +16,26 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
-// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA (Inspirada en el collar de la autora)
+// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA
+// Ahora incluye su propio degradado interno para no desaparecer con el bg-clip-text transparente del título
 const LetraOEsoterica = () => (
   <svg 
-    className="inline-block h-[0.9em] w-auto mx-[0.02em] -mt-[0.1em] text-inherit drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
+    className="inline-block h-[0.85em] w-auto mx-[0.02em] -mt-[0.05em] drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
     viewBox="0 0 100 130" 
-    fill="currentColor" 
+    fill="url(#esoteric-gradient)" 
     xmlns="http://www.w3.org/2000/svg"
   >
+    <defs>
+      <linearGradient id="esoteric-gradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stopColor="#FFF5EE" />
+        <stop offset="50%" stopColor="#E5C0A1" />
+        <stop offset="100%" stopColor="#A26D45" />
+      </linearGradient>
+    </defs>
     {/* Tilde (Acento caligráfico) */}
     <path d="M 55 10 Q 65 5 68 8 L 48 25 Q 42 27 45 20 Z" />
     
-    {/* Círculo Exterior (Estilo Serif: grueso a los lados, fino arriba/abajo) */}
+    {/* Círculo Exterior */}
     <path 
       fillRule="evenodd" 
       clipRule="evenodd" 
@@ -196,7 +204,6 @@ export default function CodicePlutonPage() {
   const [mensajePacto, setMensajePacto] = useState("");
 
   useEffect(() => {
-    // Limpieza estricta de localStorage para evitar datos de prueba residuales de admin
     if (typeof window !== 'undefined') {
       const aliasGuardado = localStorage.getItem('alias_usuario');
       if (aliasGuardado === 'prueba admin') {
@@ -487,20 +494,19 @@ export default function CodicePlutonPage() {
 
         <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-20 h-20 md:w-36 md:h-36 z-30 drop-shadow-[0_0_20px_rgba(229,192,161,1)] object-contain pointer-events-none transform-gpu" />
 
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-4xl px-4 transform-gpu w-full">
-          {/* TÍTULO CON SVG INTEGRADO - Doble capa para efecto de glow animado */}
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
           <div className="relative mb-3 grid place-items-center w-full z-10">
             {/* Capa base con blur animado */}
             <motion.h1 
-              className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center w-full" 
+              className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center" 
               animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} 
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
-              EL C<LetraOEsoterica />DICE<br />DE PLUT<LetraOEsoterica />N
+              EL CÓDICE<br />DE PLUT<LetraOEsoterica />N
             </motion.h1>
             {/* Capa nítida frontal */}
-            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center w-full">
-              EL C<LetraOEsoterica />DICE<br />DE PLUT<LetraOEsoterica />N
+            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center">
+              EL CÓDICE<br />DE PLUT<LetraOEsoterica />N
             </h1>
           </div>
           <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">El santuario para los lectores y fans de Los Hijos de Plutón</p>

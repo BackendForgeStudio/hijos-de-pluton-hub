@@ -16,11 +16,10 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
-// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA
-// Ahora incluye su propio degradado interno para no desaparecer con el bg-clip-text transparente del título
+// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA (Alineación corregida)
 const LetraOEsoterica = () => (
   <svg 
-    className="inline-block h-[0.85em] w-auto mx-[0.02em] -mt-[0.05em] drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
+    className="inline-block h-[0.85em] w-auto mx-[0.02em] relative -top-[0.12em] drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
     viewBox="0 0 100 130" 
     fill="url(#esoteric-gradient)" 
     xmlns="http://www.w3.org/2000/svg"
@@ -494,18 +493,18 @@ export default function CodicePlutonPage() {
 
         <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-20 h-20 md:w-36 md:h-36 z-30 drop-shadow-[0_0_20px_rgba(229,192,161,1)] object-contain pointer-events-none transform-gpu" />
 
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-4xl px-4 transform-gpu w-full">
           <div className="relative mb-3 grid place-items-center w-full z-10">
             {/* Capa base con blur animado */}
             <motion.h1 
-              className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center" 
+              className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center w-full" 
               animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} 
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
               EL CÓDICE<br />DE PLUT<LetraOEsoterica />N
             </motion.h1>
             {/* Capa nítida frontal */}
-            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center">
+            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center w-full">
               EL CÓDICE<br />DE PLUT<LetraOEsoterica />N
             </h1>
           </div>

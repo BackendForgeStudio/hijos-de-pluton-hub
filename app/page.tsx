@@ -16,6 +16,29 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
+// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA (Inspirada en el collar de la autora)
+const LetraOEsoterica = () => (
+  <svg 
+    className="inline-block h-[0.9em] w-auto mx-[0.02em] -mt-[0.1em] text-inherit drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
+    viewBox="0 0 100 130" 
+    fill="currentColor" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    {/* Tilde (Acento caligráfico) */}
+    <path d="M 55 10 Q 65 5 68 8 L 48 25 Q 42 27 45 20 Z" />
+    
+    {/* Círculo Exterior (Estilo Serif: grueso a los lados, fino arriba/abajo) */}
+    <path 
+      fillRule="evenodd" 
+      clipRule="evenodd" 
+      d="M 50 30 C 15 30 0 60 0 80 C 0 100 15 130 50 130 C 85 130 100 100 100 80 C 100 60 85 30 50 30 Z M 50 38 C 75 38 88 55 88 80 C 88 105 75 122 50 122 C 25 122 12 105 12 80 C 12 55 25 38 50 38 Z" 
+    />
+    
+    {/* Arco Interior (La media luna de Herea / Eclipse) */}
+    <path d="M 50 38 Q 20 80 50 122 Q 35 80 50 38 Z" />
+  </svg>
+);
+
 // PROFECÍAS CANÓNICAS DE ECLIPSE
 const PROFECIAS = [
   "“El don sin control no es más que un arma autodestructiva.” — Profesor Lucio",
@@ -464,10 +487,21 @@ export default function CodicePlutonPage() {
 
         <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-20 h-20 md:w-36 md:h-36 z-30 drop-shadow-[0_0_20px_rgba(229,192,161,1)] object-contain pointer-events-none transform-gpu" />
 
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-3xl px-4 transform-gpu">
+        <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-4xl px-4 transform-gpu w-full">
+          {/* TÍTULO CON SVG INTEGRADO - Doble capa para efecto de glow animado */}
           <div className="relative mb-3 grid place-items-center w-full z-10">
-            <motion.h1 className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center" animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>EL CÓDICE<br />DE PLUTÓN</motion.h1>
-            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center">EL CÓDICE<br />DE PLUTÓN</h1>
+            {/* Capa base con blur animado */}
+            <motion.h1 
+              className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center w-full" 
+              animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} 
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            >
+              EL C<LetraOEsoterica />DICE<br />DE PLUT<LetraOEsoterica />N
+            </motion.h1>
+            {/* Capa nítida frontal */}
+            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center w-full">
+              EL C<LetraOEsoterica />DICE<br />DE PLUT<LetraOEsoterica />N
+            </h1>
           </div>
           <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">El santuario para los lectores y fans de Los Hijos de Plutón</p>
         </motion.div>

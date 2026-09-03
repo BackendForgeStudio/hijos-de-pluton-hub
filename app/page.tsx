@@ -19,7 +19,7 @@ const academiaFont = localFont({
 // COMPONENTE DE LA LETRA "Ó" ESOTÉRICA (Proporción y alineación corregidas)
 const LetraOEsoterica = () => (
   <svg 
-    className="inline-block h-[1.15em] w-auto mx-[0.03em] relative -top-[0.22em] drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
+    className="inline-block h-[1.1em] w-auto mx-[0.03em] relative -top-[0.22em] drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
     viewBox="0 0 100 130" 
     fill="url(#esoteric-gradient)" 
     xmlns="http://www.w3.org/2000/svg"

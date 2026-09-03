@@ -577,7 +577,7 @@ export default function CodicePlutonPage() {
             className="mt-6 border-t border-[#E5C0A1]/10 pt-4 max-w-sm mx-auto"
           >
             <p className="text-[#E5C0A1]/60 text-[10px] md:text-xs tracking-[0.2em] uppercase font-light">
-              Lanzamiento oficial del libro físico
+              Lanzamiento oficial del libro físico 19 Noviembre
             </p>
           </motion.div>
 

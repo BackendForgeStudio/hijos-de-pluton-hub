@@ -548,6 +548,7 @@ export default function CodicePlutonPage() {
           <p className="text-[#C8946E] text-xs uppercase tracking-[0.4em] mb-4 font-bold flex items-center justify-center gap-2">
             <span>✧</span> Próximo Alineamiento del Eclipse <span>✧</span>
           </p>
+          
           <div className="grid grid-cols-4 gap-3 max-w-lg mx-auto text-[#F4F0EB]">
             <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
               <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.days}</span>
@@ -566,6 +567,20 @@ export default function CodicePlutonPage() {
               <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Seg</p>
             </div>
           </div>
+
+          {/* TEXTO ACLARATORIO DEL LANZAMIENTO */}
+          <motion.div 
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.8 }}
+            className="mt-6 border-t border-[#E5C0A1]/10 pt-4 max-w-sm mx-auto"
+          >
+            <p className="text-[#E5C0A1]/60 text-[10px] md:text-xs tracking-[0.2em] uppercase font-light">
+              Lanzamiento oficial del libro físico
+            </p>
+          </motion.div>
+
         </div>
       </section>
 

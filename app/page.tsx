@@ -16,10 +16,11 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
-// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA (Proporción y alineación corregidas)
-const LetraOEsoterica = () => (
+// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA (Con evento táctil añadido)
+const LetraOEsoterica = ({ onClick }: { onClick?: () => void }) => (
   <svg 
-    className="inline-block h-[1.05em] w-auto mx-[0.03em] relative -top-[0.22em] drop-shadow-[0_0_15px_rgba(200,148,110,0.8)]" 
+    onClick={onClick}
+    className="inline-block h-[1.05em] w-auto mx-[0.03em] relative -top-[0.22em] drop-shadow-[0_0_15px_rgba(200,148,110,0.8)] cursor-pointer active:scale-90 transition-transform duration-75" 
     viewBox="0 0 100 130" 
     fill="url(#esoteric-gradient)" 
     xmlns="http://www.w3.org/2000/svg"
@@ -201,6 +202,27 @@ export default function CodicePlutonPage() {
   const [emailPacto, setEmailPacto] = useState("");
   const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
+
+  // ESTADOS DEL HUEVO DE PASCUA
+  const [easterEggCount, setEasterEggCount] = useState(0);
+  const [showSecret, setShowSecret] = useState(false);
+
+  // RESET DEL HUEVO DE PASCUA
+  useEffect(() => {
+    if (easterEggCount > 0) {
+      const timer = setTimeout(() => setEasterEggCount(0), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [easterEggCount]);
+
+  const handleEasterEgg = () => {
+    if (easterEggCount === 2) {
+      setShowSecret(true);
+      setEasterEggCount(0);
+    } else {
+      setEasterEggCount(prev => prev + 1);
+    }
+  };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -501,11 +523,11 @@ export default function CodicePlutonPage() {
               animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} 
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             >
-              EL CÓDICE<br />DE PLUT<LetraOEsoterica />N
+              EL CÓDICE<br />DE PLUT<LetraOEsoterica onClick={handleEasterEgg} />N
             </motion.h1>
             {/* Capa nítida frontal */}
             <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center w-full">
-              EL CÓDICE<br />DE PLUT<LetraOEsoterica />N
+              EL CÓDICE<br />DE PLUT<LetraOEsoterica onClick={handleEasterEgg} />N
             </h1>
           </div>
           <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">El santuario para los lectores y fans de Los Hijos de Plutón</p>
@@ -833,6 +855,36 @@ export default function CodicePlutonPage() {
           </div>
         </div>
       </footer>
+
+      {/* MODAL DEL HUEVO DE PASCUA */}
+      <AnimatePresence>
+        {showSecret && (
+          <motion.div 
+            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
+            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-6 cursor-pointer"
+            onClick={() => setShowSecret(false)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              className="text-center max-w-lg border border-[#A26D45]/30 p-8 rounded-lg bg-black/50 shadow-[0_0_40px_rgba(162,109,69,0.2)]"
+            >
+              <p className="text-[#C8946E] text-[10px] uppercase tracking-[0.4em] mb-5 font-bold">
+                ✧ Nivel de Acceso: Élite ✧
+              </p>
+              <p className="text-[#F4F0EB] text-xl md:text-2xl font-serif italic mb-6 leading-relaxed">
+                "Aquel que pertenezca a las sombras, nunca temerá la luz del sol."
+              </p>
+              <p className="text-[#A26D45] text-xs tracking-widest uppercase opacity-80">
+                — Archivos de Asthar
+              </p>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </main>
   );
 }

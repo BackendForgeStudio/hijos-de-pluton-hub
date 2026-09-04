@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import './globals.css'; // Asegúrate de que esta línea coincide con tu archivo de estilos global
 
 export const metadata: Metadata = {
   title: 'El Códice de Plutón | Santuario de la Academia Eclipse',
@@ -29,3 +30,17 @@ export const metadata: Metadata = {
     images: ['https://elcodicedepluton.com/images/og-eclipse.jpg'],
   },
 };
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="es">
+      <body className="antialiased">
+        {children}
+      </body>
+    </html>
+  );
+}

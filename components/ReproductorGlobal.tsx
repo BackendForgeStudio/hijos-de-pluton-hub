@@ -36,9 +36,11 @@ export default function ReproductorGlobal() {
           <button 
             onClick={cambiarSiguientePista}
             title="Siguiente pista"
-            className="px-2.5 py-1.5 bg-black/60 border border-[#E5C0A1]/30 text-[#C8946E] text-xs rounded hover:border-[#C8946E] transition-all cursor-pointer"
+            className="px-2.5 py-1.5 bg-black/60 border border-[#E5C0A1]/30 text-[#C8946E] rounded hover:border-[#C8946E] hover:text-[#F4F0EB] transition-all cursor-pointer flex items-center justify-center"
           >
-            ⏭
+            <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M5 4l10 8-10 8V4zM17 4v16h2V4h-2z" />
+            </svg>
           </button>
 
           <div className="flex items-center gap-1.5 pl-1 border-l border-[#E5C0A1]/20">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import localFont from 'next/font/local';
@@ -139,12 +139,48 @@ const PERSONAJES: Personaje[] = [
   }
 ];
 
-const EsquinasReliquia = () => (
+// COMPONENTES DE EFECTOS ESPECIALES
+const TextoDesencriptado = ({ text }: { text: string }) => {
+  const [displayText, setDisplayText] = useState("");
+  
+  useEffect(() => {
+    let iteration = 0;
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+    const interval = setInterval(() => {
+      setDisplayText(
+        text.split("").map((letter, index) => {
+          if (index < iteration || letter === " ") return letter;
+          return characters[Math.floor(Math.random() * characters.length)];
+        }).join("")
+      );
+      if (iteration >= text.length) clearInterval(interval);
+      iteration += 1 / 2; 
+    }, 30);
+    return () => clearInterval(interval);
+  }, [text]);
+
+  return <span>{displayText}</span>;
+};
+
+const TextoCensurado = ({ children }: { children: React.ReactNode }) => (
+  <span className="bg-black/90 text-transparent hover:text-[#E5C0A1]/80 active:text-[#E5C0A1]/80 transition-colors duration-500 select-none cursor-crosshair">
+    {children}
+  </span>
+);
+
+const obtenerTemaAmbiental = (amenaza: number) => {
+  if (amenaza >= 80) return { border: "border-red-900/50", shadow: "shadow-[0_0_40px_rgba(153,27,27,0.25)]", accent: "text-red-500", glow: "bg-red-900/10" };
+  if (amenaza <= 30) return { border: "border-blue-900/50", shadow: "shadow-[0_0_40px_rgba(30,58,138,0.2)]", accent: "text-blue-400", glow: "bg-blue-900/10" };
+  return { border: "border-[#E5C0A1]/30", shadow: "shadow-[0_0_40px_rgba(76,29,149,0.2)]", accent: "text-[#C8946E]", glow: "bg-[#4C1D95]/10" };
+};
+
+// UI COMPONENTES BASE
+const EsquinasReliquia = ({ colorBorder = "border-[#E5C0A1]/50" }) => (
   <>
-    <div className="absolute top-0 left-0 w-3 h-3 border-t border-l border-[#E5C0A1]/50"></div>
-    <div className="absolute top-0 right-0 w-3 h-3 border-t border-r border-[#E5C0A1]/50"></div>
-    <div className="absolute bottom-0 left-0 w-3 h-3 border-b border-l border-[#E5C0A1]/50"></div>
-    <div className="absolute bottom-0 right-0 w-3 h-3 border-b border-r border-[#E5C0A1]/50"></div>
+    <div className={`absolute top-0 left-0 w-3 h-3 border-t border-l ${colorBorder} transition-colors duration-500`}></div>
+    <div className={`absolute top-0 right-0 w-3 h-3 border-t border-r ${colorBorder} transition-colors duration-500`}></div>
+    <div className={`absolute bottom-0 left-0 w-3 h-3 border-b border-l ${colorBorder} transition-colors duration-500`}></div>
+    <div className={`absolute bottom-0 right-0 w-3 h-3 border-b border-r ${colorBorder} transition-colors duration-500`}></div>
   </>
 );
 
@@ -168,19 +204,18 @@ const BarraEstadistica = ({ label, value, colorHex }: { label: string; value: nu
 
 // ICONOS VECTORIALES
 const IconoConstelacion = () => (
-  <svg className="w-4 h-4 text-[#C8946E] mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+  <svg className="w-4 h-4 mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <circle cx="18" cy="6" r="2"/><circle cx="6" cy="12" r="2"/><circle cx="12" cy="18" r="2"/>
     <path d="M17 7l-10 4m5 6l-5-5"/>
   </svg>
 );
 
 const IconoOjo = () => (
-  <svg className="w-4 h-4 text-[#C8946E] mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+  <svg className="w-4 h-4 mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
   </svg>
 );
 
-// NUEVO ICONO: Fisura en el Velo (Reemplaza al emoji de advertencia)
 const IconoFisura = () => (
   <svg className="w-3.5 h-3.5 text-red-400/90 mr-2 mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
     <path d="M12 2L22 12L12 22L2 12L12 2Z" strokeDasharray="4 2" strokeOpacity="0.5"/>
@@ -190,6 +225,7 @@ const IconoFisura = () => (
 
 export default function PersonajesPage() {
   const [personajeSeleccionado, setPersonajeSeleccionado] = useState<Personaje>(PERSONAJES[0]);
+  const tema = obtenerTemaAmbiental(personajeSeleccionado.stats.amenaza);
 
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen ${academiaFont.className} relative py-16 px-6`}>
@@ -214,26 +250,30 @@ export default function PersonajesPage() {
           
           {/* Lista lateral de expedientes */}
           <div className="lg:col-span-4 space-y-3">
-            {PERSONAJES.map((p) => (
-              <button
-                key={p.slug}
-                onClick={() => setPersonajeSeleccionado(p)}
-                className={`w-full text-left p-4 border transition-all duration-300 cursor-pointer flex justify-between items-center ${
-                  personajeSeleccionado.nombre === p.nombre
-                    ? 'bg-[#2E1065]/40 border-[#C8946E] text-[#F4F0EB] shadow-[0_0_15px_rgba(200,148,110,0.3)]'
-                    : 'bg-black/60 border-[#E5C0A1]/20 text-[#E5C0A1]/70 hover:border-[#C8946E]/50 hover:text-[#F4F0EB]'
-                }`}
-              >
-                <div className="flex flex-col">
-                  <span className="text-xs md:text-sm font-medium tracking-wide">{p.nombre}</span>
-                  <span className="text-[9px] uppercase tracking-widest mt-1 opacity-50 font-mono">ID: {p.slug.toUpperCase()}</span>
-                </div>
-                <span className="text-xs text-[#C8946E]">✦</span>
-              </button>
-            ))}
+            {PERSONAJES.map((p) => {
+              const pTema = obtenerTemaAmbiental(p.stats.amenaza);
+              const isActive = personajeSeleccionado.nombre === p.nombre;
+              return (
+                <button
+                  key={p.slug}
+                  onClick={() => setPersonajeSeleccionado(p)}
+                  className={`w-full text-left p-4 border transition-all duration-500 cursor-pointer flex justify-between items-center ${
+                    isActive
+                      ? `bg-[#2E1065]/40 ${pTema.border} text-[#F4F0EB] ${pTema.shadow}`
+                      : 'bg-black/60 border-[#E5C0A1]/20 text-[#E5C0A1]/70 hover:border-[#C8946E]/50 hover:text-[#F4F0EB]'
+                  }`}
+                >
+                  <div className="flex flex-col">
+                    <span className="text-xs md:text-sm font-medium tracking-wide">{p.nombre}</span>
+                    <span className="text-[9px] uppercase tracking-widest mt-1 opacity-50 font-mono">ID: {p.slug.toUpperCase()}</span>
+                  </div>
+                  <span className={`text-xs ${isActive ? pTema.accent : 'text-[#C8946E]'} transition-colors`}>✦</span>
+                </button>
+              );
+            })}
           </div>
 
-          {/* Panel de Detalles (Expediente) */}
+          {/* Panel de Detalles (Expediente Dinámico) */}
           <div className="lg:col-span-8">
             <AnimatePresence mode="wait">
               <motion.div
@@ -242,52 +282,50 @@ export default function PersonajesPage() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.4, ease: "easeOut" }}
-                className="relative border border-[#E5C0A1]/30 bg-[#0A050E]/95 shadow-[0_0_40px_rgba(76,29,149,0.2)] overflow-hidden"
+                className={`relative border ${tema.border} bg-[#0A050E]/95 ${tema.shadow} overflow-hidden transition-colors duration-700`}
               >
-                
-                {/* NUEVO: SELLO ARCANO DE CLASIFICACIÓN */}
-                <div className="absolute -top-16 -right-16 w-64 h-64 md:w-80 md:h-80 opacity-50 mix-blend-screen pointer-events-none">
-                  {/* Contenedor circular con la imagen del expediente */}
-                  <div 
-                    className="absolute inset-0 rounded-full border border-[#C8946E]/30 bg-cover bg-center"
-                    style={{ backgroundImage: `url('/images/expediente-${personajeSeleccionado.slug}.jpg')` }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-tr from-[#0A050E]/80 to-transparent rounded-full"></div>
-                  </div>
-                  {/* Anillos de contención mágicos giratorios */}
-                  <div className="absolute inset-0 rounded-full border border-dashed border-[#C8946E]/30 scale-105 animate-[spin_40s_linear_infinite]"></div>
-                  <div className="absolute inset-0 rounded-full border-t border-b border-[#C8946E]/40 scale-[1.15] animate-[spin_60s_linear_reverse_infinite]"></div>
-                </div>
+                {/* Resplandor ambiental adaptativo */}
+                <div className={`absolute top-0 right-0 w-64 h-64 rounded-full blur-3xl -z-10 transition-colors duration-700 ${tema.glow}`}></div>
 
                 <div className="relative z-10 p-8 md:p-10">
-                  <EsquinasReliquia />
+                  <EsquinasReliquia colorBorder={tema.border} />
                   
                   {/* Encabezado del Expediente */}
                   <div className="flex justify-between items-start mb-6">
                     <div className="max-w-[70%]">
-                      <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-2">{personajeSeleccionado.rol}</span>
-                      <h2 className="text-3xl md:text-4xl text-[#F4F0EB] relative z-10">{personajeSeleccionado.nombre}</h2>
+                      <span className={`${tema.accent} text-[10px] uppercase tracking-widest font-bold block mb-2 transition-colors`}>
+                        {personajeSeleccionado.rol}
+                      </span>
+                      <h2 className="text-3xl md:text-4xl text-[#F4F0EB] relative z-10 min-h-[40px]">
+                        <TextoDesencriptado text={personajeSeleccionado.nombre} />
+                      </h2>
                     </div>
                     <div className="text-right relative z-10">
-                      <span className="text-[9px] uppercase tracking-widest text-red-400 font-mono block border border-red-900/50 bg-red-950/30 px-2 py-1 backdrop-blur-sm">
+                      <motion.span 
+                        animate={{ opacity: personajeSeleccionado.stats.amenaza > 80 ? [1, 0.5, 1] : 1 }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className={`text-[9px] uppercase tracking-widest font-mono block border px-2 py-1 backdrop-blur-sm transition-colors ${
+                          personajeSeleccionado.stats.amenaza > 80 ? 'text-red-400 border-red-900/50 bg-red-950/30' : 'text-[#E5C0A1] border-[#E5C0A1]/30 bg-black/40'
+                        }`}
+                      >
                         {personajeSeleccionado.expediente.estado}
-                      </span>
+                      </motion.span>
                     </div>
                   </div>
 
                   {/* Datos Básicos con Iconos */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 pb-6 border-b border-[#E5C0A1]/15 text-xs relative z-10">
+                  <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 pb-6 border-b ${tema.border} text-xs relative z-10 transition-colors`}>
                     <div className="flex items-center">
-                      <IconoConstelacion />
+                      <span className={tema.accent}><IconoConstelacion /></span>
                       <div>
-                        <span className="text-[#C8946E] font-bold block uppercase tracking-wider mb-0.5 text-[9px]">Carta Astral</span>
+                        <span className={`${tema.accent} font-bold block uppercase tracking-wider mb-0.5 text-[9px] transition-colors`}>Carta Astral</span>
                         <span className="text-[#E5C0A1]/90">{personajeSeleccionado.signo}</span>
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <IconoOjo />
+                      <span className={tema.accent}><IconoOjo /></span>
                       <div>
-                        <span className="text-[#C8946E] font-bold block uppercase tracking-wider mb-0.5 text-[9px]">Filiación</span>
+                        <span className={`${tema.accent} font-bold block uppercase tracking-wider mb-0.5 text-[9px] transition-colors`}>Filiación</span>
                         <span className="text-[#E5C0A1]/90">{personajeSeleccionado.bando}</span>
                       </div>
                     </div>
@@ -301,12 +339,16 @@ export default function PersonajesPage() {
                       </p>
                       
                       <div className="mb-4">
-                        <span className="text-[#C8946E] font-bold block uppercase tracking-widest mb-3 text-[10px]">Registro de Anomalías</span>
+                        <span className={`${tema.accent} font-bold block uppercase tracking-widest mb-3 text-[10px] transition-colors`}>
+                          Registro de Anomalías
+                        </span>
                         <ul className="space-y-2">
                           {personajeSeleccionado.expediente.anomalias.map((anomalia, idx) => (
                             <li key={idx} className="text-xs text-[#E5C0A1]/80 font-light flex items-start">
                               <IconoFisura />
-                              <span className="leading-relaxed">{anomalia}</span>
+                              <TextoCensurado>
+                                <span className="leading-relaxed">{anomalia}</span>
+                              </TextoCensurado>
                             </li>
                           ))}
                         </ul>
@@ -315,30 +357,31 @@ export default function PersonajesPage() {
 
                     {/* Estadísticas de Contención */}
                     <div className="bg-black/40 border border-[#E5C0A1]/10 p-5 backdrop-blur-sm relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-[#4C1D95]/10 rounded-full blur-2xl -z-10"></div>
-                      <span className="text-[#C8946E] font-bold block uppercase tracking-widest mb-5 text-[10px] text-center border-b border-[#E5C0A1]/10 pb-2">
+                      <span className={`${tema.accent} font-bold block uppercase tracking-widest mb-5 text-[10px] text-center border-b border-[#E5C0A1]/10 pb-2 transition-colors`}>
                         Métricas de Contención
                       </span>
                       <BarraEstadistica label="Frecuencia Numi (Poder Bruto)" value={personajeSeleccionado.stats.frecuencia} colorHex="#E5C0A1" />
                       <BarraEstadistica label="Estabilidad / Anclaje" value={personajeSeleccionado.stats.estabilidad} colorHex="#4C1D95" />
-                      <BarraEstadistica label="Nivel de Amenaza (Asthar)" value={personajeSeleccionado.stats.amenaza} colorHex="#991B1B" />
+                      <BarraEstadistica label="Nivel de Amenaza (Asthar)" value={personajeSeleccionado.stats.amenaza} colorHex={personajeSeleccionado.stats.amenaza > 80 ? "#ef4444" : "#991B1B"} />
                     </div>
                   </div>
 
-                  {/* Notas del Custodio */}
-                  <div className="bg-[#100A14] p-5 border-l-4 border-[#C8946E] mb-8 relative z-10 shadow-inner">
+                  {/* Notas del Custodio (Encriptadas) */}
+                  <div className={`bg-[#100A14] p-5 border-l-4 ${tema.border} mb-8 relative z-10 shadow-inner transition-colors`}>
                     <div className="absolute top-0 right-0 p-2 opacity-10">
                       <IconoOjo />
                     </div>
                     <span className="font-mono text-[9px] uppercase tracking-widest text-[#E5C0A1]/50 block mb-2">Adjunto: Notas del Custodio</span>
-                    <p className="font-mono text-xs text-[#C8946E] leading-relaxed opacity-90">
-                      {personajeSeleccionado.expediente.notas}
+                    <p className={`font-mono text-xs ${tema.accent} leading-relaxed opacity-90 min-h-[60px] transition-colors`}>
+                      <TextoDesencriptado text={personajeSeleccionado.expediente.notas} />
                     </p>
                   </div>
 
                   {/* Frase canónica */}
                   <blockquote className="text-center p-4 border-t border-b border-[#E5C0A1]/10 text-xs text-[#F4F0EB] italic font-light tracking-wide relative z-10">
-                    {personajeSeleccionado.frase}
+                    <TextoCensurado>
+                      {personajeSeleccionado.frase}
+                    </TextoCensurado>
                   </blockquote>
 
                 </div>

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { ReproductorProvider } from '../components/ReproductorProvider';
 import ReproductorGlobal from '../components/ReproductorGlobal';
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: 'El Códice de Plutón | Santuario de la Academia Eclipse',

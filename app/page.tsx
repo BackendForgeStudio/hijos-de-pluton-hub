@@ -4,11 +4,6 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import localFont from 'next/font/local';
 import Link from 'next/link';
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const academiaFont = localFont({
   src: './fonts/AcademiaEclipse.ttf',
@@ -16,7 +11,6 @@ const academiaFont = localFont({
   display: 'swap',
 });
 
-// COMPONENTE DE LA LETRA "Ó" ESOTÉRICA (Con evento táctil añadido)
 const LetraOEsoterica = ({ onClick }: { onClick?: () => void }) => (
   <svg 
     onClick={onClick}
@@ -32,22 +26,12 @@ const LetraOEsoterica = ({ onClick }: { onClick?: () => void }) => (
         <stop offset="100%" stopColor="#A26D45" />
       </linearGradient>
     </defs>
-    {/* Tilde (Acento caligráfico) */}
     <path d="M 55 10 Q 65 5 68 8 L 48 25 Q 42 27 45 20 Z" />
-    
-    {/* Círculo Exterior */}
-    <path 
-      fillRule="evenodd" 
-      clipRule="evenodd" 
-      d="M 50 30 C 15 30 0 60 0 80 C 0 100 15 130 50 130 C 85 130 100 100 100 80 C 100 60 85 30 50 30 Z M 50 38 C 75 38 88 55 88 80 C 88 105 75 122 50 122 C 25 122 12 105 12 80 C 12 55 25 38 50 38 Z" 
-    />
-    
-    {/* Arco Interior (La media luna de Herea / Eclipse) */}
+    <path fillRule="evenodd" clipRule="evenodd" d="M 50 30 C 15 30 0 60 0 80 C 0 100 15 130 50 130 C 85 130 100 100 100 80 C 100 60 85 30 50 30 Z M 50 38 C 75 38 88 55 88 80 C 88 105 75 122 50 122 C 25 122 12 105 12 80 C 12 55 25 38 50 38 Z" />
     <path d="M 50 38 Q 20 80 50 122 Q 35 80 50 38 Z" />
   </svg>
 );
 
-// PROFECÍAS CANÓNICAS DE ECLIPSE
 const PROFECIAS = [
   "“El don sin control no es más que un arma autodestructiva.” — Profesor Lucio",
   "“La mente humana detesta el vacío. Cuando neutralizamos un recuerdo, el propio cerebro recompone la secuencia.” — Profesor Lucio",
@@ -58,7 +42,6 @@ const PROFECIAS = [
   "“Dante intentó controlar su Plutón y cuando quiso replegarlo, Herea no lo dejó.” — Evan"
 ];
 
-// TEST DE BASTIONES AMPLIADO (CANON DE LA NOVELA)
 const PREGUNTAS_TEST = [
   {
     pregunta: "Suena la alarma de tormenta magnética ultra cósmica en Eclipse y estás en el patio exterior. ¿Qué haces?",
@@ -108,30 +91,10 @@ const PREGUNTAS_TEST = [
 ];
 
 const BASTIONES_INFO: Record<string, { nombre: string; descripcion: string; emblema: string; kinesis: string }> = {
-  Fuego: {
-    nombre: "Bastión de Fuego",
-    descripcion: "Tu energía es directa, afilada y letal. El combate y el instinto dominan tu naturaleza. No estás aquí para retroceder, sino para arder sin destruirlo todo.",
-    emblema: "Signos: Aries, Leo, Sagitario",
-    kinesis: "Doce Leyes: Pirokinesis, Heliokinesis, Chorokinesis."
-  },
-  Agua: {
-    nombre: "Bastión de Agua",
-    descripcion: "Sientes todo a un nivel insoportable. Tu poder transforma las emociones, navega por el mundo de los sueños y es capaz de dominar la oscuridad más profunda.",
-    emblema: "Signos: Cáncer, Escorpio, Piscis",
-    kinesis: "Doce Leyes: Patokinesis, Umbrakinesis, Onirokinesis."
-  },
-  Tierra: {
-    nombre: "Bastión de Tierra",
-    descripcion: "Eres el límite, la estructura y la contención. Tu poder puede estabilizar células vivas, volverte físicamente indestructible o paralizar procesos atómicos.",
-    emblema: "Signos: Tauro, Virgo, Capricornio",
-    kinesis: "Doce Leyes: Taurokinesis, Biokinesis, Akinesis."
-  },
-  Aire: {
-    nombre: "Bastión de Aire",
-    descripcion: "Eres libre, elocuente y mental. Dominas el espacio, la gravedad, los desdoblamientos de identidad y los flujos eléctricos y tecnológicos.",
-    emblema: "Signos: Géminis, Libra, Acuario",
-    kinesis: "Doce Leyes: Duplikinesis, Gravitokinesis, Electrokinesis."
-  }
+  Fuego: { nombre: "Bastión de Fuego", descripcion: "Tu energía es directa, afilada y letal. El combate y el instinto dominan tu naturaleza. No estás aquí para retroceder, sino para arder sin destruirlo todo.", emblema: "Signos: Aries, Leo, Sagitario", kinesis: "Doce Leyes: Pirokinesis, Heliokinesis, Chorokinesis." },
+  Agua: { nombre: "Bastión de Agua", descripcion: "Sientes todo a un nivel insoportable. Tu poder transforma las emociones, navega por el mundo de los sueños y es capaz de dominar la oscuridad más profunda.", emblema: "Signos: Cáncer, Escorpio, Piscis", kinesis: "Doce Leyes: Patokinesis, Umbrakinesis, Onirokinesis." },
+  Tierra: { nombre: "Bastión de Tierra", descripcion: "Eres el límite, la estructura y la contención. Tu poder puede estabilizar células vivas, volverte físicamente indestructible o paralizar procesos atómicos.", emblema: "Signos: Tauro, Virgo, Capricornio", kinesis: "Doce Leyes: Taurokinesis, Biokinesis, Akinesis." },
+  Aire: { nombre: "Bastión de Aire", descripcion: "Eres libre, elocuente y mental. Dominas el espacio, la gravedad, los desdoblamientos de identidad y los flujos eléctricos y tecnológicos.", emblema: "Signos: Géminis, Libra, Acuario", kinesis: "Doce Leyes: Duplikinesis, Gravitokinesis, Electrokinesis." }
 };
 
 const DivisorEstelar = () => (
@@ -163,27 +126,11 @@ const BotonReliquia = ({ children, onClick, type = "button", disabled = false }:
   </button>
 );
 
-// ICONOS SVG ELEGANTES
-const IconoSelloArcano = () => (
-  <svg className="w-8 h-8 text-[#C8946E] drop-shadow-[0_0_10px_rgba(200,148,110,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="12" cy="12" r="9" strokeWidth="1.5" strokeDasharray="3 3"/>
-    <circle cx="12" cy="12" r="5" strokeWidth="1.5"/>
-    <path d="M12 2V5M12 19V22M2 12H5M19 12H22" strokeWidth="1.5" strokeLinecap="round"/>
-    <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
-  </svg>
-);
+const IconoSelloArcano = () => (<svg className="w-8 h-8 text-[#C8946E] drop-shadow-[0_0_10px_rgba(200,148,110,0.8)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" strokeWidth="1.5" strokeDasharray="3 3"/><circle cx="12" cy="12" r="5" strokeWidth="1.5"/><path d="M12 2V5M12 19V22M2 12H5M19 12H22" strokeWidth="1.5" strokeLinecap="round"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>);
 const IconoOraculo = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>);
 const IconoEclipse = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>);
-const IconoDescargar = () => (
-  <svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-  </svg>
-);
-const IconoCompartir = () => (
-  <svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-  </svg>
-);
+const IconoDescargar = () => (<svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>);
+const IconoCompartir = () => (<svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>);
 
 export default function CodicePlutonPage() {
   const [profeciaActual, setProfeciaActual] = useState("Pulsa el cristal para invocar tu profecía diaria.");
@@ -196,18 +143,16 @@ export default function CodicePlutonPage() {
   
   const [fondoTarjeta, setFondoTarjeta] = useState<'oscura' | 'dorada'>('oscura');
   const [generandoImagen, setGenerandoImagen] = useState(false);
-
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
-  const [emailPacto, setEmailPacto] = useState("");
+  // PACTO DEL VELO (SISTEMA SEGURO BASADO EN ALIAS)
+  const [aliasPacto, setAliasPacto] = useState("");
   const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
 
-  // ESTADOS DEL HUEVO DE PASCUA
   const [easterEggCount, setEasterEggCount] = useState(0);
   const [showSecret, setShowSecret] = useState(false);
 
-  // RESET DEL HUEVO DE PASCUA
   useEffect(() => {
     if (easterEggCount > 0) {
       const timer = setTimeout(() => setEasterEggCount(0), 2000);
@@ -229,6 +174,12 @@ export default function CodicePlutonPage() {
       const aliasGuardado = localStorage.getItem('alias_usuario');
       if (aliasGuardado === 'prueba admin') {
         localStorage.removeItem('alias_usuario');
+      }
+      
+      const pactoGuardado = localStorage.getItem('pacto_asthar_mensaje');
+      if (pactoGuardado) {
+        setMensajePacto(pactoGuardado);
+        setEstadoPacto('success');
       }
     }
 
@@ -262,7 +213,6 @@ export default function CodicePlutonPage() {
   const consultarOraculo = () => {
     if (cargandoProfecia) return;
     setCargandoProfecia(true);
-
     setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * PROFECIAS.length);
       setProfeciaActual(PROFECIAS[randomIndex]);
@@ -399,11 +349,6 @@ export default function CodicePlutonPage() {
         setGenerandoImagen(false);
       }
     };
-
-    imagenFondo.onerror = () => {
-      console.error("No se pudo cargar la imagen de fondo");
-      setGenerandoImagen(false);
-    };
   };
 
   const compartirResultado = async () => {
@@ -414,46 +359,31 @@ export default function CodicePlutonPage() {
           text: `He realizado la evaluación de contención y pertenezco al ${bastionResultado ? BASTIONES_INFO[bastionResultado].nombre : 'Bastión'}. ¡Descubre el tuyo en elcodicedepluton.com!`,
           url: window.location.href,
         });
-      } catch {
-        // Usuario canceló compartir
-      }
+      } catch {}
     } else {
       navigator.clipboard.writeText(window.location.href);
       alert("¡Enlace copiado al portapapeles! Compártelo en tus redes sociales.");
     }
   };
 
-  const sellarPacto = async (e: React.FormEvent) => {
+  const sellarPacto = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!emailPacto) return;
+    if (!aliasPacto.trim()) return;
 
     setEstadoPacto('loading');
     setMensajePacto("Invocando a los astros...");
 
-    try {
-      const { error } = await supabase
-        .from('pactos')
-        .insert([{ email: emailPacto }]);
-
-      if (error) {
-        if (error.code === '23505') {
-          setMensajePacto("Las estrellas indican que este sello ya ha sido registrado anteriormente.");
-        } else {
-          setMensajePacto("Hubo una interferencia cósmica. Inténtalo de nuevo.");
-        }
-        setEstadoPacto('error');
-      } else {
-        const { data, error: rpcError } = await supabase.rpc('obtener_numero_pacto');
-        const numeroIniciado = (!rpcError && data !== null) ? data : "1";
-
-        setMensajePacto(`✨ Pacto sellado. Eres el iniciado oficial número #${numeroIniciado} de la Academia.`);
-        setEstadoPacto('success');
-        setEmailPacto("");
+    setTimeout(() => {
+      const numeroIniciado = Math.floor(Math.random() * 8999) + 1000;
+      const msj = `✨ Pacto sellado. Las sombras te reconocen, ${aliasPacto}. Eres el registro oficial #${numeroIniciado} de la Academia.`;
+      
+      setMensajePacto(msj);
+      setEstadoPacto('success');
+      
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('pacto_asthar_mensaje', msj);
       }
-    } catch {
-      setMensajePacto("Error de conexión. Las constelaciones están ocultas.");
-      setEstadoPacto('error');
-    }
+    }, 1500);
   };
 
   const fadeUp = {
@@ -468,67 +398,37 @@ export default function CodicePlutonPage() {
     }
   };
 
-  const textShadowStyle = fondoTarjeta === 'dorada' 
-    ? { textShadow: '0px 1px 2px rgba(59,30,8,0.3)' } 
-    : { textShadow: '0px 2px 4px rgba(0,0,0,0.8)' };
+  const textShadowStyle = fondoTarjeta === 'dorada' ? { textShadow: '0px 1px 2px rgba(59,30,8,0.3)' } : { textShadow: '0px 2px 4px rgba(0,0,0,0.8)' };
 
   return (
     <main className={`bg-[#08040C] text-[#F4F0EB] min-h-screen selection:bg-[#3B0764] selection:text-white ${academiaFont.className} relative transform-gpu`}>
       
-      {/* Fondo optimizado con aceleración por GPU y oculto en móviles lentos para máximo rendimiento */}
       <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-[0.60] mix-blend-screen hidden md:block transform-gpu">
         <div className="absolute top-0 left-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/runas-izq.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to right, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 right-0 w-1/3 h-full bg-repeat-y" style={{ backgroundImage: "url('/images/zodiaco-der.jpg')", backgroundSize: '100% auto', WebkitMaskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)', maskImage: 'linear-gradient(to left, rgba(0,0,0,1) 10%, rgba(0,0,0,0) 90%)' }} />
         <div className="absolute top-0 left-0 w-full h-[30vh] bg-gradient-to-b from-[#08040C] to-transparent"></div>
       </div>
 
-      {/* 1. HERO ASTRAL */}
       <section className="relative h-[100dvh] flex flex-col justify-center items-center text-center overflow-hidden isolate transform-gpu">
         <div className="absolute inset-0 bg-cover bg-center -z-30 opacity-60 transform-gpu" style={{ backgroundImage: "url('/fondo-astral.png')" }}></div>
-
-        <motion.img 
-          src="/anillo.png" 
-          alt="Anillo Astrológico" 
-          animate={{ rotate: 360 }} 
-          transition={{ repeat: Infinity, duration: 120, ease: "linear" }} 
-          style={{ willChange: "transform" }} 
-          className="absolute w-[900px] h-[900px] md:w-[1500px] md:h-[1500px] max-w-none -z-20 opacity-75 object-contain pointer-events-none select-none transform-gpu" 
-        />
-
+        <motion.img src="/anillo.png" alt="Anillo Astrológico" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 120, ease: "linear" }} style={{ willChange: "transform" }} className="absolute w-[900px] h-[900px] md:w-[1500px] md:h-[1500px] max-w-none -z-20 opacity-75 object-contain pointer-events-none select-none transform-gpu" />
+        
         <div className="absolute inset-0 pointer-events-none z-20 flex items-center justify-center overflow-hidden">
           {particulas.map((p) => (
-            <motion.div 
-              key={p.id} 
-              className="absolute bg-[#FFF5EE] rounded-full blur-[0.5px] shadow-[0_0_10px_rgba(229,192,161,0.8)] transform-gpu" 
-              style={{ width: p.size, height: p.size, willChange: 'transform, opacity' }} 
-              initial={{ opacity: 0, x: p.x, y: p.y, scale: 0 }} 
-              animate={{ opacity: [0, 0.8, 0], scale: [0, 1, 0.3], y: [p.y, p.y - 140], x: [p.x, p.x + (Math.random() * 40 - 20)] }} 
-              transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }} 
-            />
+            <motion.div key={p.id} className="absolute bg-[#FFF5EE] rounded-full blur-[0.5px] shadow-[0_0_10px_rgba(229,192,161,0.8)] transform-gpu" style={{ width: p.size, height: p.size, willChange: 'transform, opacity' }} initial={{ opacity: 0, x: p.x, y: p.y, scale: 0 }} animate={{ opacity: [0, 0.8, 0], scale: [0, 1, 0.3], y: [p.y, p.y - 140], x: [p.x, p.x + (Math.random() * 40 - 20)] }} transition={{ duration: p.duration, repeat: Infinity, ease: "easeInOut", delay: p.delay }} />
           ))}
         </div>
 
         <div className="absolute w-[350px] h-[350px] md:w-[500px] md:h-[500px] -z-10 flex items-center justify-center pointer-events-none transform-gpu">
           <div className="absolute w-[280px] h-[280px] md:w-[420px] md:h-[420px] bg-gradient-to-tr from-[#2E1065] to-[#4C1D95] rounded-full blur-[50px] md:blur-[80px] opacity-80 transform-gpu"></div>
-          <img src="/planeta-oficial.png" alt="Planeta Oficial Los Hijos de Plutón" className="absolute w-full h-full object-contain drop-shadow-[0_0_35px_rgba(76,29,149,0.7)] opacity-95 brightness-90 contrast-125 transform-gpu" />
+          <img src="/planeta-oficial.png" alt="Planeta Oficial" className="absolute w-full h-full object-contain drop-shadow-[0_0_35px_rgba(76,29,149,0.7)] opacity-95 brightness-90 contrast-125 transform-gpu" />
         </div>
-
-        <img src="/estrella.png" alt="Estrella Polar" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-20 h-20 md:w-36 md:h-36 z-30 drop-shadow-[0_0_20px_rgba(229,192,161,1)] object-contain pointer-events-none transform-gpu" />
+        <img src="/estrella.png" alt="Estrella" className="absolute top-[calc(50%-300px)] md:top-[calc(50%-380px)] -translate-y-1/2 w-20 h-20 md:w-36 md:h-36 z-30 drop-shadow-[0_0_20px_rgba(229,192,161,1)] object-contain pointer-events-none transform-gpu" />
 
         <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }} className="relative z-10 flex flex-col items-center justify-center max-w-4xl px-4 transform-gpu w-full">
           <div className="relative mb-3 grid place-items-center w-full z-10">
-            {/* Capa base con blur animado */}
-            <motion.h1 
-              className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center w-full" 
-              animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} 
-              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            >
-              EL CÓDICE<br />DE PLUT<LetraOEsoterica onClick={handleEasterEgg} />N
-            </motion.h1>
-            {/* Capa nítida frontal */}
-            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center w-full">
-              EL CÓDICE<br />DE PLUT<LetraOEsoterica onClick={handleEasterEgg} />N
-            </h1>
+            <motion.h1 className="col-start-1 row-start-1 font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] tracking-wider text-center w-full" animate={{ filter: ["blur(4px) brightness(1)", "blur(12px) brightness(1.5)", "blur(4px) brightness(1)"], opacity: [0.3, 0.8, 0.3] }} transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}>EL CÓDICE<br />DE PLUT<LetraOEsoterica onClick={handleEasterEgg} />N</motion.h1>
+            <h1 className="col-start-1 row-start-1 relative font-normal text-4xl sm:text-6xl md:text-8xl text-transparent bg-clip-text bg-gradient-to-b from-[#FFF5EE] via-[#E5C0A1] to-[#A26D45] drop-shadow-[0_4px_10px_rgba(0,0,0,1)] tracking-wider text-center w-full">EL CÓDICE<br />DE PLUT<LetraOEsoterica onClick={handleEasterEgg} />N</h1>
           </div>
           <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">El santuario inmersivo creado de fans para fans</p>
         </motion.div>
@@ -538,7 +438,6 @@ export default function CodicePlutonPage() {
         </div>
       </section>
 
-      {/* 2. NAVEGACIÓN ADHESIVA CON ENLACE A DISCORD */}
       <nav className="sticky top-0 z-50 bg-[#08040C]/95 backdrop-blur-md border-b border-[#E5C0A1]/20 py-3 px-4 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transform-gpu">
         <ul className="flex justify-start md:justify-center gap-5 md:gap-8 text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-[#E5C0A1]/80 min-w-max px-2 relative z-10 items-center">
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/grimorio">Grimorio</Link></li>
@@ -550,7 +449,7 @@ export default function CodicePlutonPage() {
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/galeria">Galería</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/circulo">El Círculo</Link></li>
           
-          {/* BOTÓN DISCORD */}
+          {/* BOTÓN DISCORD REINCORPORADO */}
           <li>
             <a 
               href="https://discord.gg/22c8Xgmp" 
@@ -564,89 +463,45 @@ export default function CodicePlutonPage() {
         </ul>
       </nav>
 
-      {/* 3. CUENTA ATRÁS */}
       <section className="py-12 bg-transparent text-center relative z-10">
         <div className="max-w-4xl mx-auto px-6">
-          <p className="text-[#C8946E] text-xs uppercase tracking-[0.4em] mb-4 font-bold flex items-center justify-center gap-2">
-            <span>✧</span> Próximo Alineamiento del Eclipse <span>✧</span>
-          </p>
-          
+          <p className="text-[#C8946E] text-xs uppercase tracking-[0.4em] mb-4 font-bold flex items-center justify-center gap-2"><span>✧</span> Próximo Alineamiento del Eclipse <span>✧</span></p>
           <div className="grid grid-cols-4 gap-3 max-w-lg mx-auto text-[#F4F0EB]">
-            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
-              <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.days}</span>
-              <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Días</p>
-            </div>
-            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
-              <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.hours}</span>
-              <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Horas</p>
-            </div>
-            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
-              <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.minutes}</span>
-              <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Min</p>
-            </div>
-            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]">
-              <span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.seconds}</span>
-              <p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Seg</p>
-            </div>
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]"><span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.days}</span><p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Días</p></div>
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]"><span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.hours}</span><p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Horas</p></div>
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]"><span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.minutes}</span><p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Min</p></div>
+            <div className="bg-black/80 border border-[#E5C0A1]/20 p-3 rounded backdrop-blur-md shadow-[inset_0_0_15px_rgba(0,0,0,0.5)]"><span className="text-2xl md:text-3xl font-bold text-[#E5C0A1] drop-shadow-[0_0_5px_rgba(229,192,161,0.5)]">{timeLeft.seconds}</span><p className="text-[9px] tracking-widest uppercase text-[#E5C0A1]/60 mt-1">Seg</p></div>
           </div>
-
-          {/* TEXTO ACLARATORIO DEL LANZAMIENTO */}
-          <motion.div 
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="mt-6 border-t border-[#E5C0A1]/10 pt-4 max-w-sm mx-auto"
-          >
-            <p className="text-[#E5C0A1]/60 text-[10px] md:text-xs tracking-[0.2em] uppercase font-light">
-              Lanzamiento oficial del libro físico 19 Noviembre
-            </p>
+          <motion.div initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2, duration: 0.8 }} className="mt-6 border-t border-[#E5C0A1]/10 pt-4 max-w-sm mx-auto">
+            <p className="text-[#E5C0A1]/60 text-[10px] md:text-xs tracking-[0.2em] uppercase font-light">Lanzamiento oficial del libro físico 19 Noviembre</p>
           </motion.div>
-
         </div>
       </section>
 
       <DivisorEstelar />
 
-      {/* 4. CAJAS ASIMÉTRICAS */}
       <section className="py-12 px-6 relative overflow-hidden transform-gpu z-10">
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl text-[#F4F0EB] mb-2 tracking-wider">Los Archivos del Códice</h2>
             <p className="text-[#E5C0A1]/70 text-xs tracking-[0.3em] uppercase">Explora los misterios de la Academia Eclipse</p>
           </motion.div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-start">
             <Link href="/grimorio" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Volumen I</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">El Grimorio</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Descubre la verdad sobre los Espontáneos y las 12 Leyes Numi.</p>
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Volumen I</span><h3 className="text-xl text-[#F4F0EB] mb-2">El Grimorio</h3><p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Descubre la verdad sobre los Espontáneos y las 12 Leyes Numi.</p><span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
             </Link>
-            
             <Link href="/personajes" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-10" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Consejo</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">Personajes</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Fichas técnicas y cartas astrales de Lola, Cosmo, Evan y más.</p>
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Explorar ✦</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Consejo</span><h3 className="text-xl text-[#F4F0EB] mb-2">Personajes</h3><p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Fichas técnicas y cartas astrales de Lola, Cosmo, Evan y más.</p><span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Explorar ✦</span>
             </Link>
-            
             <Link href="/cartas-astrales" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(147,51,234,0.15)] transition-all duration-300" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Registro</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">Cartas Astrales</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Calcula tu frecuencia Numi y tu Bastión elemental asignado.</p>
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Descubrir ✦</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Registro</span><h3 className="text-xl text-[#F4F0EB] mb-2">Cartas Astrales</h3><p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Calcula tu frecuencia Numi y tu Bastión elemental asignado.</p><span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Descubrir ✦</span>
             </Link>
-            
             <Link href="/pacto-del-velo" className="block p-6 border border-[#E5C0A1]/20 relative bg-cover bg-center group hover:border-[#C8946E] hover:shadow-[0_0_20px_rgba(229,192,161,0.15)] transition-all duration-300 md:mt-14" style={{ backgroundImage: "linear-gradient(to bottom, rgba(14, 7, 20, 0.90), rgba(10, 5, 14, 0.98)), url('/images/textura-grimorio.jpg')" }}>
               <EsquinasReliquia />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Leyes</span>
-              <h3 className="text-xl text-[#F4F0EB] mb-2">Pacto del Velo</h3>
-              <p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Manifiesto oficial sobre la Akinesis cognitiva y la magia solar.</p>
-              <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
+              <span className="text-[10px] uppercase tracking-[0.3em] text-[#C8946E] block mb-2 font-bold">Leyes</span><h3 className="text-xl text-[#F4F0EB] mb-2">Pacto del Velo</h3><p className="text-[#E5C0A1]/80 text-xs font-light leading-relaxed mb-4">Manifiesto oficial sobre la Akinesis cognitiva y la magia solar.</p><span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold group-hover:text-[#F4F0EB] transition-colors">Leer ✦</span>
             </Link>
           </div>
         </div>
@@ -654,15 +509,11 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 5. ORÁCULO DIARIO MÁGICO */}
       <section id="oraculo-diario" className="py-12 px-6 text-center transform-gpu relative z-10">
         <div className="max-w-2xl mx-auto">
-          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-            <IconoOraculo /> Consulta Mística <IconoOraculo />
-          </span>
+          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3"><IconoOraculo /> Consulta Mística <IconoOraculo /></span>
           <h2 className="text-3xl text-[#F4F0EB] mb-4">El Oráculo de Plutón</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Pulsa el sello para invocar la advertencia mística que marcará tu destino.</p>
-
           <div className="p-8 border border-[#E5C0A1]/30 mb-8 relative group shadow-[0_0_40px_rgba(46,16,101,0.5)] bg-black/90 backdrop-blur-md overflow-hidden">
             <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-20 mix-blend-overlay pointer-events-none"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-[#C8946E] to-transparent"></div>
@@ -670,40 +521,25 @@ export default function CodicePlutonPage() {
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-[#4C1D95]/20 blur-2xl rounded-full pointer-events-none"></div>
             
             <AnimatePresence mode="wait">
-              <motion.p 
-                key={profeciaActual}
-                initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }}
-                animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                exit={{ opacity: 0, scale: 1.05, filter: "blur(8px)" }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="text-base md:text-xl text-[#F4F0EB] italic font-light min-h-[60px] flex items-center justify-center relative z-10"
-              >
-                {profeciaActual}
-              </motion.p>
+              <motion.p key={profeciaActual} initial={{ opacity: 0, scale: 0.95, filter: "blur(8px)" }} animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }} exit={{ opacity: 0, scale: 1.05, filter: "blur(8px)" }} transition={{ duration: 0.5, ease: "easeInOut" }} className="text-base md:text-xl text-[#F4F0EB] italic font-light min-h-[60px] flex items-center justify-center relative z-10">{profeciaActual}</motion.p>
             </AnimatePresence>
-
             {cargandoProfecia && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="absolute inset-0 bg-[#08040C]/70 backdrop-blur-sm flex items-center justify-center z-20">
                 <span className="text-[#C8946E] text-xs uppercase tracking-widest animate-pulse">✦ Sintonizando frecuencias estelares... ✦</span>
               </motion.div>
             )}
           </div>
-
           <BotonReliquia onClick={consultarOraculo} disabled={cargandoProfecia}>Invocar Profecía ✦</BotonReliquia>
         </div>
       </section>
 
       <DivisorEstelar />
 
-      {/* 6. TEST DE BASTIONES AMPLIADO */}
       <section id="test-casas" className="py-12 px-6 text-center relative z-10">
         <div className="max-w-xl mx-auto">
-          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3">
-            <IconoEclipse /> Evaluación de Contención <IconoEclipse />
-          </span>
+          <span className="text-[#C8946E] uppercase tracking-[0.3em] text-xs font-bold mb-3 flex items-center justify-center gap-3"><IconoEclipse /> Evaluación de Contención <IconoEclipse /></span>
           <h2 className="text-3xl text-[#F4F0EB] mb-3">Las Doce Leyes de Asthar</h2>
           <p className="text-[#E5C0A1]/80 text-xs md:text-sm font-light mb-10">Descubre a qué Bastión de la Academia Eclipse perteneces resolviendo esta prueba oficial.</p>
-
           <div className="p-8 border border-[#E5C0A1]/30 text-left relative bg-black/90 backdrop-blur-md shadow-[0_0_40px_rgba(76,29,149,0.3)] overflow-hidden">
             <div className="absolute inset-0 bg-[url('/images/textura-grimorio.jpg')] opacity-15 mix-blend-overlay pointer-events-none"></div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-48 h-[2px] bg-gradient-to-r from-transparent via-[#C8946E] to-transparent"></div>
@@ -711,85 +547,50 @@ export default function CodicePlutonPage() {
 
             {!bastionResultado ? (
               <div className="relative z-10">
-                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-4 border-b border-[#E5C0A1]/20 pb-3 flex justify-between">
-                  <span>Prueba {preguntaActual + 1} de {PREGUNTAS_TEST.length}</span>
-                  <span className="text-[#E5C0A1]/50">Registro Central</span>
-                </span>
+                <span className="text-[10px] uppercase tracking-widest text-[#C8946E] font-bold block mb-4 border-b border-[#E5C0A1]/20 pb-3 flex justify-between"><span>Prueba {preguntaActual + 1} de {PREGUNTAS_TEST.length}</span><span className="text-[#E5C0A1]/50">Registro Central</span></span>
                 <h3 className="text-lg md:text-xl text-[#F4F0EB] mb-8 font-light leading-relaxed">{PREGUNTAS_TEST[preguntaActual].pregunta}</h3>
                 <div className="space-y-4">
                   {PREGUNTAS_TEST[preguntaActual].opciones.map((opcion, index) => (
                     <button key={index} onClick={() => seleccionarRespuesta(opcion.bastion)} className="w-full text-left p-4 bg-[#140B1A]/80 border border-[#E5C0A1]/20 hover:border-[#C8946E] hover:bg-[#2E1065]/40 text-[#F4F0EB] text-xs md:text-sm transition-all duration-300 cursor-pointer group flex justify-between items-center shadow-inner">
-                      <span>{opcion.texto}</span>
-                      <span className="text-[#C8946E] opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
+                      <span>{opcion.texto}</span><span className="text-[#C8946E] opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
                     </button>
                   ))}
                 </div>
               </div>
             ) : (
               <div className="text-center py-6 relative z-10">
-                
-                {/* Selector de Fondo */}
                 <div className="mb-6">
                   <p className="text-[10px] uppercase tracking-widest text-[#E5C0A1]/70 mb-3">Estilo del pergamino</p>
                   <div className="flex justify-center gap-4">
-                    <button 
-                      onClick={() => setFondoTarjeta('oscura')}
-                      className={`w-20 h-12 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'oscura' ? 'border-2 border-[#C8946E] shadow-[0_0_15px_rgba(200,148,110,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
-                      style={{ backgroundImage: "url('/tarjeta-oscura.jpg')" }}
-                    />
-                    <button 
-                      onClick={() => setFondoTarjeta('dorada')}
-                      className={`w-20 h-12 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'dorada' ? 'border-2 border-[#8B4513] shadow-[0_0_15px_rgba(139,69,19,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`}
-                      style={{ backgroundImage: "url('/tarjeta-dorada.jpg')" }}
-                    />
+                    <button onClick={() => setFondoTarjeta('oscura')} className={`w-20 h-12 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'oscura' ? 'border-2 border-[#C8946E] shadow-[0_0_15px_rgba(200,148,110,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`} style={{ backgroundImage: "url('/tarjeta-oscura.jpg')" }} />
+                    <button onClick={() => setFondoTarjeta('dorada')} className={`w-20 h-12 bg-cover bg-center rounded-sm transition-all duration-300 ${fondoTarjeta === 'dorada' ? 'border-2 border-[#8B4513] shadow-[0_0_15px_rgba(139,69,19,0.5)] scale-110' : 'border border-[#E5C0A1]/20 opacity-50 hover:opacity-100'}`} style={{ backgroundImage: "url('/tarjeta-dorada.jpg')" }} />
                   </div>
                 </div>
 
-                {/* TARJETA VISUAL DE RESULTADO DINÁMICA */}
-                <div 
-                  className={`w-full aspect-[1200/630] flex flex-col justify-center items-center text-center relative mb-6 shadow-2xl transition-all duration-500 rounded-xl overflow-hidden ${fondoTarjeta === 'dorada' ? 'text-[#1E0B2B]' : 'text-[#F4F0EB]'}`}
-                  style={{ 
-                    backgroundImage: `url(${fondoTarjeta === 'dorada' ? '/tarjeta-dorada.jpg' : '/tarjeta-oscura.jpg'})`,
-                    backgroundSize: '100% 100%' 
-                  }}
-                >
-                  <div 
-                    className="relative z-10 w-[80%] md:w-[70%] flex flex-col items-center -mt-2 md:-mt-4"
-                    style={textShadowStyle}
-                  >
+                <div className={`w-full aspect-[1200/630] flex flex-col justify-center items-center text-center relative mb-6 shadow-2xl transition-all duration-500 rounded-xl overflow-hidden ${fondoTarjeta === 'dorada' ? 'text-[#1E0B2B]' : 'text-[#F4F0EB]'}`} style={{ backgroundImage: `url(${fondoTarjeta === 'dorada' ? '/tarjeta-dorada.jpg' : '/tarjeta-oscura.jpg'})`, backgroundSize: '100% 100%' }}>
+                  <div className="relative z-10 w-[80%] md:w-[70%] flex flex-col items-center -mt-2 md:-mt-4" style={textShadowStyle}>
                     <span className={`text-[8px] md:text-[10px] uppercase tracking-widest block mb-1 md:mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#8B4513]' : 'text-[#C8946E]'}`}>Academia Eclipse — Asthar</span>
                     <h3 className="text-2xl md:text-4xl mb-2 md:mb-3 font-serif">{BASTIONES_INFO[bastionResultado].nombre}</h3>
                     <p className={`text-[10px] md:text-sm mb-2 font-bold ${fondoTarjeta === 'dorada' ? 'text-[#3B1E08]' : 'text-[#E5C0A1]'}`}>{BASTIONES_INFO[bastionResultado].emblema}</p>
                     <p className={`text-[8px] md:text-[10px] mb-3 md:mb-4 font-bold tracking-widest uppercase ${fondoTarjeta === 'dorada' ? 'text-[#8B4513]' : 'text-[#C8946E]'}`}>{BASTIONES_INFO[bastionResultado].kinesis}</p>
                     <p className={`text-[10px] md:text-xs font-medium leading-relaxed mb-4 md:mb-6 ${fondoTarjeta === 'dorada' ? 'text-[#3B1E08]' : 'text-[#E5C0A1]/90'}`}>{BASTIONES_INFO[bastionResultado].descripcion}</p>
-                    
                     <div className={`w-full pt-3 md:pt-4 border-t flex justify-center gap-6 md:gap-16 items-center text-[7px] md:text-[9px] tracking-widest uppercase font-bold ${fondoTarjeta === 'dorada' ? 'border-[#8B4513]/30 text-[#8B4513]' : 'border-[#E5C0A1]/20 text-[#C8946E]'}`}>
-                      <span>elcodicedepluton.com</span>
-                      <span>✦ Códice de Plutón</span>
+                      <span>elcodicedepluton.com</span><span>✦ Códice de Plutón</span>
                     </div>
                   </div>
                 </div>
 
-                {/* BOTONES DE ACCION CON SVGs */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <BotonReliquia onClick={descargarTarjetaTest} disabled={generandoImagen}>
-                    {generandoImagen ? 'Canalizando...' : (
-                      <span className="flex items-center justify-center">
-                        <IconoDescargar /> Descargar Tarjeta
-                      </span>
-                    )}
+                    {generandoImagen ? 'Canalizando...' : <span className="flex items-center justify-center"><IconoDescargar /> Descargar Tarjeta</span>}
                   </BotonReliquia>
                   <button onClick={compartirResultado} className="flex items-center justify-center px-6 py-3 bg-[#2E1065]/60 border border-[#E5C0A1]/40 text-[#F4F0EB] font-bold uppercase tracking-widest text-xs hover:border-[#C8946E] transition-all cursor-pointer">
                     <IconoCompartir /> Compartir Resultado
                   </button>
                 </div>
-
                 <div className="text-center mt-6">
-                  <button onClick={reiniciarTest} className="text-xs text-[#E5C0A1]/60 hover:text-[#C8946E] underline tracking-widest uppercase cursor-pointer">
-                    Repetir Evaluación
-                  </button>
+                  <button onClick={reiniciarTest} className="text-xs text-[#E5C0A1]/60 hover:text-[#C8946E] underline tracking-widest uppercase cursor-pointer">Repetir Evaluación</button>
                 </div>
-
               </div>
             )}
           </div>
@@ -798,7 +599,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 7. CAPTACIÓN */}
+      {/* 7. CAPTACIÓN SEGURA Y LOCAL (SIN CORREOS) */}
       <section className="py-16 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           
@@ -807,15 +608,15 @@ export default function CodicePlutonPage() {
           </div>
 
           <h2 className="text-3xl text-[#F4F0EB] mb-3">Inscripción a la Academia</h2>
-          <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Sella tu destino antes del 19 de noviembre y prepárate para cruzar el Umbral a Asthar.</p>
+          <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Obtén tu sello antes del 19 de noviembre y prepárate para cruzar el Umbral a Asthar.</p>
           
           <form className="flex flex-col sm:flex-row gap-4 justify-center" onSubmit={sellarPacto}>
             <input 
-              type="email" 
-              required
-              value={emailPacto}
-              onChange={(e) => setEmailPacto(e.target.value)}
-              placeholder="tu@correo.com" 
+              type="text" 
+              value={aliasPacto}
+              onChange={(e) => setAliasPacto(e.target.value)}
+              placeholder="Tu Alias (Opcional)" 
+              maxLength={20}
               className="px-6 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] sm:w-80 focus:outline-none focus:border-[#C8946E] transition-colors shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]" 
             />
             <BotonReliquia type="submit" disabled={estadoPacto === 'loading'}>
@@ -836,35 +637,17 @@ export default function CodicePlutonPage() {
         </motion.div>
       </section>
 
-      {/* MODAL DEL HUEVO DE PASCUA */}
       <AnimatePresence>
         {showSecret && (
-          <motion.div 
-            initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
-            exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-6 cursor-pointer"
-            onClick={() => setShowSecret(false)}
-          >
-            <motion.div 
-              initial={{ scale: 0.9, y: 20 }}
-              animate={{ scale: 1, y: 0 }}
-              className="text-center max-w-lg border border-[#A26D45]/30 p-8 rounded-lg bg-black/50 shadow-[0_0_40px_rgba(162,109,69,0.2)]"
-            >
-              <p className="text-[#C8946E] text-[10px] uppercase tracking-[0.4em] mb-5 font-bold">
-                ✧ Nivel de Acceso: Élite ✧
-              </p>
-              <p className="text-[#F4F0EB] text-xl md:text-2xl font-serif italic mb-6 leading-relaxed">
-                "Aquel que pertenezca a las sombras, nunca temerá la luz del sol."
-              </p>
-              <p className="text-[#A26D45] text-xs tracking-widest uppercase opacity-80">
-                — Archivos de Asthar
-              </p>
+          <motion.div initial={{ opacity: 0, backdropFilter: "blur(0px)" }} animate={{ opacity: 1, backdropFilter: "blur(12px)" }} exit={{ opacity: 0, backdropFilter: "blur(0px)" }} className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-6 cursor-pointer" onClick={() => setShowSecret(false)}>
+            <motion.div initial={{ scale: 0.9, y: 20 }} animate={{ scale: 1, y: 0 }} className="text-center max-w-lg border border-[#A26D45]/30 p-8 rounded-lg bg-black/50 shadow-[0_0_40px_rgba(162,109,69,0.2)]">
+              <p className="text-[#C8946E] text-[10px] uppercase tracking-[0.4em] mb-5 font-bold">✧ Nivel de Acceso: Élite ✧</p>
+              <p className="text-[#F4F0EB] text-xl md:text-2xl font-serif italic mb-6 leading-relaxed">"Aquel que pertenezca a las sombras, nunca temerá la luz del sol."</p>
+              <p className="text-[#A26D45] text-xs tracking-widest uppercase opacity-80">— Archivos de Asthar</p>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
-
     </main>
   );
 }

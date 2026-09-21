@@ -530,7 +530,7 @@ export default function CodicePlutonPage() {
               EL CÓDICE<br />DE PLUT<LetraOEsoterica onClick={handleEasterEgg} />N
             </h1>
           </div>
-          <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">El santuario para los lectores y fans de Los Hijos de Plutón</p>
+          <p className="relative z-10 text-[#E5C0A1]/90 text-[11px] sm:text-xs md:text-base font-light tracking-[0.2em] uppercase text-center px-2 mt-2 drop-shadow-[0_3px_5px_rgba(0,0,0,0.8)]">El santuario inmersivo creado de fans para fans</p>
         </motion.div>
         
         <div onClick={() => scrollToSection('oraculo-diario')} className="absolute bottom-6 cursor-pointer px-5 py-2 rounded-full bg-black/60 backdrop-blur-md border border-[#E5C0A1]/20 shadow-[0_4px_20px_rgba(0,0,0,0.9)] hover:border-[#C8946E]/50 transition-all z-30 group transform-gpu">
@@ -835,26 +835,6 @@ export default function CodicePlutonPage() {
 
         </motion.div>
       </section>
-
-      {/* 8. PIE DE PÁGINA */}
-      <footer className="py-12 px-6 bg-black/95 backdrop-blur-lg border-t border-[#E5C0A1]/15 text-center text-[11px] text-[#E5C0A1]/60 relative z-10">
-        <div className="max-w-4xl mx-auto space-y-4">
-          <p className="font-bold tracking-widest text-[#C8946E] uppercase">EL CÓDICE DE PLUTÓN</p>
-          <p className="leading-relaxed font-light">
-            Este sitio web es un portal de fans no oficial creado sin ánimo de lucro por y para la comunidad de lectores de la obra literaria <span className="italic">Los Hijos de Plutón</span>. Não está afiliado ni asociado oficialmente con los autores ni con las editoriales oficiales.
-          </p>
-
-          <div className="pt-2 text-xs text-[#E5C0A1]">
-            Contacto oficial: <a href="mailto:contacto@elcodicedepluton.com" className="text-[#C8946E] underline hover:text-[#F4F0EB] transition-colors">contacto@elcodicedepluton.com</a> | 
-            Comunidad: <a href="https://discord.gg/22c8Xgmp" target="_blank" rel="noopener noreferrer" className="text-[#C8946E] underline hover:text-[#F4F0EB] transition-colors ml-1">Discord Oficial</a>
-          </div>
-
-          <div className="pt-4 border-t border-[#E5C0A1]/10 flex flex-col sm:flex-row justify-between items-center gap-2">
-            <span>© 2026 elcodicedepluton.com — Todos los derechos reservados.</span>
-            <span className="tracking-widest uppercase text-[#C8946E]">Santuario de la Academia Eclipse</span>
-          </div>
-        </div>
-      </footer>
 
       {/* MODAL DEL HUEVO DE PASCUA */}
       <AnimatePresence>

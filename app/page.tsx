@@ -145,9 +145,9 @@ export default function CodicePlutonPage() {
   const [generandoImagen, setGenerandoImagen] = useState(false);
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
-  // PACTO DEL VELO (SISTEMA SEGURO BASADO EN ALIAS)
+  // SISTEMA DE DESCARGA DE SELLO (SIN RECOPILACIÓN DE DATOS)
   const [aliasPacto, setAliasPacto] = useState("");
-  const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
 
   const [easterEggCount, setEasterEggCount] = useState(0);
@@ -371,11 +371,11 @@ export default function CodicePlutonPage() {
     if (!aliasPacto.trim()) return;
 
     setEstadoPacto('loading');
-    setMensajePacto("Invocando a los astros...");
+    setMensajePacto("Forjando tu sello en las sombras...");
 
     setTimeout(() => {
       const numeroIniciado = Math.floor(Math.random() * 8999) + 1000;
-      const msj = `✨ Pacto sellado. Las sombras te reconocen, ${aliasPacto}. Eres el registro oficial #${numeroIniciado} de la Academia.`;
+      const msj = `✨ Las sombras te reconocen, ${aliasPacto}. Tu sello oficial de iniciado #${numeroIniciado} ha sido revelado.`;
       
       setMensajePacto(msj);
       setEstadoPacto('success');
@@ -383,6 +383,19 @@ export default function CodicePlutonPage() {
       if (typeof window !== 'undefined') {
         localStorage.setItem('pacto_asthar_mensaje', msj);
       }
+
+      // Descarga automática de la imagen "sello-iniciado.jpg"
+      try {
+        const link = document.createElement('a');
+        link.href = '/images/sello-iniciado.jpg'; // Ruta a la imagen generada por Gemini
+        link.download = `Sello_Iniciado_Eclipse_${aliasPacto.replace(/\s+/g, '_')}.jpg`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error al forzar la descarga del sello:", error);
+      }
+
     }, 1500);
   };
 
@@ -449,10 +462,10 @@ export default function CodicePlutonPage() {
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/galeria">Galería</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/circulo">El Círculo</Link></li>
           
-          {/* BOTÓN DISCORD REINCORPORADO */}
+          {/* BOTÓN DISCORD CON ENLACE PERMANENTE */}
           <li>
             <a 
-              href="https://discord.gg/22c8Xgmp" 
+              href="https://discord.gg/SZjJthfvKP" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="px-3 py-1.5 bg-[#2E1065]/80 border border-[#E5C0A1]/40 text-[#F4F0EB] rounded hover:border-[#C8946E] transition-all flex items-center gap-1.5 shadow-[0_0_10px_rgba(76,29,149,0.3)] text-[10px]"
@@ -599,7 +612,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 7. CAPTACIÓN SEGURA Y LOCAL (SIN CORREOS) */}
+      {/* 7. DESCARGA DIRECTA DE SELLO (SIN DATOS) */}
       <section className="py-16 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           
@@ -607,20 +620,21 @@ export default function CodicePlutonPage() {
             <IconoSelloArcano />
           </div>
 
-          <h2 className="text-3xl text-[#F4F0EB] mb-3">Inscripción a la Academia</h2>
-          <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Obtén tu sello antes del 19 de noviembre y prepárate para cruzar el Umbral a Asthar.</p>
+          <h2 className="text-3xl text-[#F4F0EB] mb-3">Sello del Iniciado</h2>
+          <p className="text-[#E5C0A1]/80 mb-8 font-light text-xs md:text-sm">Confirma tu Alias para desvelar y reclamar tu emblema oficial de la Academia Eclipse.</p>
           
           <form className="flex flex-col sm:flex-row gap-4 justify-center" onSubmit={sellarPacto}>
             <input 
               type="text" 
+              required
               value={aliasPacto}
               onChange={(e) => setAliasPacto(e.target.value)}
-              placeholder="Tu Alias (Opcional)" 
+              placeholder="Tu Alias / Pseudónimo" 
               maxLength={20}
               className="px-6 py-3 bg-black/80 backdrop-blur-md border border-[#E5C0A1]/30 text-xs text-[#F4F0EB] sm:w-80 focus:outline-none focus:border-[#C8946E] transition-colors shadow-[inset_0_0_10px_rgba(0,0,0,0.5)]" 
             />
             <BotonReliquia type="submit" disabled={estadoPacto === 'loading'}>
-              {estadoPacto === 'loading' ? 'Invocando...' : 'Sellar Pacto'}
+              {estadoPacto === 'loading' ? 'Invocando...' : 'Reclamar Sello'}
             </BotonReliquia>
           </form>
 

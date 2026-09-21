@@ -151,7 +151,6 @@ export default function CodicePlutonPage() {
   const [generandoImagen, setGenerandoImagen] = useState(false);
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
-  // SISTEMA DE DESCARGA DE SELLO ÉPICO (CONECTADO A SUPABASE)
   const [aliasPacto, setAliasPacto] = useState("");
   const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
@@ -380,7 +379,6 @@ export default function CodicePlutonPage() {
     setMensajePacto("Forjando tu sello en las sombras...");
 
     try {
-      // 1. Guardamos el Alias en Supabase para obtener un contador secuencial REAL
       let numeroIniciado = 0;
       
       const { data, error } = await supabase
@@ -390,39 +388,38 @@ export default function CodicePlutonPage() {
         .single();
 
       if (error || !data) {
-        // Salvavidas: si la DB falla, generamos uno temporal para no dejar colgado al usuario
         console.warn("Conexión con el oráculo interrumpida. Generando registro temporal.");
         numeroIniciado = Math.floor(Math.random() * 8999) + 1000;
       } else {
-        numeroIniciado = data.id + 1000; // Sumamos 1000 para que empiece en #1001
+        numeroIniciado = data.id + 1000;
       }
 
       const msj = `Las sombras te reconocen, ${aliasPacto}. Tu sello oficial de iniciado #${numeroIniciado} ha sido revelado.`;
 
-      // 2. Generar el Canvas con diseño ÉPICO
+      // GENERACIÓN AVANZADA DEL CANVAS
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.src = '/images/sello-iniciado.jpg'; // Tu imagen de alta resolución de Gemini
+      img.src = '/images/sello-iniciado.jpg';
       
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
         
         if (ctx) {
-          // A. Dibujar el fondo
+          // 1. Dibujar imagen de fondo
           ctx.drawImage(img, 0, 0);
 
-          // B. Oscurecer la base para que el texto sea perfectamente legible
-          const gradient = ctx.createLinearGradient(0, canvas.height * 0.6, 0, canvas.height);
+          // 2. Viñeta oscura inferior para dar profundidad y contraste
+          const gradient = ctx.createLinearGradient(0, canvas.height * 0.55, 0, canvas.height);
           gradient.addColorStop(0, 'rgba(8, 4, 12, 0)');
           gradient.addColorStop(0.5, 'rgba(8, 4, 12, 0.7)');
-          gradient.addColorStop(1, 'rgba(8, 4, 12, 0.95)');
+          gradient.addColorStop(1, 'rgba(8, 4, 12, 0.98)');
           ctx.fillStyle = gradient;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-          // C. Dibujar el doble marco mágico perimetral
+          // 3. Doble marco esotérico
           const margin = canvas.width * 0.04;
           ctx.strokeStyle = 'rgba(200, 148, 110, 0.15)';
           ctx.lineWidth = 2;
@@ -432,61 +429,84 @@ export default function CodicePlutonPage() {
           ctx.lineWidth = 1;
           ctx.strokeRect(margin + 12, margin + 12, canvas.width - (margin + 12) * 2, canvas.height - (margin + 12) * 2);
 
-          // D. Esquinas ornamentales estilo reliquia
+          // 4. Esquinas de reliquia
           const cornerLen = canvas.width * 0.08;
           ctx.strokeStyle = '#C8946E';
           ctx.lineWidth = 4;
-          
-          ctx.beginPath(); ctx.moveTo(margin, margin + cornerLen); ctx.lineTo(margin, margin); ctx.lineTo(margin + cornerLen, margin); ctx.stroke(); // Arriba-Izquierda
-          ctx.beginPath(); ctx.moveTo(canvas.width - margin - cornerLen, margin); ctx.lineTo(canvas.width - margin, margin); ctx.lineTo(canvas.width - margin, margin + cornerLen); ctx.stroke(); // Arriba-Derecha
-          ctx.beginPath(); ctx.moveTo(margin, canvas.height - margin - cornerLen); ctx.lineTo(margin, canvas.height - margin); ctx.lineTo(margin + cornerLen, canvas.height - margin); ctx.stroke(); // Abajo-Izquierda
-          ctx.beginPath(); ctx.moveTo(canvas.width - margin - cornerLen, canvas.height - margin); ctx.lineTo(canvas.width - margin, canvas.height - margin); ctx.lineTo(canvas.width - margin, canvas.height - margin - cornerLen); ctx.stroke(); // Abajo-Derecha
+          ctx.beginPath(); ctx.moveTo(margin, margin + cornerLen); ctx.lineTo(margin, margin); ctx.lineTo(margin + cornerLen, margin); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(canvas.width - margin - cornerLen, margin); ctx.lineTo(canvas.width - margin, margin); ctx.lineTo(canvas.width - margin, margin + cornerLen); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(margin, canvas.height - margin - cornerLen); ctx.lineTo(margin, canvas.height - margin); ctx.lineTo(margin + cornerLen, canvas.height - margin); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(canvas.width - margin - cornerLen, canvas.height - margin); ctx.lineTo(canvas.width - margin, canvas.height - margin); ctx.lineTo(canvas.width - margin, canvas.height - margin - cornerLen); ctx.stroke();
 
-          // E. Configuración tipográfica global
+          // 5. Transformar y preparar el Alias
+          const aliasMayusculas = aliasPacto.toUpperCase();
+          const yAlias = canvas.height * 0.81;
+          const fontSizeAlias = Math.floor(canvas.height * 0.06);
+
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-          ctx.shadowBlur = 15;
           
-          // F. Título Superior
-          const yTopText = canvas.height * 0.74;
-          ctx.font = `bold ${Math.floor(canvas.height * 0.025)}px sans-serif`;
+          // 6. Efecto de Aura Mágica expansiva
+          ctx.font = `bold ${fontSizeAlias}px "Times New Roman", serif`;
+          ctx.shadowColor = 'rgba(229, 192, 161, 0.9)';
+          ctx.shadowBlur = 40;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+          ctx.fillText(aliasMayusculas, canvas.width / 2, yAlias);
+
+          // 7. Texto Principal Metálico
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+          const textGradient = ctx.createLinearGradient(0, yAlias - fontSizeAlias/2, 0, yAlias + fontSizeAlias/2);
+          textGradient.addColorStop(0, '#FFF5EE');
+          textGradient.addColorStop(0.4, '#E5C0A1');
+          textGradient.addColorStop(0.6, '#C8946E');
+          textGradient.addColorStop(1, '#8B4513');
+          ctx.fillStyle = textGradient;
+          ctx.fillText(aliasMayusculas, canvas.width / 2, yAlias);
+
+          // 8. Chispas arcanas flanqueando el nombre
+          ctx.font = `bold ${fontSizeAlias}px "Times New Roman", serif`;
+          const textWidth = ctx.measureText(aliasMayusculas).width;
+          const offset = textWidth / 2 + 40;
+          ctx.font = `normal ${Math.floor(fontSizeAlias * 0.6)}px sans-serif`;
+          ctx.shadowColor = 'rgba(229, 192, 161, 0.8)';
+          ctx.shadowBlur = 15;
+          ctx.fillStyle = '#E5C0A1';
+          ctx.fillText("✧", canvas.width / 2 - offset, yAlias - 2);
+          ctx.fillText("✧", canvas.width / 2 + offset, yAlias - 2);
+
+          // 9. Título Superior Pequeño
+          const yTopText = canvas.height * 0.72;
+          ctx.font = `bold ${Math.floor(canvas.height * 0.022)}px sans-serif`;
           ctx.fillStyle = '#C8946E';
           ctx.fillText("✦   A C A D E M I A   E C L I P S E   ✦", canvas.width / 2, yTopText);
 
-          // G. Alias del Iniciado (El Gran Protagonista)
-          const yAlias = canvas.height * 0.83;
-          ctx.font = `italic ${Math.floor(canvas.height * 0.065)}px "Times New Roman", serif`;
-          ctx.fillStyle = '#FFF5EE';
-          ctx.fillText(aliasPacto, canvas.width / 2, yAlias);
-
-          // H. Divisor Fino
+          // 10. Línea divisoria elegante
           ctx.beginPath();
-          ctx.moveTo(canvas.width / 2 - 180, canvas.height * 0.89);
-          ctx.lineTo(canvas.width / 2 + 180, canvas.height * 0.89);
-          ctx.strokeStyle = 'rgba(229, 192, 161, 0.4)';
+          ctx.moveTo(canvas.width / 2 - 180, canvas.height * 0.88);
+          ctx.lineTo(canvas.width / 2 + 180, canvas.height * 0.88);
+          ctx.strokeStyle = 'rgba(229, 192, 161, 0.3)';
           ctx.lineWidth = 1.5;
           ctx.stroke();
 
-          // I. Número de Registro
-          const yReg = canvas.height * 0.93;
-          ctx.font = `bold ${Math.floor(canvas.height * 0.022)}px sans-serif`;
+          // 11. Número de Registro Oficial
+          const yReg = canvas.height * 0.92;
+          ctx.font = `bold ${Math.floor(canvas.height * 0.020)}px sans-serif`;
           ctx.fillStyle = '#E5C0A1';
           ctx.fillText(`R E G I S T R O   O F I C I A L   # ${numeroIniciado}`, canvas.width / 2, yReg);
 
-          // J. Marca de agua web oculta
+          // 12. Marca de agua web sutil
           const yDomain = canvas.height * 0.97;
           ctx.font = `bold ${Math.floor(canvas.height * 0.012)}px sans-serif`;
           ctx.fillStyle = 'rgba(200, 148, 110, 0.3)';
           ctx.fillText("E L C O D I C E D E P L U T O N . C O M", canvas.width / 2, yDomain);
 
-          // K. Forzar Descarga
+          // 13. Forzar Descarga
           const link = document.createElement('a');
           link.download = `Sello_Eclipse_${aliasPacto.replace(/\s+/g, '_')}.png`;
           link.href = canvas.toDataURL('image/png');
           link.click();
 
-          // Finalizar proceso UI
           setMensajePacto(msj);
           setEstadoPacto('success');
           if (typeof window !== 'undefined') {

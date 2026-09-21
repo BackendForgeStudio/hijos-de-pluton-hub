@@ -4,6 +4,11 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import localFont from 'next/font/local';
 import Link from 'next/link';
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const academiaFont = localFont({
   src: './fonts/AcademiaEclipse.ttf',
@@ -131,6 +136,7 @@ const IconoOraculo = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" 
 const IconoEclipse = () => (<svg className="w-5 h-5 text-[#C8946E]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>);
 const IconoDescargar = () => (<svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>);
 const IconoCompartir = () => (<svg className="w-4 h-4 text-[#C8946E] mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>);
+const IconoChispa = () => (<svg className="w-4 h-4 text-[#C8946E] flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" /></svg>);
 
 export default function CodicePlutonPage() {
   const [profeciaActual, setProfeciaActual] = useState("Pulsa el cristal para invocar tu profecía diaria.");
@@ -145,7 +151,7 @@ export default function CodicePlutonPage() {
   const [generandoImagen, setGenerandoImagen] = useState(false);
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
-  // SISTEMA DE DESCARGA DE SELLO (SIN RECOPILACIÓN DE DATOS)
+  // SISTEMA DE DESCARGA DE SELLO (CANVAS DINÁMICO)
   const [aliasPacto, setAliasPacto] = useState("");
   const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
@@ -366,37 +372,89 @@ export default function CodicePlutonPage() {
     }
   };
 
-  const sellarPacto = (e: React.FormEvent) => {
+  const sellarPacto = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!aliasPacto.trim()) return;
 
     setEstadoPacto('loading');
     setMensajePacto("Forjando tu sello en las sombras...");
 
-    setTimeout(() => {
-      const numeroIniciado = Math.floor(Math.random() * 8999) + 1000;
-      const msj = `✨ Las sombras te reconocen, ${aliasPacto}. Tu sello oficial de iniciado #${numeroIniciado} ha sido revelado.`;
+    try {
+      // 1. Guardamos el Alias en Supabase para obtener un contador real
+      let numeroIniciado = Math.floor(Math.random() * 8999) + 1000;
       
-      setMensajePacto(msj);
-      setEstadoPacto('success');
-      
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('pacto_asthar_mensaje', msj);
+      const { data, error } = await supabase
+        .from('iniciados')
+        .insert([{ alias: aliasPacto }])
+        .select('id')
+        .single();
+
+      if (!error && data) {
+        numeroIniciado = data.id + 1000; // Le sumamos 1000 para que la base empiece fuerte
       }
 
-      // Descarga automática de la imagen "sello-iniciado.jpg"
-      try {
-        const link = document.createElement('a');
-        link.href = '/images/sello-iniciado.jpg'; // Ruta a la imagen generada por Gemini
-        link.download = `Sello_Iniciado_Eclipse_${aliasPacto.replace(/\s+/g, '_')}.jpg`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error("Error al forzar la descarga del sello:", error);
-      }
+      const msj = `Las sombras te reconocen, ${aliasPacto}. Tu sello oficial de iniciado #${numeroIniciado} ha sido revelado.`;
 
-    }, 1500);
+      // 2. Generar el Canvas con la imagen y el texto mágico
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const img = new Image();
+      img.crossOrigin = "anonymous";
+      img.src = '/images/sello-iniciado.jpg'; // Asegúrate de que tu imagen de Gemini está aquí
+      
+      img.onload = () => {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+
+          // Configuración del texto mágico
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
+          ctx.shadowBlur = 12; // Efecto de resplandor oscuro
+          
+          // Posición en la parte inferior de la imagen (ajustable)
+          const yPosText = canvas.height * 0.88;
+          
+          // Imprimir Alias
+          const fontSizeAlias = Math.floor(canvas.height * 0.045);
+          ctx.font = `italic ${fontSizeAlias}px serif`;
+          ctx.fillStyle = '#E5C0A1'; 
+          ctx.fillText(`Iniciado: ${aliasPacto}`, canvas.width / 2, yPosText);
+
+          // Imprimir Número de Registro
+          const fontSizeNum = Math.floor(canvas.height * 0.022);
+          ctx.font = `bold ${fontSizeNum}px sans-serif`;
+          ctx.fillStyle = '#C8946E';
+          ctx.fillText(`REGISTRO OFICIAL #${numeroIniciado}`, canvas.width / 2, yPosText + fontSizeAlias);
+
+          // Forzar la descarga
+          const link = document.createElement('a');
+          link.download = `Sello_Eclipse_${aliasPacto.replace(/\s+/g, '_')}.png`;
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+
+          // Actualizar la interfaz una vez completado
+          setMensajePacto(msj);
+          setEstadoPacto('success');
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('pacto_asthar_mensaje', msj);
+          }
+        }
+      };
+
+      img.onerror = () => {
+        // Si la imagen falla por alguna razón técnica, mostramos el mensaje de éxito igualmente
+        setMensajePacto(msj);
+        setEstadoPacto('success');
+      };
+
+    } catch (err) {
+      setMensajePacto("Las sombras no responden, intenta de nuevo.");
+      setEstadoPacto('idle');
+    }
   };
 
   const fadeUp = {
@@ -462,7 +520,6 @@ export default function CodicePlutonPage() {
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/galeria">Galería</Link></li>
           <li className="hover:text-[#C8946E] transition-colors py-1"><Link href="/circulo">El Círculo</Link></li>
           
-          {/* BOTÓN DISCORD CON ENLACE PERMANENTE */}
           <li>
             <a 
               href="https://discord.gg/SZjJthfvKP" 
@@ -612,7 +669,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 7. DESCARGA DIRECTA DE SELLO (SIN DATOS) */}
+      {/* 7. DESCARGA DIRECTA DE SELLO DINÁMICO (SIN CORREOS) */}
       <section className="py-16 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           
@@ -639,13 +696,14 @@ export default function CodicePlutonPage() {
           </form>
 
           {mensajePacto && (
-            <motion.p 
+            <motion.div 
               initial={{ opacity: 0, y: 10 }} 
               animate={{ opacity: 1, y: 0 }} 
-              className={`mt-6 text-xs p-4 bg-black/90 backdrop-blur-md border inline-block shadow-[0_0_20px_rgba(0,0,0,0.5)] ${estadoPacto === 'success' ? 'text-[#E5C0A1] border-[#E5C0A1]/50' : 'text-red-400 border-red-900/50'}`}
+              className={`mt-6 text-xs p-4 bg-black/90 backdrop-blur-md border inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,0,0,0.5)] ${estadoPacto === 'success' ? 'text-[#E5C0A1] border-[#E5C0A1]/50' : 'text-red-400 border-red-900/50'}`}
             >
-              {mensajePacto}
-            </motion.p>
+              {estadoPacto === 'success' && <IconoChispa />}
+              <span>{mensajePacto}</span>
+            </motion.div>
           )}
 
         </motion.div>

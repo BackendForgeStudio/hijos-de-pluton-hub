@@ -151,7 +151,7 @@ export default function CodicePlutonPage() {
   const [generandoImagen, setGenerandoImagen] = useState(false);
   const [particulas, setParticulas] = useState<{ id: number; x: number; y: number; delay: number; duration: number; size: number }[]>([]);
 
-  // SISTEMA DE DESCARGA DE SELLO (CANVAS DINÁMICO)
+  // SISTEMA DE DESCARGA DE SELLO ÉPICO (CONECTADO A SUPABASE)
   const [aliasPacto, setAliasPacto] = useState("");
   const [estadoPacto, setEstadoPacto] = useState<'idle' | 'loading' | 'success'>('idle');
   const [mensajePacto, setMensajePacto] = useState("");
@@ -380,8 +380,8 @@ export default function CodicePlutonPage() {
     setMensajePacto("Forjando tu sello en las sombras...");
 
     try {
-      // 1. Guardamos el Alias en Supabase para obtener un contador real
-      let numeroIniciado = Math.floor(Math.random() * 8999) + 1000;
+      // 1. Guardamos el Alias en Supabase para obtener un contador secuencial REAL
+      let numeroIniciado = 0;
       
       const { data, error } = await supabase
         .from('iniciados')
@@ -389,54 +389,104 @@ export default function CodicePlutonPage() {
         .select('id')
         .single();
 
-      if (!error && data) {
-        numeroIniciado = data.id + 1000; // Le sumamos 1000 para que la base empiece fuerte
+      if (error || !data) {
+        // Salvavidas: si la DB falla, generamos uno temporal para no dejar colgado al usuario
+        console.warn("Conexión con el oráculo interrumpida. Generando registro temporal.");
+        numeroIniciado = Math.floor(Math.random() * 8999) + 1000;
+      } else {
+        numeroIniciado = data.id + 1000; // Sumamos 1000 para que empiece en #1001
       }
 
       const msj = `Las sombras te reconocen, ${aliasPacto}. Tu sello oficial de iniciado #${numeroIniciado} ha sido revelado.`;
 
-      // 2. Generar el Canvas con la imagen y el texto mágico
+      // 2. Generar el Canvas con diseño ÉPICO
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.src = '/images/sello-iniciado.jpg'; // Asegúrate de que tu imagen de Gemini está aquí
+      img.src = '/images/sello-iniciado.jpg'; // Tu imagen de alta resolución de Gemini
       
       img.onload = () => {
         canvas.width = img.width;
         canvas.height = img.height;
         
         if (ctx) {
+          // A. Dibujar el fondo
           ctx.drawImage(img, 0, 0);
 
-          // Configuración del texto mágico
+          // B. Oscurecer la base para que el texto sea perfectamente legible
+          const gradient = ctx.createLinearGradient(0, canvas.height * 0.6, 0, canvas.height);
+          gradient.addColorStop(0, 'rgba(8, 4, 12, 0)');
+          gradient.addColorStop(0.5, 'rgba(8, 4, 12, 0.7)');
+          gradient.addColorStop(1, 'rgba(8, 4, 12, 0.95)');
+          ctx.fillStyle = gradient;
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+          // C. Dibujar el doble marco mágico perimetral
+          const margin = canvas.width * 0.04;
+          ctx.strokeStyle = 'rgba(200, 148, 110, 0.15)';
+          ctx.lineWidth = 2;
+          ctx.strokeRect(margin, margin, canvas.width - margin * 2, canvas.height - margin * 2);
+          
+          ctx.strokeStyle = 'rgba(229, 192, 161, 0.3)';
+          ctx.lineWidth = 1;
+          ctx.strokeRect(margin + 12, margin + 12, canvas.width - (margin + 12) * 2, canvas.height - (margin + 12) * 2);
+
+          // D. Esquinas ornamentales estilo reliquia
+          const cornerLen = canvas.width * 0.08;
+          ctx.strokeStyle = '#C8946E';
+          ctx.lineWidth = 4;
+          
+          ctx.beginPath(); ctx.moveTo(margin, margin + cornerLen); ctx.lineTo(margin, margin); ctx.lineTo(margin + cornerLen, margin); ctx.stroke(); // Arriba-Izquierda
+          ctx.beginPath(); ctx.moveTo(canvas.width - margin - cornerLen, margin); ctx.lineTo(canvas.width - margin, margin); ctx.lineTo(canvas.width - margin, margin + cornerLen); ctx.stroke(); // Arriba-Derecha
+          ctx.beginPath(); ctx.moveTo(margin, canvas.height - margin - cornerLen); ctx.lineTo(margin, canvas.height - margin); ctx.lineTo(margin + cornerLen, canvas.height - margin); ctx.stroke(); // Abajo-Izquierda
+          ctx.beginPath(); ctx.moveTo(canvas.width - margin - cornerLen, canvas.height - margin); ctx.lineTo(canvas.width - margin, canvas.height - margin); ctx.lineTo(canvas.width - margin, canvas.height - margin - cornerLen); ctx.stroke(); // Abajo-Derecha
+
+          // E. Configuración tipográfica global
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-          ctx.shadowBlur = 12; // Efecto de resplandor oscuro
+          ctx.shadowBlur = 15;
           
-          // Posición en la parte inferior de la imagen (ajustable)
-          const yPosText = canvas.height * 0.88;
-          
-          // Imprimir Alias
-          const fontSizeAlias = Math.floor(canvas.height * 0.045);
-          ctx.font = `italic ${fontSizeAlias}px serif`;
-          ctx.fillStyle = '#E5C0A1'; 
-          ctx.fillText(`Iniciado: ${aliasPacto}`, canvas.width / 2, yPosText);
-
-          // Imprimir Número de Registro
-          const fontSizeNum = Math.floor(canvas.height * 0.022);
-          ctx.font = `bold ${fontSizeNum}px sans-serif`;
+          // F. Título Superior
+          const yTopText = canvas.height * 0.74;
+          ctx.font = `bold ${Math.floor(canvas.height * 0.025)}px sans-serif`;
           ctx.fillStyle = '#C8946E';
-          ctx.fillText(`REGISTRO OFICIAL #${numeroIniciado}`, canvas.width / 2, yPosText + fontSizeAlias);
+          ctx.fillText("✦   A C A D E M I A   E C L I P S E   ✦", canvas.width / 2, yTopText);
 
-          // Forzar la descarga
+          // G. Alias del Iniciado (El Gran Protagonista)
+          const yAlias = canvas.height * 0.83;
+          ctx.font = `italic ${Math.floor(canvas.height * 0.065)}px "Times New Roman", serif`;
+          ctx.fillStyle = '#FFF5EE';
+          ctx.fillText(aliasPacto, canvas.width / 2, yAlias);
+
+          // H. Divisor Fino
+          ctx.beginPath();
+          ctx.moveTo(canvas.width / 2 - 180, canvas.height * 0.89);
+          ctx.lineTo(canvas.width / 2 + 180, canvas.height * 0.89);
+          ctx.strokeStyle = 'rgba(229, 192, 161, 0.4)';
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+
+          // I. Número de Registro
+          const yReg = canvas.height * 0.93;
+          ctx.font = `bold ${Math.floor(canvas.height * 0.022)}px sans-serif`;
+          ctx.fillStyle = '#E5C0A1';
+          ctx.fillText(`R E G I S T R O   O F I C I A L   # ${numeroIniciado}`, canvas.width / 2, yReg);
+
+          // J. Marca de agua web oculta
+          const yDomain = canvas.height * 0.97;
+          ctx.font = `bold ${Math.floor(canvas.height * 0.012)}px sans-serif`;
+          ctx.fillStyle = 'rgba(200, 148, 110, 0.3)';
+          ctx.fillText("E L C O D I C E D E P L U T O N . C O M", canvas.width / 2, yDomain);
+
+          // K. Forzar Descarga
           const link = document.createElement('a');
           link.download = `Sello_Eclipse_${aliasPacto.replace(/\s+/g, '_')}.png`;
           link.href = canvas.toDataURL('image/png');
           link.click();
 
-          // Actualizar la interfaz una vez completado
+          // Finalizar proceso UI
           setMensajePacto(msj);
           setEstadoPacto('success');
           if (typeof window !== 'undefined') {
@@ -446,13 +496,12 @@ export default function CodicePlutonPage() {
       };
 
       img.onerror = () => {
-        // Si la imagen falla por alguna razón técnica, mostramos el mensaje de éxito igualmente
         setMensajePacto(msj);
         setEstadoPacto('success');
       };
 
     } catch (err) {
-      setMensajePacto("Las sombras no responden, intenta de nuevo.");
+      setMensajePacto("Las constelaciones no responden. Inténtalo de nuevo.");
       setEstadoPacto('idle');
     }
   };
@@ -669,7 +718,7 @@ export default function CodicePlutonPage() {
 
       <DivisorEstelar />
 
-      {/* 7. DESCARGA DIRECTA DE SELLO DINÁMICO (SIN CORREOS) */}
+      {/* 7. DESCARGA DIRECTA DE SELLO MÁGICO Y CONECTADO A SUPABASE */}
       <section className="py-16 px-6 text-center mb-10 relative z-10">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} className="max-w-xl mx-auto">
           
